@@ -1,5 +1,19 @@
 {
-  "tabWidth": 4,
-  "singleQuote": true,
-  "trailingComma": "all"
+    "tabWidth": 4,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "overrides": [
+        {
+            "files": "*.json",
+            "options": {
+                "tabWidth": 2
+            }
+        },
+        {
+            "files": ".prettierrc",
+            "options": {
+                "tabWidth": 2
+            }
+        }
+    ]
 }

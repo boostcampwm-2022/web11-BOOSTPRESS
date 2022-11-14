@@ -1,23 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
 
 const App = () => {
+    const { REACT_APP_CLIENT_ID, REACT_APP_REDIRECT_URL } = process.env;
+    const path = "/";
+
     return (
         <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Edit <code>src/App.tsx</code> and save to reload.
-                </p>
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn React
-                </a>
-            </header>
+          <a href={`https://github.com/login/oauth/authorize?client_id=${REACT_APP_CLIENT_ID}&redirect_url=${REACT_APP_REDIRECT_URL}?path=${path}`}>GitHub</a>
         </div>
     );
 };

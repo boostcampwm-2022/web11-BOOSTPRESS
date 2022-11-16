@@ -1,52 +1,47 @@
 /* Header */
 import React from 'react';
-import { css } from '@emotion/css';
-import { btnST } from '../styles/common';
+import styled from '@emotion/styled';
+import { BasicButton } from '../styles/common';
 
-type headerType = {
-    isLogoActive: boolean;
-};
-
-// 로고는 안보일때도 있을 수 있음
-const Header = ({ isLogoActive }: headerType) => {
-    return (
-        <>
-            <div className={headerST}>
-                <div className={logoST(isLogoActive)}>
-                    <p className={logoTitleST}>BOOSTPRESS</p>
-                    The Ultimate Platform For Dev
-                </div>
-                <input className={searchBtnST} placeholder="검색어 입력 " />
-            </div>
-        </>
-    );
-};
-
-const headerST = css`
+const HeaderWrapper = styled.div`
     display: flex;
     justify-content: space-between;
 
     padding: 1rem;
 `;
 
-const logoST = (isLogoActive: boolean) => {
-    return css`
-        display: ${isLogoActive ? 'default' : 'none'};
-        font-weight: 700;
-        font-size: 28px;
-    `;
+type headerType = {
+    isLogoActive: boolean;
 };
 
-const logoTitleST = css`
+const LogoArea = styled.div<headerType>`
+    display: ${(props) => (props.isLogoActive ? 'default' : 'none')};
+    font-weight: 700;
+    font-size: 28px;
+`;
+
+const LogoTitle = styled.h1`
     text-decoration: underline;
     margin-bottom: 0.5rem;
 `;
 
-const searchBtnST = css`
-    ${btnST};
+const SearchArea = styled(BasicButton)`
     width: 358px;
     font-size: 15px;
     padding: 1rem;
 `;
+
+// 로고는 안보일때도 있을 수 있음
+const Header = ({ isLogoActive }: headerType) => {
+    return (
+        <HeaderWrapper>
+            <LogoArea isLogoActive={isLogoActive}>
+                <LogoTitle>BOOSTPRESS</LogoTitle>
+                The Ultimate Platform For Dev
+            </LogoArea>
+            <SearchArea placeholder="검색어 입력 " />
+        </HeaderWrapper>
+    );
+};
 
 export default Header;

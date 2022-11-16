@@ -32,7 +32,7 @@ const Header = ({ isLogoActive, isLogin }: headerType) => {
 
     return (
         <HeaderWrapper>
-            <LogoArea isLogoActive={isLogoActive} isLogin={isLogin}>
+            <LogoArea isLogoActive={isLogoActive}>
                 <LogoTitle>BOOSTPRESS</LogoTitle>
                 The Ultimate Platform For Dev
             </LogoArea>
@@ -56,16 +56,12 @@ const Header = ({ isLogoActive, isLogin }: headerType) => {
                     />
                 )}
 
-                <GitHubLoginArea
-                    gitHubLoginModalActive={gitHubLoginModalActive}
-                >
+                <GitHubLoginArea Active={gitHubLoginModalActive}>
                     <GitHubIconSVG />
                     <p>Github로 계속하기</p>
                 </GitHubLoginArea>
 
-                <UserSettingModalArea
-                    userSettingModalActive={userSettingModalActive}
-                >
+                <UserSettingModalArea Active={userSettingModalActive}>
                     <UserSettingModalItem>
                         <HomeSVG /> <p>내 블로그 페이지</p>
                     </UserSettingModalItem>
@@ -89,7 +85,7 @@ const HeaderWrapper = styled.div`
     padding: 1rem;
 `;
 
-const LogoArea = styled.div<headerType>`
+const LogoArea = styled.div<{ isLogoActive: boolean }>`
     visibility: ${(props) => (props.isLogoActive ? 'default' : 'hidden')};
     font-weight: 700;
     font-size: 28px;
@@ -127,10 +123,8 @@ const UserIcon = css`
     cursor: pointer;
 `;
 
-const GitHubLoginArea = styled(BasicShadowBox)<{
-    gitHubLoginModalActive: boolean;
-}>`
-    display: ${(props) => (props.gitHubLoginModalActive ? 'flex' : 'none')};
+const GitHubLoginArea = styled(BasicShadowBox)<{ Active: boolean }>`
+    display: ${(props) => (props.Active ? 'flex' : 'none')};
     align-content: center;
     position: absolute;
     right: 0;
@@ -146,10 +140,8 @@ const GitHubLoginArea = styled(BasicShadowBox)<{
     }
 `;
 
-const UserSettingModalArea = styled(BasicShadowBox)<{
-    userSettingModalActive: boolean;
-}>`
-    display: ${(props) => (props.userSettingModalActive ? 'flex' : 'none')};
+const UserSettingModalArea = styled(BasicShadowBox)<{ Active: boolean }>`
+    display: ${(props) => (props.Active ? 'flex' : 'none')};
     flex-direction: column;
     align-content: center;
 

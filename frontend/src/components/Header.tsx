@@ -1,15 +1,15 @@
 /* Header */
 import React from 'react';
-import { css } from '@emotion/css';
+import styled from '@emotion/styled';
+
+const Logo = styled.div``;
 
 const Header = () => {
     return (
         <>
-            <div className={logoST}>Header 안녕하세요</div>
+            <Logo>Header 안녕하세요</Logo>
         </>
     );
 };
-
-const logoST = css``;
 
 export default Header;

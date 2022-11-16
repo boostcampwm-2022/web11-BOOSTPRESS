@@ -5,7 +5,7 @@ import Header from '../components/Header';
 const Main = () => {
     return (
         <>
-            <Header isLogoActive={true} />
+            <Header isLogoActive={true} isLogin={true} />
         </>
     );
 };

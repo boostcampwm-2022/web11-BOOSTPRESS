@@ -6,7 +6,7 @@ import PostCard from '../components/PostCard';
 const Main = () => {
     return (
         <>
-            <Header isLogoActive={true} isLogin={true} />
+            <Header isLogoActive={true} isLogin={false} />
             <PostCard
                 img="test"
                 title="TITLE! dasfsadfasdf안ㄴ여TITLE!!! dasfsadfasdf Hello안녕RaaR"

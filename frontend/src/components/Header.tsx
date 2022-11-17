@@ -106,9 +106,6 @@ const SearchArea = styled(BasicInput)`
     width: 358px;
     font-size: 15px;
     padding: 1rem;
-    ::-webkit-input-placeholder {
-        background-image: '../assets/svg/MagnifyingGlass.svg';
-    }
 `;
 
 const SearchIcon = css`

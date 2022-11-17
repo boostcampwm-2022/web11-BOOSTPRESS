@@ -76,7 +76,7 @@ const Title = styled.p`
     -webkit-line-clamp: 2; // 원하는 라인수
     -webkit-box-orient: vertical;
 
-    line-height: 1.2em;
+    line-height: 1.3em;
 `;
 
 const BottomInfo = styled.div<{ date: Date; writer: string }>`

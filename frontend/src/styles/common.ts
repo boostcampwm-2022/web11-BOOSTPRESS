@@ -13,3 +13,11 @@ export const BasicShadowBox = styled.div`
         0px 0px 1px rgba(10, 31, 68, 0.08), 0px 8px 10px rgba(10, 31, 68, 0.1);
     border-radius: 4px;
 `;
+
+export const PlainBtn = styled.button`
+    height: 48px;
+    border-radius: 0px 12px 12px 0px;
+    &:hover {
+        background: #c5dcfa;
+    }
+`;

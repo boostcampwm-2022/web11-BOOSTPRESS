@@ -29,7 +29,7 @@ const PostCard = ({
     width,
 }: postCardType) => {
     return (
-        <PostCardWrapper width={width}>
+        <Wrapper width={width}>
             <Link to={postUrl}>
                 {/* 추후에 이미지로 변경 */}
                 <div
@@ -46,11 +46,11 @@ const PostCard = ({
                     </BottomInfo>
                 </DescriptionArea>
             </Link>
-        </PostCardWrapper>
+        </Wrapper>
     );
 };
 
-const PostCardWrapper = styled.div<{ width: string }>`
+const Wrapper = styled.div<{ width: string }>`
     position: relative;
     width: ${(props) => `${props.width}px`};
     height: 284px;

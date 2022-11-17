@@ -9,7 +9,7 @@ export class GitHubUser {
     @IsNotEmpty()
     login: string;
 
-    // @IsEmail()
-    // @IsNotEmpty()
-    // email: string;
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
 }

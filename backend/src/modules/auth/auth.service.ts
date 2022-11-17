@@ -46,12 +46,12 @@ export class AuthService {
     }
 
     private async signup(data: GitHubUser, accessToken: string) {
-        const { id, login: nickname } = data;
+        const { id, login: nickname, email } = data;
 
         // 사용자가 작성한 글을 백업하기 위한 repo를 생성
         this.createRepo(data, accessToken);
 
-        return await this.prisma.user.create({ data: { id, nickname } });
+        return await this.prisma.user.create({ data: { id, nickname, email } });
     }
 
     async login(data: GitHubUser, accessToken: string) {

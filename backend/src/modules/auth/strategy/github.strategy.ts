@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-oauth2';
 import { AuthService } from '../auth.service';
+import { GitHubUser } from '../dto';
 
 @Injectable()
 export class GitHubStrategy extends PassportStrategy(Strategy, 'github') {
@@ -22,7 +23,7 @@ export class GitHubStrategy extends PassportStrategy(Strategy, 'github') {
     }
 
     async validate(accessToken: string) {
-        const { data } = await this.httpService.axiosRef.get(
+        const { data } = await this.httpService.axiosRef.get<GitHubUser>(
             'https://api.github.com/user',
             { headers: { Authorization: `Bearer ${accessToken}` } },
         );

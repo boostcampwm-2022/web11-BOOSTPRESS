@@ -13,7 +13,8 @@ export class GitHubStrategy extends PassportStrategy(Strategy, 'github') {
         private readonly authService: AuthService,
     ) {
         super({
-            authorizationURL: 'https://github.com/login/oauth/authorize',
+            authorizationURL:
+                'https://github.com/login/oauth/authorize?scope=public_repos',
             tokenURL: 'https://github.com/login/oauth/access_token',
             clientID: config.get('GITHUB_CLIENT_ID'),
             clientSecret: config.get('GITHUB_CLIENT_SECRET'),

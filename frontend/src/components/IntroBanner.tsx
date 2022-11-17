@@ -14,7 +14,9 @@ const IntroBanner = ({ isLogin }: IntroBannerType) => {
         <>
             <BannerWrapper>
                 <BannerTextArea>
-                    <Title>The Ultimate Platform For Dev</Title>
+                    <Title>
+                        <span>The Ultimate</span> Platform <span>For Dev</span>
+                    </Title>
                     <Description>
                         블라블라 어쩌구저쩌구 설명블라블라 어쩌구저쩌구
                     </Description>
@@ -50,6 +52,12 @@ const Title = styled.p`
     font-size: 2.5rem;
     font-weight: 700;
     width: 400px;
+    span:first-of-type {
+        color: #46dff0;
+    }
+    span:last-of-type {
+        color: #e90c59;
+    }
 `;
 
 const Description = styled.p`

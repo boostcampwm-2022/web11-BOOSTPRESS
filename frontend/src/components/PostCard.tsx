@@ -3,9 +3,10 @@
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import React from 'react';
-import colors from '../styles/color';
-import { dateToStrMMDD } from '../utils/utils';
+import colors from 'styles/color';
+import { dateToStrMMDD } from 'utils/utils';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 type postCardType = {
     //이미지는 파일자체를 받을건지, url주소로 할껀지 결정해야함
@@ -27,24 +28,24 @@ const PostCard = ({
     postUrl,
     width,
 }: postCardType) => {
-    const navigate = useNavigate();
-
     return (
-        <PostCardWrapper width={width} onClick={() => navigate(postUrl)}>
-            {/* 추후에 이미지로 변경 */}
-            <div
-                css={css`
-                    background: yellowgreen;
-                    height: 115px;
-                `}
-            ></div>
-            <DescriptionArea>
-                <p>{`[ ${category} ]`}</p>
-                <Title>{title}</Title>
-                <BottomInfo date={date} writer={writer}>
-                    {dateToStrMMDD(date)} · {writer}
-                </BottomInfo>
-            </DescriptionArea>
+        <PostCardWrapper width={width}>
+            <Link to={postUrl}>
+                {/* 추후에 이미지로 변경 */}
+                <div
+                    css={css`
+                        background: yellowgreen;
+                        height: 115px;
+                    `}
+                ></div>
+                <DescriptionArea>
+                    <p>{`[ ${category} ]`}</p>
+                    <Title>{title}</Title>
+                    <BottomInfo date={date} writer={writer}>
+                        {dateToStrMMDD(date)} · {writer}
+                    </BottomInfo>
+                </DescriptionArea>
+            </Link>
         </PostCardWrapper>
     );
 };

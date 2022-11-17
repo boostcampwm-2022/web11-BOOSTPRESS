@@ -2,15 +2,15 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import { BasicInput, BasicShadowBox } from '../styles/common';
-import { ReactComponent as SearchIconSVG } from '../assets/svg/MagnifyingGlass.svg';
-import { ReactComponent as UserIconSVG } from '../assets/svg/User.svg';
-import { ReactComponent as GitHubIconSVG } from '../assets/svg/GithubIcon.svg';
-import { ReactComponent as HomeSVG } from '../assets/svg/home.svg';
-import { ReactComponent as SettingSVG } from '../assets/svg/setting.svg';
-import { ReactComponent as PencilSVG } from '../assets/svg/pencil.svg';
+import { BasicInput, BasicShadowBox } from 'styles/common';
+import { ReactComponent as SearchIconSVG } from 'assets/svg/MagnifyingGlass.svg';
+import { ReactComponent as UserIconSVG } from 'assets/svg/User.svg';
+import { ReactComponent as GitHubIconSVG } from 'assets/svg/GithubIcon.svg';
+import { ReactComponent as HomeSVG } from 'assets/svg/home.svg';
+import { ReactComponent as SettingSVG } from 'assets/svg/setting.svg';
+import { ReactComponent as PencilSVG } from 'assets/svg/pencil.svg';
 import { css } from '@emotion/react';
-import colors from '../styles/color';
+import colors from 'styles/color';
 
 type headerType = {
     isLogoActive: boolean;

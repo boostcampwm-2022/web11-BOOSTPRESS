@@ -1,7 +1,7 @@
 /* Main 페이지 */
 import React from 'react';
-import Header from '../components/Header';
-import PostCard from '../components/PostCard';
+import Header from 'components/Header';
+import PostCard from 'components/PostCard';
 
 const Main = () => {
     return (
@@ -13,7 +13,7 @@ const Main = () => {
                 category="Category"
                 date={new Date('2022-11-17')}
                 writer="정민규"
-                postUrl="movemove"
+                postUrl="http://www.naver.com"
                 width="224"
             />
         </>

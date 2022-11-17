@@ -12,4 +12,9 @@ export class AuthController {
     async github(@User() user) {
         return user;
     }
+
+    @Get('commit_test')
+    async create() {
+        return this.authService.commit();
+    }
 }

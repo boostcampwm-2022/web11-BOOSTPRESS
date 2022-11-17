@@ -13,6 +13,7 @@ datasource db {
 model User {
   id       Int    @id
   nickname String
+//   email    String @unique
 
   // posts Post[]
 }

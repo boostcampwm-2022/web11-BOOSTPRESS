@@ -14,7 +14,7 @@ export class GitHubStrategy extends PassportStrategy(Strategy, 'github') {
     ) {
         super({
             authorizationURL: 'https://github.com/login/oauth/authorize',
-            scope: ['public_repo'],
+            scope: ['public_repo', 'read:user', 'user:email'],
             tokenURL: 'https://github.com/login/oauth/access_token',
             clientID: config.get('GITHUB_CLIENT_ID'),
             clientSecret: config.get('GITHUB_CLIENT_SECRET'),
@@ -27,10 +27,6 @@ export class GitHubStrategy extends PassportStrategy(Strategy, 'github') {
             { headers: { Authorization: `Bearer ${accessToken}` } },
         );
 
-        console.log(data);
-
-        const { id, login: nickname } = data;
-
-        return this.authService.login(id, nickname, accessToken);
+        return this.authService.login(data, accessToken);
     }
 }

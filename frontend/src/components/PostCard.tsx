@@ -8,7 +8,7 @@ import { dateToStrMMDD } from 'utils/utils';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-type postCardType = {
+interface postCardType {
     //이미지는 파일자체를 받을건지, url주소로 할껀지 결정해야함
     img: string;
     title: string;
@@ -17,7 +17,7 @@ type postCardType = {
     writer: string;
     postUrl: string;
     width: string;
-};
+}
 
 const PostCard = ({
     img,

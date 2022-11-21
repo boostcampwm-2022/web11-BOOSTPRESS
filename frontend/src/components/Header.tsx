@@ -12,10 +12,10 @@ import { ReactComponent as PencilSVG } from 'assets/svg/pencil.svg';
 import { css } from '@emotion/react';
 import colors from 'styles/color';
 
-type headerType = {
+interface headerType {
     isLogoActive: boolean;
     isLogin: boolean;
-};
+}
 
 // 로고는 안보일때도 있을 수 있음
 const Header = ({ isLogoActive, isLogin }: headerType) => {

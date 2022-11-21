@@ -1,17 +1,33 @@
 import styled from '@emotion/styled/macro';
 import { Link } from 'react-router-dom';
 import { ReactComponent as SettingIconSVG } from 'assets/svg/setting.svg';
-import { ReactComponent as MenuIconSVG } from 'assets/svg/menu.svg';
-import { ReactComponent as PlusIconSVG } from 'assets/svg/plus.svg';
-import { ReactComponent as ChevronUpIconSVG } from 'assets/svg/chevronUp.svg';
-import { ReactComponent as ChevronDownIconSVG } from 'assets/svg/chevronDown.svg';
 import { ReactComponent as GithubIconSVG } from 'assets/svg/github.svg';
 import { ReactComponent as MailIconSVG } from 'assets/svg/mail.svg';
 import { ReactComponent as TwitterIconSVG } from 'assets/svg/twitter.svg';
 import { ReactComponent as LinkedinIconSVG } from 'assets/svg/linkedin.svg';
-import Collapsible from './Collapsible';
+import Collapsible from './Sidebar/Collapsible';
+import CategoryButton from './Sidebar/CategoryButton';
+import { PlainBtn } from 'styles/common';
 
 const SidebarComponent = () => {
+    const categories = [
+        {
+            id: 1,
+            name: '확장가능',
+            depth: 1,
+            child: [{ id: 1, name: '하위1', depth: 2, child: [] }],
+        },
+        {
+            id: 1,
+            name: '확장불가',
+            depth: 1,
+            child: [],
+        },
+    ];
+    const tags = [
+        { name: '태그1호', article_count: 1 },
+        { name: '태그2호', article_count: 2 },
+    ];
     return (
         <Sidebar>
             <TitleArea>
@@ -40,8 +56,18 @@ const SidebarComponent = () => {
                 </SocialInfos>
             </NameCard>
             <Menu>
-                <Collapsible title="lorem">
-                    <div>qdb</div>
+                <SideBarPlainButton>전체 글 보기</SideBarPlainButton>
+                <Collapsible title="카테고리">
+                    {categories.map((category) => (
+                        <CategoryButton categoryObj={category} />
+                    ))}
+                </Collapsible>
+                <Collapsible title="태그">
+                    <Tags>
+                        {tags.map((tag) => (
+                            <Tag>{`${tag.name}(${tag.article_count})`}</Tag>
+                        ))}
+                    </Tags>
                 </Collapsible>
             </Menu>
             <BlogConfig>
@@ -128,26 +154,39 @@ const NameCard = styled.header`
     }
 `;
 
-const BlogConfig = styled.div`
-    position: absolute;
-    width: 300px;
-    height: 60px;
-    bottom: 0px;
+const SideBarPlainButton = styled(PlainBtn)`
+    padding-left: 12px;
     display: flex;
     align-items: center;
-    gap: 16px;
+    width: 100%;
     font-family: 'Manrope';
+    font-style: normal;
     font-weight: 700;
     font-size: 16px;
     line-height: 150%;
-    border-top: 1px solid #d8d8d8;
-    padding-left: 12px;
+`;
+
+const BlogConfig = styled(SideBarPlainButton)`
+    position: absolute;
+    gap: 16px;
+    bottom: 0px;
+    border-radius: 0;
 `;
 
 const Menu = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+`;
+
+const Tags = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const Tag = styled(SideBarPlainButton)`
+    font-weight: 500;
+    font-size: 16px;
 `;
 
 export default SidebarComponent;

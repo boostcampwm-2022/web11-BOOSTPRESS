@@ -15,6 +15,14 @@ export const BasicShadowBox = styled.div`
 `;
 
 export const PlainBtn = styled.button`
+    background-color: transparent;
+    border-width: 0;
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    padding: 0;
     height: 48px;
     border-radius: 0px 12px 12px 0px;
     &:hover {

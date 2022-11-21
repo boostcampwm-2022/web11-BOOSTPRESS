@@ -42,6 +42,10 @@ const TitleArea = styled(PlainBtn)`
 
 const Title = styled.h3`
     font-family: 'Manrope';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 150%;
 `;
 
 const ToggleButton = styled(ChevronUpSVG)<ToggleProps>`
@@ -51,7 +55,7 @@ const ToggleButton = styled(ChevronUpSVG)<ToggleProps>`
 
 const Content = styled.div<ToggleProps>`
     overflow-y: hidden;
-    max-height: ${(props) => (props.isOpen ? 'fit-content' : '0')};
+    max-height: ${(props) => (props.isOpen ? 'fit-content' : 0)};
 `;
 
 export default Collapsible;

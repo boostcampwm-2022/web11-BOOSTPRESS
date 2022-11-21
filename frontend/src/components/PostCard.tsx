@@ -7,30 +7,17 @@ import colors from 'styles/color';
 import { dateToStrMMDD } from 'utils/utils';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { postCardInfoType } from 'api/apiTypes';
 
-type postCardType = {
-    //이미지는 파일자체를 받을건지, url주소로 할껀지 결정해야함
-    img: string;
-    title: string;
-    category: string;
-    date: Date;
-    writer: string;
-    postUrl: string;
+interface postCardType {
+    postInfo: postCardInfoType;
     width: string;
-};
+}
 
-const PostCard = ({
-    img,
-    title,
-    category,
-    date,
-    writer,
-    postUrl,
-    width,
-}: postCardType) => {
+const PostCard = ({ postInfo, width }: postCardType) => {
     return (
         <PostCardWrapper width={width}>
-            <Link to={postUrl}>
+            <Link to={postInfo.postUrl}>
                 {/* 추후에 이미지로 변경 */}
                 <div
                     css={css`
@@ -39,10 +26,14 @@ const PostCard = ({
                     `}
                 ></div>
                 <DescriptionArea>
-                    <p>{`[ ${category} ]`}</p>
-                    <Title>{title}</Title>
-                    <BottomInfo date={date} writer={writer}>
-                        {dateToStrMMDD(date)} · {writer}
+                    <p>{`[ ${postInfo.category} ]`}</p>
+                    <Title>{postInfo.title}</Title>
+                    <BottomInfo
+                        date={new Date(postInfo.date)}
+                        writer={postInfo.authorId}
+                    >
+                        {dateToStrMMDD(new Date(postInfo.date))} ·{' '}
+                        {postInfo.authorId}
                     </BottomInfo>
                 </DescriptionArea>
             </Link>

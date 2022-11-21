@@ -1,4 +1,4 @@
-import { blogSideBarInfoType } from './apiTypes';
+import { blogSideBarInfoType, postCardInfoType } from './apiTypes';
 
 export function getBlogSideBarInfo(): blogSideBarInfoType {
     return {
@@ -24,4 +24,46 @@ export function getBlogSideBarInfo(): blogSideBarInfoType {
             { name: '태그2호', article_count: 2 },
         ],
     };
+}
+
+//추천게시물 받아오는 가상 api (나중에 조회수,추천수 등등 만들어야함)
+export function getFeaturePostInfo(): postCardInfoType[] {
+    return [
+        {
+            //이미지는 파일자체를 받을건지, url주소로 할껀지 결정해야함
+            img: '이미지',
+            title: '제목이지롱',
+            category: '리액트',
+            date: '2022-11-01',
+            authorId: 'supersfel',
+            postUrl: 'post/123s',
+        },
+        {
+            //이미지는 파일자체를 받을건지, url주소로 할껀지 결정해야함
+            img: '이미지',
+            title: '제목이지롱',
+            category: '리액트',
+            date: '2022-11-01',
+            authorId: 'supersfel',
+            postUrl: 'post/123s',
+        },
+        {
+            //이미지는 파일자체를 받을건지, url주소로 할껀지 결정해야함
+            img: '이미지',
+            title: '제목이지롱',
+            category: '리액트',
+            date: '2022-11-01',
+            authorId: 'supersfel',
+            postUrl: 'post/123s',
+        },
+        {
+            //이미지는 파일자체를 받을건지, url주소로 할껀지 결정해야함
+            img: '이미지',
+            title: '제목이지롱',
+            category: '리액트',
+            date: '2022-11-01',
+            authorId: 'supersfel',
+            postUrl: 'post/123s',
+        },
+    ];
 }

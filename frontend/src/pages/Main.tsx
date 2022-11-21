@@ -3,6 +3,8 @@ import React from 'react';
 import Header from 'components/Header';
 import PostCard from 'components/PostCard';
 import IntroBanner from 'components/IntroBanner';
+import FeaturedPost from 'components/FeaturedPost';
+import { getFeaturePostInfo } from 'api/api';
 
 const Main = () => {
     return (
@@ -20,6 +22,7 @@ const Main = () => {
 
             /> */}
             <IntroBanner isLogin={false} />
+            <FeaturedPost title="인기게시글" postInfo={getFeaturePostInfo()} />
         </>
     );
 };

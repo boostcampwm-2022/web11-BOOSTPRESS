@@ -12,19 +12,15 @@ import { postCardInfoType } from 'api/apiTypes';
 interface postCardType {
     postInfo: postCardInfoType;
     width: string;
+    height: string;
 }
 
-const PostCard = ({ postInfo, width }: postCardType) => {
+const PostCard = ({ postInfo, width, height }: postCardType) => {
     return (
-        <PostCardWrapper width={width}>
+        <PostCardWrapper width={width} height={height}>
             <Link to={postInfo.postUrl}>
                 {/* 추후에 이미지로 변경 */}
-                <div
-                    css={css`
-                        background: yellowgreen;
-                        height: 115px;
-                    `}
-                ></div>
+                <img src="https://picsum.photos/230/144" />
                 <DescriptionArea>
                     <p>{`[ ${postInfo.category} ]`}</p>
                     <Title>{postInfo.title}</Title>
@@ -41,10 +37,15 @@ const PostCard = ({ postInfo, width }: postCardType) => {
     );
 };
 
-const PostCardWrapper = styled.div<{ width: string }>`
+interface PostCardWrapperType {
+    width: string;
+    height: string;
+}
+
+const PostCardWrapper = styled.div<PostCardWrapperType>`
     position: relative;
-    width: ${(props) => `${props.width}px`};
-    height: 284px;
+    width: ${(props) => `${props.width}`};
+    height: ${(props) => `${props.height}`};
     color: white;
     background: ${colors.cardBackground};
     cursor: pointer;

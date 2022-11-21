@@ -23,6 +23,7 @@ const Main = () => {
             /> */}
             <IntroBanner isLogin={false} />
             <FeaturedPost title="인기게시글" postInfo={getFeaturePostInfo()} />
+            <FeaturedPost title="추천게시글" postInfo={getFeaturePostInfo()} />
         </>
     );
 };

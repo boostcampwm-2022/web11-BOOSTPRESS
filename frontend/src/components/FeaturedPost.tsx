@@ -12,10 +12,10 @@ interface FeaturePostType {
 const FeaturedPost = ({ title, postInfo }: FeaturePostType) => {
     return (
         <>
-            <Title>인기 게시글</Title>
+            <Title>{title}</Title>
             <PostCardWrap>
                 {postInfo.map((post) => (
-                    <PostCard postInfo={post} width="200" />
+                    <PostCard postInfo={post} width="100%" height="300px" />
                 ))}
             </PostCardWrap>
         </>
@@ -24,9 +24,19 @@ const FeaturedPost = ({ title, postInfo }: FeaturePostType) => {
 
 const Title = styled.p`
     margin: 5rem;
+    margin-left: 10%;
     font-weight: 700;
+    font-size: 1.2rem;
 `;
 
-const PostCardWrap = styled.div``;
+//그리드로 width에 따라 카드수가 달라지게
+const PostCardWrap = styled.div`
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 230px));
+    width: 80%;
+    margin: 0 auto;
+    row-gap: 2rem;
+    column-gap: 3rem;
+`;
 
 export default FeaturedPost;

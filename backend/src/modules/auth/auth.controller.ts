@@ -1,15 +1,13 @@
 import { Controller, Get, Res, UseGuards } from '@nestjs/common';
-import cookieParser from 'cookie-parser';
 import { Response } from 'express';
-import { Cookie, User } from 'src/decorator';
+import { User } from 'src/decorator';
 import { GitHubGuard, JwtGuard } from 'src/guard';
+import { Auth } from 'src/types';
 import { AuthService } from './auth.service';
 import { TokenService } from './token.service';
 
 @Controller('auth')
 export class AuthController {
-    static readonly Auth = 'Authorization';
-
     constructor(
         private readonly authService: AuthService,
         private readonly tokenService: TokenService,
@@ -17,12 +15,13 @@ export class AuthController {
 
     @UseGuards(GitHubGuard)
     @Get('github')
-    github(@User() user, @Res({ passthrough: true }) res: Response) {
-        res.cookie(
-            AuthController.Auth,
-            `Bearer ${this.tokenService.create(user)}`,
-            this.tokenService.bearerOption(),
-        );
+    async github(@User() user, @Res({ passthrough: true }) res: Response) {
+        const jwt = this.tokenService.create(user);
+
+        res.cookie(Auth, `Bearer ${jwt}`, this.tokenService.bearerOption());
+
+        await this.tokenService.setToken(user, jwt);
+
         return user;
     }
 

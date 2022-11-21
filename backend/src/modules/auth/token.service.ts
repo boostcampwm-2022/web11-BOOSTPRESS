@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
-import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
 import { CookieOptions } from 'express';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class TokenService {
@@ -21,12 +21,25 @@ export class TokenService {
         this.JWT_SECRET = config.get('JWT_SECRET');
     }
 
+    loginExpirationDate() {
+        return new Date(new Date().getTime() + this.LOGIN_LIFESPAN);
+    }
+
     bearerOption(): CookieOptions {
         return {
-            expires: new Date(new Date().getTime() + this.JWT_LIFESPAN),
-            maxAge: this.JWT_LIFESPAN,
+            maxAge: this.loginExpirationDate().getTime(),
             httpOnly: true,
         };
+    }
+
+    async setToken(user: User, accessToken: string) {
+        return await this.prisma.session.create({
+            data: {
+                userId: user.id,
+                accessToken,
+                expiresAt: this.loginExpirationDate(),
+            },
+        });
     }
 
     create(user: User) {

@@ -11,11 +11,20 @@ datasource db {
 }
 
 model User {
-    id       Int     @id
+    id       Int    @id
     nickname String
-    email    String? @unique
+    email    String
+
+    session Session?
 
     // posts Post[]
+}
+
+model Session {
+    userId      Int      @unique
+    user        User     @relation(fields: [userId], references: [id])
+    accessToken String
+    expiresAt   DateTime @default(now())
 }
 
 // model Post {

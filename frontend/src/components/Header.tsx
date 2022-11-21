@@ -34,7 +34,6 @@ const Header = ({ isLogoActive, isLogin }: headerType) => {
         <HeaderWrapper>
             <LogoArea isLogoActive={isLogoActive}>
                 <LogoTitle>BOOSTPRESS</LogoTitle>
-                The Ultimate Platform For Dev
             </LogoArea>
             <HeaderRightArea>
                 <SearchArea placeholder="검색어 입력 " />

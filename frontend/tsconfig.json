@@ -22,7 +22,8 @@
       "assets/*": ["assets/*"],
       "components/*": ["components/*"],
       "styles/*": ["styles/*"],
-      "utils/*": ["utils/*"]
+      "utils/*": ["utils/*"],
+      "api/*": ["api/*"]
     }
   },
   "include": ["src"]

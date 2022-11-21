@@ -5,6 +5,7 @@ import { HttpService } from '@nestjs/axios';
 import { PrismaService } from '../prisma/prisma.service';
 import { GitHubUser } from './dto';
 import { githubServerUser, repoName } from './test';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -61,16 +62,15 @@ export class AuthService {
         return user ?? (await this.signup(data, accessToken));
     }
 
-    async commit() {
-        // 테스트용 계정의 테스트용 repo에 test.md 파일을 생성
+    async commit(user: User) {
         const { data } = await this.axios.put(
-            `https://api.github.com/repos/Themion/${repoName}/contents/test.md`,
+            `https://api.github.com/repos/${user.nickname}/${repoName}/contents/test.md`,
             {
                 message: '',
                 content: Buffer.from(`this is a test text`).toString('base64'),
                 committer: {
-                    name: 'Themion',
-                    email: 'themion@naver.com',
+                    name: user.nickname,
+                    email: user.email,
                 },
             },
             { headers: { Authorization: `Bearer ${this.TEST_ACCESS_TOKEN}` } },

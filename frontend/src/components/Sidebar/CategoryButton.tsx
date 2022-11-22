@@ -71,14 +71,6 @@ const CollapseButtonArea = styled.div<collapseButtonProps>`
     display: ${(props) => (props.isExpandable ? 'block' : 'none')};
 `;
 const CollapseButton = styled.button`
-    background-color: transparent;
-    border-width: 0;
-    font-family: inherit;
-    font-size: inherit;
-    font-style: inherit;
-    font-weight: inherit;
-    line-height: inherit;
-    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;

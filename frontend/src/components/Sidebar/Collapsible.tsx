@@ -28,9 +28,10 @@ const Collapsible = ({ title, children }: Props) => {
     );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.button`
     display: flex;
     flex-direction: column;
+    width: 100%;
 `;
 
 const TitleArea = styled(PlainBtn)`
@@ -38,6 +39,7 @@ const TitleArea = styled(PlainBtn)`
     justify-content: space-between;
     align-items: center;
     padding: 0px 10px;
+    width: 100%;
 `.withComponent('header');
 
 const Title = styled.h3`
@@ -56,6 +58,7 @@ const ToggleButton = styled(ChevronUpSVG)<ToggleProps>`
 const Content = styled.div<ToggleProps>`
     overflow-y: hidden;
     max-height: ${(props) => (props.isOpen ? 'fit-content' : 0)};
+    width: 100%;
 `;
 
 export default Collapsible;

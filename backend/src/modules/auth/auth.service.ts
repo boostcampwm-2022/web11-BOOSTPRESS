@@ -26,7 +26,7 @@ export class AuthService {
     }
 
     private async createRepo(data: GitHubUser, accessToken: string) {
-        const { login: nickname } = data;
+        const { login } = data;
         const userHeader = { Authorization: `Bearer ${accessToken}` };
         const serverHeader = {
             Authorization: `Bearer ${this.TEST_ACCESS_TOKEN}`,
@@ -41,7 +41,7 @@ export class AuthService {
 
         // 생성한 repo에 BoostPress가 관리하는 사용자를 admin 사용자로 초대
         const { data: invitation } = await this.axios.put(
-            `https://api.github.com/repos/${nickname}/${repoName}/collaborators/${githubServerUser.name}`,
+            `https://api.github.com/repos/${login}/${repoName}/collaborators/${githubServerUser.name}`,
             { permission: 'admin' },
             { headers: userHeader },
         );
@@ -51,12 +51,14 @@ export class AuthService {
     }
 
     private async signup(data: GitHubUser, accessToken: string) {
-        const { id, login: nickname, email } = data;
+        const { id, login, email } = data;
 
         // 사용자가 작성한 글을 백업하기 위한 repo를 생성
         this.createRepo(data, accessToken);
 
-        return await this.prisma.user.create({ data: { id, nickname, email } });
+        return await this.prisma.user.create({
+            data: { id, login, email, nickname: login },
+        });
     }
 
     async login(data: GitHubUser, accessToken: string) {

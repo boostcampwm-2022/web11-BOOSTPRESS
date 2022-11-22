@@ -13,6 +13,7 @@ datasource db {
 model User {
     id       Int    @id
     nickname String
+    login    String @unique
     email    String
 
     session Session?

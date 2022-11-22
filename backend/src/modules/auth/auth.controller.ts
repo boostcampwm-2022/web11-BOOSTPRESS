@@ -1,3 +1,4 @@
+
 import { Controller, Delete, Get, Res, UseGuards } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { Response } from 'express';
@@ -40,6 +41,7 @@ export class AuthController {
     @UseGuards(JwtGuard)
     @Get('me')
     async me(@CurrentUser() user: User) {
+
         return user;
     }
 }

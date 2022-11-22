@@ -1,12 +1,15 @@
 /* Main 페이지 */
 import React from 'react';
 import Header from 'components/Header';
-import PostCard from 'components/PostCard';
+import IntroBanner from 'components/IntroBanner';
+import FeaturedPost from 'components/FeaturedPost';
+import { getFeaturePostInfo } from 'api/api';
 
 const Main = () => {
     return (
         <>
-            <Header isLogoActive={true} isLogin={false} />
+            <Header isLogoActive={true} isLogin={true} />
+            {/* <PostCard
             <PostCard
                 img="test"
                 title="TITLE! dasfsadfasdf안ㄴ여TITLE!!! dasfsadfasdf Hello안녕RaaR"
@@ -15,7 +18,11 @@ const Main = () => {
                 writer="정민규"
                 postUrl="http://www.naver.com"
                 width="224"
-            />
+
+            /> */}
+            <IntroBanner isLogin={true} />
+            <FeaturedPost title="" postInfo={getFeaturePostInfo()} />
+            <FeaturedPost title="" postInfo={getFeaturePostInfo()} />
         </>
     );
 };

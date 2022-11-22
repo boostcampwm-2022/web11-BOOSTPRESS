@@ -14,6 +14,12 @@ export const BasicShadowBox = styled.div`
     border-radius: 4px;
 `;
 
+
+//z-index 정보
+export const zIndex = {
+    header: 10,
+};
+
 export const PlainBtn = styled.button`
     height: 48px;
     border-radius: 0px 12px 12px 0px;

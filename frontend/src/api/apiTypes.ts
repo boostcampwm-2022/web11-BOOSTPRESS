@@ -35,7 +35,7 @@ export interface postCardInfoType {
     category: string;
     date: string;
     authorId: string;
-    postUrl: string;
+    postURL: string;
 }
 
 interface snsLinkType {

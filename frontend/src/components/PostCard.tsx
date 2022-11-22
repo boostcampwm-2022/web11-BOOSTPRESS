@@ -16,7 +16,7 @@ interface postCardType {
 const PostCard = ({ postInfo, width, height }: postCardType) => {
     return (
         <PostCardWrapper width={width} height={height}>
-            <Link to={postInfo.postUrl}>
+            <Link to={postInfo.postURL}>
                 {/* 추후에 이미지로 변경 */}
                 <img src={postInfo.imgURL} alt="게시글이미지" />
                 <DescriptionArea>

@@ -21,8 +21,8 @@ const Main = () => {
 
             /> */}
             <IntroBanner isLogin={true} />
-            <FeaturedPost title="인기게시글" postInfo={getFeaturePostInfo()} />
-            <FeaturedPost title="추천게시글" postInfo={getFeaturePostInfo()} />
+            <FeaturedPost title="" postInfo={getFeaturePostInfo()} />
+            <FeaturedPost title="" postInfo={getFeaturePostInfo()} />
         </>
     );
 };

@@ -2,7 +2,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import { BasicInput, BasicShadowBox } from 'styles/common';
+import { BasicInput, BasicShadowBox, zIndex } from 'styles/common';
 import { ReactComponent as SearchIconSVG } from 'assets/svg/MagnifyingGlass.svg';
 import { ReactComponent as UserIconSVG } from 'assets/svg/User.svg';
 import { ReactComponent as GitHubIconSVG } from 'assets/svg/GithubIcon.svg';
@@ -40,14 +40,11 @@ const Header = ({ isLogoActive, isLogin }: headerType) => {
                 <SearchIconSVG css={SearchIcon} />
                 {isLogin ? (
                     // 유저이미지 부분으로 교체해야함 (현재 임시)
-                    <div
-                        css={css`
-                            cursor: pointer;
-                        `}
+                    <UserImg
+                        src={'https://picsum.photos/50'}
+                        alt="유저이미지"
                         onClick={handleUserSettingModal}
-                    >
-                        유저이미지
-                    </div>
+                    />
                 ) : (
                     <UserIconSVG
                         css={UserIcon}
@@ -78,10 +75,13 @@ const Header = ({ isLogoActive, isLogin }: headerType) => {
 
 /* styled 부분 */
 const HeaderWrapper = styled.div`
+    position: absolute;
     display: flex;
     justify-content: space-between;
-    top: 0;
-    padding: 1rem;
+    width: 90%;
+    left: 5%;
+    top: 1rem;
+    z-index: ${zIndex.header};
 `;
 
 const LogoArea = styled.div<{ isLogoActive: boolean }>`
@@ -101,6 +101,11 @@ const HeaderRightArea = styled.div`
     align-items: center;
 `;
 
+const UserImg = styled.img`
+    cursor: pointer;
+    margin-left: 1rem;
+`;
+
 const SearchArea = styled(BasicInput)`
     width: 358px;
     font-size: 15px;
@@ -109,8 +114,8 @@ const SearchArea = styled(BasicInput)`
 
 const SearchIcon = css`
     position: absolute;
-    top: 1rem;
-    left: 350px;
+    top: 0.7rem;
+    left: 320px;
     cursor: pointer;
 `;
 
@@ -124,7 +129,7 @@ const GitHubLoginArea = styled(BasicShadowBox)<{ Active: boolean }>`
     align-content: center;
     position: absolute;
     right: 0;
-    top: 5rem;
+    top: 4rem;
     padding: 1rem;
 
     p {
@@ -144,7 +149,7 @@ const UserSettingModalArea = styled(BasicShadowBox)<{ Active: boolean }>`
     width: 320px;
     position: absolute;
     right: 0;
-    top: 5rem;
+    top: 4rem;
     padding: 0.5rem 1rem;
     color: ${colors.setting};
 `;

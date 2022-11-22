@@ -40,7 +40,7 @@ const BannerWrapper = styled.div`
     background: ${colors.bannerBackground};
     justify-content: center;
     align-items: center;
-    margin-top: 5rem;
+    margin-top: 10rem;
 `;
 
 const BannerTextArea = styled.div`
@@ -66,7 +66,7 @@ const Description = styled.p`
     width: 240px;
 `;
 
-const GitHubBtn = styled.div<{ isLogin: boolean }>`
+const GitHubBtn = styled.button<{ isLogin: boolean }>`
     display: ${(props) => (props.isLogin ? 'none' : 'flex')};
     justify-content: center;
     align-items: center;

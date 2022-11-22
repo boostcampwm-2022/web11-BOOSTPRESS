@@ -33,13 +33,14 @@ export class TokenService {
     }
 
     async setToken(user: User, accessToken: string) {
-        return await this.prisma.session.create({
-            data: {
-                userId: user.id,
-                accessToken,
-                expiresAt: this.loginExpirationDate(),
-            },
-        });
+        const userId = user.id,
+            expiresAt = this.loginExpirationDate();
+
+        const where = { userId },
+            create = { userId, accessToken, expiresAt },
+            update = { accessToken, expiresAt };
+
+        return await this.prisma.session.upsert({ where, create, update });
     }
 
     create(user: User) {

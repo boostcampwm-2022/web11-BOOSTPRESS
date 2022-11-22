@@ -1,7 +1,6 @@
 /* Main 페이지 */
 import React from 'react';
 import Header from 'components/Header';
-import PostCard from 'components/PostCard';
 import IntroBanner from 'components/IntroBanner';
 import FeaturedPost from 'components/FeaturedPost';
 import { getFeaturePostInfo } from 'api/api';
@@ -9,7 +8,7 @@ import { getFeaturePostInfo } from 'api/api';
 const Main = () => {
     return (
         <>
-            <Header isLogoActive={true} isLogin={false} />
+            <Header isLogoActive={true} isLogin={true} />
             {/* <PostCard
             <PostCard
                 img="test"
@@ -21,7 +20,7 @@ const Main = () => {
                 width="224"
 
             /> */}
-            <IntroBanner isLogin={false} />
+            <IntroBanner isLogin={true} />
             <FeaturedPost title="인기게시글" postInfo={getFeaturePostInfo()} />
             <FeaturedPost title="추천게시글" postInfo={getFeaturePostInfo()} />
         </>

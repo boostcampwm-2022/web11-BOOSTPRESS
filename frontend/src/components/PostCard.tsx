@@ -1,11 +1,9 @@
 /* 포스트 카드형식 컴포넌트 */
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
 import React from 'react';
 import colors from 'styles/color';
 import { dateToStrMMDD } from 'utils/utils';
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { postCardInfoType } from 'api/apiTypes';
 
@@ -20,7 +18,7 @@ const PostCard = ({ postInfo, width, height }: postCardType) => {
         <PostCardWrapper width={width} height={height}>
             <Link to={postInfo.postUrl}>
                 {/* 추후에 이미지로 변경 */}
-                <img src="https://picsum.photos/230/144" />
+                <img src={postInfo.imgURL} alt="게시글이미지" />
                 <DescriptionArea>
                     <p>{`[ ${postInfo.category} ]`}</p>
                     <Title>{postInfo.title}</Title>
@@ -60,7 +58,7 @@ const DescriptionArea = styled.div`
     }
 `;
 
-const Title = styled.p`
+const Title = styled.header`
     text-overflow: ellipsis;
     overflow: hidden;
     word-break: break-word;

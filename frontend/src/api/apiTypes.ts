@@ -14,7 +14,7 @@ export interface categoryType {
 }
 
 export interface postType {
-    img: string;
+    imgURL: string;
     id: number;
     title: string;
     content: string;
@@ -30,8 +30,7 @@ export interface postType {
 }
 
 export interface postCardInfoType {
-    //이미지는 파일자체를 받을건지, url주소로 할껀지 결정해야함
-    img: string;
+    imgURL: string;
     title: string;
     category: string;
     date: string;

@@ -80,7 +80,7 @@ const Header = ({ isLogoActive, isLogin }: headerType) => {
 const HeaderWrapper = styled.div`
     display: flex;
     justify-content: space-between;
-
+    top: 0;
     padding: 1rem;
 `;
 

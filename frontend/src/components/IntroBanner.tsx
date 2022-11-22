@@ -48,7 +48,7 @@ const BannerTextArea = styled.div`
     margin-right: 5rem;
 `;
 
-const Title = styled.p`
+const Title = styled.header`
     font-size: 2.5rem;
     font-weight: 700;
     width: 400px;

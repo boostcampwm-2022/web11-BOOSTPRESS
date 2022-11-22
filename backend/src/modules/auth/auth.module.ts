@@ -9,7 +9,6 @@ import { TokenService } from './token.service';
 
 @Module({
     imports: [HttpModule, PassportModule, JwtModule.register({})],
-
     controllers: [AuthController],
     providers: [AuthService, TokenService, GitHubStrategy, JwtStrategy],
 })

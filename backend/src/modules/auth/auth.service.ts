@@ -1,10 +1,14 @@
-import { AxiosInstance } from 'axios';
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { HttpService } from '@nestjs/axios';
+import { User } from '@prisma/client';
+import { AxiosInstance } from 'axios';
+import { Response } from 'express';
+import { Auth } from 'src/types';
 import { PrismaService } from '../prisma/prisma.service';
 import { GitHubUser } from './dto';
 import { githubServerUser, repoName } from './test';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +18,7 @@ export class AuthService {
     constructor(
         private readonly prisma: PrismaService,
         private readonly config: ConfigService,
+        private readonly tokenService: TokenService,
         httpService: HttpService,
     ) {
         this.TEST_ACCESS_TOKEN = this.config.get('TEST_ACCESS_TOKEN');
@@ -21,7 +26,7 @@ export class AuthService {
     }
 
     private async createRepo(data: GitHubUser, accessToken: string) {
-        const { login: nickname } = data;
+        const { login } = data;
         const userHeader = { Authorization: `Bearer ${accessToken}` };
         const serverHeader = {
             Authorization: `Bearer ${this.TEST_ACCESS_TOKEN}`,
@@ -36,7 +41,7 @@ export class AuthService {
 
         // 생성한 repo에 BoostPress가 관리하는 사용자를 admin 사용자로 초대
         const { data: invitation } = await this.axios.put(
-            `https://api.github.com/repos/${nickname}/${repoName}/collaborators/${githubServerUser.name}`,
+            `https://api.github.com/repos/${login}/${repoName}/collaborators/${githubServerUser.name}`,
             { permission: 'admin' },
             { headers: userHeader },
         );
@@ -46,12 +51,14 @@ export class AuthService {
     }
 
     private async signup(data: GitHubUser, accessToken: string) {
-        const { id, login: nickname, email } = data;
+        const { id, login, email } = data;
 
         // 사용자가 작성한 글을 백업하기 위한 repo를 생성
         this.createRepo(data, accessToken);
 
-        return await this.prisma.user.create({ data: { id, nickname, email } });
+        return await this.prisma.user.create({
+            data: { id, login, email, nickname: login },
+        });
     }
 
     async login(data: GitHubUser, accessToken: string) {
@@ -61,21 +68,8 @@ export class AuthService {
         return user ?? (await this.signup(data, accessToken));
     }
 
-    async commit() {
-        // 테스트용 계정의 테스트용 repo에 test.md 파일을 생성
-        const { data } = await this.axios.put(
-            `https://api.github.com/repos/Themion/${repoName}/contents/test.md`,
-            {
-                message: '',
-                content: Buffer.from(`this is a test text`).toString('base64'),
-                committer: {
-                    name: 'Themion',
-                    email: 'themion@naver.com',
-                },
-            },
-            { headers: { Authorization: `Bearer ${this.TEST_ACCESS_TOKEN}` } },
-        );
-
-        return data;
+    logout(user: User, clearCookie: Response['clearCookie']) {
+        clearCookie(Auth);
+        return this.tokenService.softDelete(user);
     }
 }

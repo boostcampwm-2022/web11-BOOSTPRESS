@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { User } from '@prisma/client';
 import { AxiosInstance } from 'axios';
 import { repoName } from '../auth/test';
+import { PostArticle } from './dto';
 
 @Injectable()
 export class ArticleService {
@@ -18,12 +19,12 @@ export class ArticleService {
         this.axios = httpService.axiosRef;
     }
 
-    async commit(user: User) {
+    async commit(user: User, dto: PostArticle) {
         const { data } = await this.axios.put(
-            `https://api.github.com/repos/${user.login}/${repoName}/contents/test.md`,
+            `https://api.github.com/repos/${user.login}/${repoName}/contents/${dto.title}.md`,
             {
                 message: '',
-                content: Buffer.from(`this is a test text`).toString('base64'),
+                content: Buffer.from(dto.content).toString('base64'),
                 committer: {
                     name: user.login,
                     email: user.email,

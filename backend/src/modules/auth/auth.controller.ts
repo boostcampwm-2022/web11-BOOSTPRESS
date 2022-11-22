@@ -1,4 +1,4 @@
-import { Controller, Get, Res, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Res, UseGuards } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { Response } from 'express';
 import { CurrentUser } from 'src/decorator';
@@ -21,6 +21,18 @@ export class AuthController {
         res.cookie(Auth, `Bearer ${jwt}`, this.tokenService.bearerOption());
         await this.tokenService.setToken(user, jwt);
 
+        return user;
+    }
+
+    @UseGuards(JwtGuard)
+    @Delete('logout')
+    async logout(@CurrentUser() user: User) {
+        return await this.tokenService.softDelete(user);
+    }
+
+    @UseGuards(JwtGuard)
+    @Get('me')
+    async me(@CurrentUser() user: User) {
         return user;
     }
 }

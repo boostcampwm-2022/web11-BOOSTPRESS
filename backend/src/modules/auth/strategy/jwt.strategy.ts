@@ -48,7 +48,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     // 사용자를 강제로 로그아웃
     private async forceLogout(user: User) {
-        this.prisma.session.delete({ where: { userId: user.id } });
+        this.tokenService.softDelete(user);
         throw new UnauthorizedException('로그인이 만료되었습니다!');
     }
 

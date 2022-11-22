@@ -53,6 +53,16 @@ export class TokenService {
         return jwt;
     }
 
+    softDelete(user: User) {
+        return this.prisma.session.update({
+            where: { userId: user.id },
+            data: {
+                accessToken: '',
+                expiresAt: new Date(new Date().getTime() - 1000),
+            },
+        });
+    }
+
     verify(token: string) {
         return this.jwtService.verify(token);
     }

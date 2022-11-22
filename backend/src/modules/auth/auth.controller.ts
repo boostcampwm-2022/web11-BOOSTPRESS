@@ -4,11 +4,15 @@ import { Response } from 'express';
 import { CurrentUser } from 'src/decorator';
 import { GitHubGuard, JwtGuard } from 'src/guard';
 import { Auth } from 'src/types';
+import { AuthService } from './auth.service';
 import { TokenService } from './token.service';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly tokenService: TokenService) {}
+    constructor(
+        private readonly authService: AuthService,
+        private readonly tokenService: TokenService,
+    ) {}
 
     @UseGuards(GitHubGuard)
     @Get('github')
@@ -26,8 +30,11 @@ export class AuthController {
 
     @UseGuards(JwtGuard)
     @Delete('logout')
-    async logout(@CurrentUser() user: User) {
-        return await this.tokenService.softDelete(user);
+    async logout(
+        @CurrentUser() user: User,
+        @Res({ passthrough: true }) res: Response,
+    ) {
+        return await this.authService.logout(user, res.clearCookie);
     }
 
     @UseGuards(JwtGuard)

@@ -1,11 +1,14 @@
-import { AxiosInstance } from 'axios';
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { HttpService } from '@nestjs/axios';
+import { User } from '@prisma/client';
+import { AxiosInstance } from 'axios';
+import { Response } from 'express';
+import { Auth } from 'src/types';
 import { PrismaService } from '../prisma/prisma.service';
 import { GitHubUser } from './dto';
 import { githubServerUser, repoName } from './test';
-import { User } from '@prisma/client';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +18,7 @@ export class AuthService {
     constructor(
         private readonly prisma: PrismaService,
         private readonly config: ConfigService,
+        private readonly tokenService: TokenService,
         httpService: HttpService,
     ) {
         this.TEST_ACCESS_TOKEN = this.config.get('TEST_ACCESS_TOKEN');
@@ -62,20 +66,8 @@ export class AuthService {
         return user ?? (await this.signup(data, accessToken));
     }
 
-    async commit(user: User) {
-        const { data } = await this.axios.put(
-            `https://api.github.com/repos/${user.nickname}/${repoName}/contents/test.md`,
-            {
-                message: '',
-                content: Buffer.from(`this is a test text`).toString('base64'),
-                committer: {
-                    name: user.nickname,
-                    email: user.email,
-                },
-            },
-            { headers: { Authorization: `Bearer ${this.TEST_ACCESS_TOKEN}` } },
-        );
-
-        return data;
+    logout(user: User, clearCookie: Response['clearCookie']) {
+        clearCookie(Auth);
+        return this.tokenService.softDelete(user);
     }
 }

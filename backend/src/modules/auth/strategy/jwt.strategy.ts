@@ -6,6 +6,7 @@ import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { Auth } from 'src/types';
+import { AuthService } from '../auth.service';
 import { TokenService } from '../token.service';
 
 const bearerRegExp = /^Bearer /;
@@ -17,6 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     constructor(
         private readonly prisma: PrismaService,
         private readonly tokenService: TokenService,
+        private readonly authService: AuthService,
         config: ConfigService,
     ) {
         super({
@@ -39,7 +41,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         const isLoginValid =
             new Date().getTime() - session.expiresAt.getTime() <= 0;
 
-        if (!isTokenValid && !isLoginValid) this.forceLogout(user);
+        if (!isTokenValid && !isLoginValid) this.forceLogout(req, user);
         else if (!isTokenValid) this.resetAccessToken(req, user);
         else if (!isLoginValid) this.resetExpiration(user);
 
@@ -47,8 +49,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     }
 
     // 사용자를 강제로 로그아웃
-    private async forceLogout(user: User) {
-        this.tokenService.softDelete(user);
+    private async forceLogout(req: Request, user: User) {
+        this.authService.logout(user, req.res.clearCookie);
         throw new UnauthorizedException('로그인이 만료되었습니다!');
     }
 

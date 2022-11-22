@@ -15,8 +15,10 @@ interface postCardType {
 
 const PostCard = ({ postInfo, width, height }: postCardType) => {
     return (
+
         <PostCardWrapper width={width} height={height}>
             <Link to={postInfo.postURL}>
+
                 {/* 추후에 이미지로 변경 */}
                 <img src={postInfo.imgURL} alt="게시글이미지" />
                 <DescriptionArea>
@@ -31,9 +33,10 @@ const PostCard = ({ postInfo, width, height }: postCardType) => {
                     </BottomInfo>
                 </DescriptionArea>
             </Link>
-        </PostCardWrapper>
+        </Wrapper>
     );
 };
+
 
 interface PostCardWrapperType {
     width: string;
@@ -41,6 +44,7 @@ interface PostCardWrapperType {
 }
 
 const PostCardWrapper = styled.div<PostCardWrapperType>`
+
     position: relative;
     width: ${(props) => `${props.width}`};
     height: ${(props) => `${props.height}`};

@@ -13,6 +13,7 @@ export interface categoryType {
     child: categoryType[];
 }
 
+
 export interface postType {
     imgURL: string;
     id: number;
@@ -37,6 +38,7 @@ export interface postCardInfoType {
     authorId: string;
     postURL: string;
 }
+
 
 interface snsLinkType {
     sns_name: string;

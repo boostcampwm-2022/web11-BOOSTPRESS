@@ -2,19 +2,32 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id       Int    @id
-  nickname String
+    id       Int    @id
+    nickname String
+    login    String @unique
+    email    String
 
-  // posts Post[]
+    session Session?
+
+    // posts Post[]
+}
+
+model Session {
+    userId      Int      @unique
+    user        User     @relation(fields: [userId], references: [id])
+    accessToken String
+    expiresAt   DateTime @default(now())
+
 }
 
 // model Post {

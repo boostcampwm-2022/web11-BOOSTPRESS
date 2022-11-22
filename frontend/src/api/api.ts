@@ -1,6 +1,4 @@
-
-import { blogSideBarInfoType } from './apiTypes';
-
+import { blogSideBarInfoType, postCardInfoType } from './apiTypes';
 
 export function getBlogSideBarInfo(): blogSideBarInfoType {
     return {
@@ -27,7 +25,6 @@ export function getBlogSideBarInfo(): blogSideBarInfoType {
         ],
     };
 }
-
 
 //추천게시물 받아오는 가상 api (나중에 조회수,추천수 등등 만들어야함)
 export function getFeaturePostInfo(): postCardInfoType[] {
@@ -87,4 +84,3 @@ export function getFeaturePostInfo(): postCardInfoType[] {
         },
     ];
 }
-

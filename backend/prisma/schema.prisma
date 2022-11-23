@@ -28,10 +28,17 @@ model Session {
 }
 
 model Article {
-    id        Int      @id @default(autoincrement())
+    // 게시글 파일
+    id    Int    @id @default(autoincrement())
+    title String
+
+    // GitHub 관련
+    updateSHA String @default("")
+
+    // prisma 관련
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    title     String
+    deleted   Boolean  @default(false)
     authorId  Int
     author    User     @relation(fields: [authorId], references: [id])
 }

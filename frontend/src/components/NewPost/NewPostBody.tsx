@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import React from 'react';
 import colors from 'styles/color';
 import { dateToStrYYYYMMDD } from 'utils/utils';
+import Editor from './Editor';
 
 const NewPostBody = () => {
     return (
@@ -22,6 +23,9 @@ const NewPostBody = () => {
                     <p>카테고리 선택</p>
                 </PostInfoItem>
             </PostInfo>
+            <EditorWrapper>
+                <Editor />
+            </EditorWrapper>
         </NewPostBodyWrapper>
     );
 };
@@ -33,7 +37,7 @@ const NewPostBodyWrapper = styled.div`
 const PostInfo = styled.div`
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 60%;
     margin: auto;
     padding: 2rem 3rem;
     border: 1px solid #d8d8d8;
@@ -59,6 +63,11 @@ const PostInfoItem = styled.div`
     p:nth-of-type(2) {
         margin-top: 0.1rem;
     }
+`;
+
+const EditorWrapper = styled.div`
+    width: 80%;
+    margin: 5rem auto;
 `;
 
 export default NewPostBody;

@@ -1,5 +1,6 @@
 import { ApiOperationOptions, ApiResponseOptions } from '@nestjs/swagger';
 import { ExceptionResponse } from 'src/types';
+import { PostArticleResponseDTO } from '../dto';
 
 export const Operation: ApiOperationOptions = {
     summary: '게시글 작성 API',
@@ -7,10 +8,10 @@ export const Operation: ApiOperationOptions = {
         '게시글을 작성해 .md 파일로 저장한 뒤, GitHub API를 이용해 작성한 게시글을 commit한다.',
 };
 
-export const _200: ApiResponseOptions = {
-    status: 200,
+export const _201: ApiResponseOptions = {
+    status: 201,
     description: 'GitHub API로 commit한 결과',
-    type: typeof {},
+    type: PostArticleResponseDTO,
 };
 
 export const _401: ApiResponseOptions = {

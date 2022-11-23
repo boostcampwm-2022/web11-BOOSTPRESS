@@ -1,59 +1,49 @@
 /* 포스트 카드형식 컴포넌트 */
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
 import React from 'react';
 import colors from 'styles/color';
 import { dateToStrMMDD } from 'utils/utils';
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { postCardInfoType } from 'api/apiTypes';
 
-type postCardType = {
-    //이미지는 파일자체를 받을건지, url주소로 할껀지 결정해야함
-    img: string;
-    title: string;
-    category: string;
-    date: Date;
-    writer: string;
-    postUrl: string;
+interface postCardType {
+    postInfo: postCardInfoType;
     width: string;
-};
+    height: string;
+}
 
-const PostCard = ({
-    img,
-    title,
-    category,
-    date,
-    writer,
-    postUrl,
-    width,
-}: postCardType) => {
+const PostCard = ({ postInfo, width, height }: postCardType) => {
     return (
-        <Wrapper width={width}>
-            <Link to={postUrl}>
+        <PostCardWrapper width={width} height={height}>
+            <Link to={postInfo.postURL}>
                 {/* 추후에 이미지로 변경 */}
-                <div
-                    css={css`
-                        background: yellowgreen;
-                        height: 115px;
-                    `}
-                ></div>
+                <img src={postInfo.imgURL} alt="게시글이미지" />
                 <DescriptionArea>
-                    <p>{`[ ${category} ]`}</p>
-                    <Title>{title}</Title>
-                    <BottomInfo date={date} writer={writer}>
-                        {dateToStrMMDD(date)} · {writer}
+                    <p>{`[ ${postInfo.category} ]`}</p>
+                    <Title>{postInfo.title}</Title>
+                    <BottomInfo
+                        date={new Date(postInfo.date)}
+                        writer={postInfo.authorId}
+                    >
+                        {dateToStrMMDD(new Date(postInfo.date))} ·{' '}
+                        {postInfo.authorId}
                     </BottomInfo>
                 </DescriptionArea>
             </Link>
-        </Wrapper>
+        </PostCardWrapper>
     );
 };
 
-const Wrapper = styled.div<{ width: string }>`
+interface PostCardWrapperType {
+    width: string;
+    height: string;
+}
+
+const PostCardWrapper = styled.div<PostCardWrapperType>`
     position: relative;
-    width: ${(props) => `${props.width}px`};
-    height: 284px;
+    width: ${(props) => `${props.width}`};
+    height: ${(props) => `${props.height}`};
     color: white;
     background: ${colors.cardBackground};
     cursor: pointer;
@@ -68,7 +58,7 @@ const DescriptionArea = styled.div`
     }
 `;
 
-const Title = styled.p`
+const Title = styled.header`
     text-overflow: ellipsis;
     overflow: hidden;
     word-break: break-word;

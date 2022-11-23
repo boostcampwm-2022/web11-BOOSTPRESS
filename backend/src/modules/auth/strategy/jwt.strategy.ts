@@ -37,6 +37,11 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
             this.prisma.session.findUnique({ where: { userId: id } }),
         ]);
 
+        if (user === null || session === null) {
+            req.res.clearCookie(Auth);
+            throw new UnauthorizedException('사용자 정보를 찾을 수 없습니다!');
+        }
+
         const isTokenValid = new Date().getTime() - payload.exp * 1000 <= 0;
         const isLoginValid =
             new Date().getTime() - session.expiresAt.getTime() <= 0;

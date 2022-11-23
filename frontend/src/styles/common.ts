@@ -13,7 +13,17 @@ export const BasicShadowBox = styled.div`
         0px 0px 1px rgba(10, 31, 68, 0.08), 0px 8px 10px rgba(10, 31, 68, 0.1);
     border-radius: 4px;
 `;
+export const Successbtn = styled.button`
+    background: #328048;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
+    :hover {
+        background: #5cb176;
+    }
+`;
 
 //z-index 정보
 export const zIndex = {

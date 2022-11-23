@@ -1,13 +1,22 @@
-import { useCallback, useMemo, useState } from 'react';
+/** @jsxImportSource @emotion/react */
+import { useCallback, useMemo } from 'react';
 import { renderToString } from 'react-dom/server';
 import SimpleMdeReact from 'react-simplemde-editor';
 import EasyMDE from 'easymde';
 import 'easymde/dist/easymde.min.css';
 import ReactMarkdown from 'react-markdown';
+import 'styles/editor.css';
 
-const Editor = () => {
-    const [value, setValue] = useState('initial value');
-    const onChange = useCallback((value: string) => setValue(() => value), []);
+interface EditorType {
+    content: string;
+    setContent: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const Editor = ({ content, setContent }: EditorType) => {
+    const onChange = useCallback(
+        (value: string) => setContent(() => value),
+        [],
+    );
 
     const options = useMemo(
         () =>
@@ -15,6 +24,7 @@ const Editor = () => {
                 sideBySideFullscreen: false,
                 autofocus: true,
                 spellChecker: false,
+
                 previewRender(value) {
                     return renderToString(
                         <ReactMarkdown>{value}</ReactMarkdown>,
@@ -25,7 +35,7 @@ const Editor = () => {
     );
 
     return (
-        <SimpleMdeReact options={options} value={value} onChange={onChange} />
+        <SimpleMdeReact options={options} value={content} onChange={onChange} />
     );
 };
 

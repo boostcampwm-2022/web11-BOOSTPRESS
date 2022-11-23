@@ -1,15 +1,28 @@
 /*  */
 import styled from '@emotion/styled';
-import React from 'react';
+import React, { useState } from 'react';
 import colors from 'styles/color';
+import { Successbtn } from 'styles/common';
 import { dateToStrYYYYMMDD } from 'utils/utils';
 import Editor from './Editor';
+import 'styles/editor.css';
 
 const NewPostBody = () => {
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+
+    //태그,카테고리는 후에 선택
+    const [tag, setTag] = useState('');
+    const [category, setCategory] = useState('');
+
+    const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.target.value);
+    };
+
     return (
         <NewPostBodyWrapper>
             <PostInfo>
-                <Title placeholder="제목을 입력하세요" />
+                <Title placeholder="제목을 입력하세요" onChange={handleTitle} />
                 <PostInfoItem>
                     <p>Posted Date : </p>
                     <p>&nbsp;{dateToStrYYYYMMDD(new Date())}</p>
@@ -23,9 +36,14 @@ const NewPostBody = () => {
                     <p>카테고리 선택</p>
                 </PostInfoItem>
             </PostInfo>
+
             <EditorWrapper>
-                <Editor />
+                <div className="markdown-body">
+                    <Editor content={content} setContent={setContent} />
+                </div>
             </EditorWrapper>
+
+            <SubmitButton>글쓰기</SubmitButton>
         </NewPostBodyWrapper>
     );
 };
@@ -67,7 +85,15 @@ const PostInfoItem = styled.div`
 
 const EditorWrapper = styled.div`
     width: 80%;
-    margin: 5rem auto;
+    margin: 3rem auto;
+`;
+
+const SubmitButton = styled(Successbtn)`
+    width: 200px;
+    height: 30px;
+    margin: 0 auto;
+    color: white;
+    margin-bottom: 15rem;
 `;
 
 export default NewPostBody;

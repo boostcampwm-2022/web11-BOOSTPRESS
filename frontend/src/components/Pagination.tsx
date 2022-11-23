@@ -10,7 +10,7 @@ interface PaginationProps {
 
 const Pagination = ({ curPage, maxPage, setCurPage }: PaginationProps) => {
     return (
-        <Wrapper>
+        <Wrapper className="pagination">
             <NavigationButton onClick={() => setCurPage((prev) => prev - 1)}>
                 <ChevronLeft />
             </NavigationButton>

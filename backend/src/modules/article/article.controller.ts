@@ -17,6 +17,6 @@ export class ArticleController {
     @UseGuards(JwtGuard)
     @Post('')
     async write(@CurrentUser() user: User, @Body() dto: PostArticle) {
-        return await this.articleService.commit(user, dto);
+        return await this.articleService.write(user, dto);
     }
 }

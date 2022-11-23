@@ -11,11 +11,8 @@ export class ArticleService {
     private readonly TEST_ACCESS_TOKEN: string;
     private readonly axios: AxiosInstance;
 
-    constructor(
-        private readonly config: ConfigService,
-        httpService: HttpService,
-    ) {
-        this.TEST_ACCESS_TOKEN = this.config.get('TEST_ACCESS_TOKEN');
+    constructor(config: ConfigService, httpService: HttpService) {
+        this.TEST_ACCESS_TOKEN = config.get('TEST_ACCESS_TOKEN');
         this.axios = httpService.axiosRef;
     }
 

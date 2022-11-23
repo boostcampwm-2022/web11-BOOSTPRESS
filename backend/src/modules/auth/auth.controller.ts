@@ -1,4 +1,3 @@
-
 import { Controller, Delete, Get, Res, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from '@prisma/client';
@@ -26,16 +25,16 @@ export class AuthController {
     async github(
         @CurrentUser() user: User,
         @Res({ passthrough: true }) res: Response,
-    ) {
+    ): Promise<LoginResponseDTO> {
         const jwt = this.tokenService.create(user);
 
         res.cookie(Auth, `Bearer ${jwt}`, this.tokenService.bearerOption());
         await this.tokenService.setToken(user, jwt);
 
-        return LoginResponseDTO.builder()
-            .email(user.email)
-            .nickname(user.nickname)
-            .build();
+        return {
+            nickname: user.nickname,
+            email: user.email,
+        };
     }
 
     @ApiOperation(DeleteLogout.Operation)
@@ -56,10 +55,10 @@ export class AuthController {
     @ApiResponse(GetMe._401)
     @UseGuards(JwtGuard)
     @Get('me')
-    async me(@CurrentUser() user: User) {
-        return LoginResponseDTO.builder()
-            .email(user.email)
-            .nickname(user.nickname)
-            .build();
+    async me(@CurrentUser() user: User): Promise<LoginResponseDTO> {
+        return {
+            nickname: user.nickname,
+            email: user.email,
+        };
     }
 }

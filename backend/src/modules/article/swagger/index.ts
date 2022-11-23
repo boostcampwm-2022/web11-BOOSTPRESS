@@ -1,1 +1,1 @@
-export * as Write from './write.swagger';
+export * as Create from './create.swagger';

@@ -1,5 +1,5 @@
-import { UnauthorizedException } from '@nestjs/common';
 import { ApiOperationOptions, ApiResponseOptions } from '@nestjs/swagger';
+import { ExceptionResponse } from 'src/types';
 
 export const Operation: ApiOperationOptions = {
     summary: '로그아웃 API',
@@ -16,5 +16,5 @@ export const _200: ApiResponseOptions = {
 export const _401: ApiResponseOptions = {
     status: 401,
     description: '로그인되어 있지 않음',
-    type: UnauthorizedException,
+    type: ExceptionResponse,
 };

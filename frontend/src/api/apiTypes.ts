@@ -29,7 +29,7 @@ export interface postType {
     tag: string[];
 }
 
-export interface MainPageArticleAPIType {
+export interface MultipleArticleAPIType {
     articles: postCardInfoType[];
 }
 export interface postCardInfoType {

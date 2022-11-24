@@ -8,8 +8,13 @@ import { ReactComponent as LinkedinIconSVG } from 'assets/svg/linkedin.svg';
 import Collapsible from './Sidebar/Collapsible';
 import CategoryButton from './Sidebar/CategoryButton';
 import { PlainBtn } from 'styles/common';
+import { blogSideBarInfoType } from 'api/apiTypes';
 
-const SidebarComponent = () => {
+interface SidebarComponentProps {
+    blogSideBarInfo: blogSideBarInfoType;
+}
+
+const SidebarComponent = ({ blogSideBarInfo }: SidebarComponentProps) => {
     const categories = [
         {
             id: 1,
@@ -37,7 +42,7 @@ const SidebarComponent = () => {
             <NameCard>
                 <Name>John doe</Name>
                 <Bio>
-                    <p>날 어떻게 한줄로 소개해</p>
+                    <p>{blogSideBarInfo.bio}</p>
                 </Bio>
                 <ProfileImage src="https://picsum.photos/75" />
                 <SocialInfos>

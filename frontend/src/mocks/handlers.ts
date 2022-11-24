@@ -48,4 +48,21 @@ export const handlers = [
             }),
         );
     }),
+    rest.get('/api/article', (req, res, ctx) => {
+        console.log('api/article hit');
+        return res(
+            ctx.delay(1500),
+            ctx.status(200),
+            ctx.json({
+                articles: Array(6).fill({
+                    imgURL: 'https://picsum.photos/230/144',
+                    title: '제목이지롱',
+                    category: '리액트',
+                    date: '2022-11-01',
+                    authorId: 'supersfel',
+                    postURL: 'post/123s',
+                }),
+            }),
+        );
+    }),
 ];

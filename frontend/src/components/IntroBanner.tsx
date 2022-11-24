@@ -10,6 +10,10 @@ interface IntroBannerType {
 }
 
 const IntroBanner = ({ isLogin }: IntroBannerType) => {
+    const moveGitHubAuth = () => {
+        window.location.href = `http://localhost:8080/auth/github`;
+    };
+
     return (
         <>
             <BannerWrapper>
@@ -22,12 +26,7 @@ const IntroBanner = ({ isLogin }: IntroBannerType) => {
                     </Description>
                 </BannerTextArea>
                 <LoadingSVG />
-                <GitHubBtn
-                    isLogin={isLogin}
-                    onClick={() =>
-                        (window.location.href = `http://localhost:8080/auth/github`)
-                    }
-                >
+                <GitHubBtn isLogin={isLogin} onClick={moveGitHubAuth}>
                     <GitHubSVG stroke="black" />
                     GitHub로 로그인
                 </GitHubBtn>

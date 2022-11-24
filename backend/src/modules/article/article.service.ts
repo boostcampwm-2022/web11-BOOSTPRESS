@@ -1,5 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import {
+    BadRequestException,
     ForbiddenException,
     Injectable,
     UnauthorizedException,
@@ -7,8 +8,6 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Article, User } from '@prisma/client';
 import { AxiosInstance } from 'axios';
-import { Direction } from 'readline';
-import { distinct } from 'rxjs';
 import { repoName } from '../auth/test';
 import { PrismaService } from '../prisma/prisma.service';
 import {
@@ -65,22 +64,42 @@ export class ArticleService {
     }
 
     async update(user: User, dto: PatchArticleDTO) {
-        const where = { id: dto.id },
-            data = { title: dto.title };
-
-        const article = await this.prisma.article.findUnique({ where });
-
-        if (article.authorId !== user.id) {
-            const message = '게시글이 현재 사용자가 작성한 게시글이 아닙니다!';
-            throw new ForbiddenException(message);
-        }
+        const article = await this.getArticleWithUser(dto.id, user.id);
 
         await Promise.all([
             this.commit(user, dto, article),
-            this.prisma.article.update({ where, data }),
+            this.prisma.article.update({
+                where: { id: dto.id },
+                data: { title: dto.title },
+            }),
         ]);
 
         return { id: article.id };
+    }
+
+    async delete(user: User, id: number) {
+        const article = await this.getArticleWithUser(id, user.id);
+
+        if (article.deleted)
+            throw new BadRequestException('이미 삭제된 게시글입니다.');
+
+        await this.prisma.article.update({
+            where: { id },
+            data: { deleted: true },
+        });
+
+        return { id: article.id };
+    }
+
+    private async getArticleWithUser(id: number, authorId: number) {
+        try {
+            return await this.prisma.article.findFirstOrThrow({
+                where: { id, authorId },
+            });
+        } catch (error) {
+            const message = '게시글이 현재 사용자가 작성한 게시글이 아닙니다!';
+            throw new ForbiddenException(message);
+        }
     }
 
     private async commit(user: User, dto: PostArticleDTO, article: Article) {

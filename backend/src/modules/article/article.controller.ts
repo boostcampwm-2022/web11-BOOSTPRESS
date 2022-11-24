@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Param,
     ParseIntPipe,
@@ -41,5 +42,14 @@ export class ArticleController {
     @Patch()
     async update(@CurrentUser() user: User, @Body() dto: PatchArticleDTO) {
         return await this.articleService.update(user, dto);
+    }
+
+    @UseGuards(JwtGuard)
+    @Delete(':id')
+    async delete(
+        @CurrentUser() user: User,
+        @Param('id', ParseIntPipe) id: number,
+    ) {
+        return await this.articleService.delete(user, id);
     }
 }

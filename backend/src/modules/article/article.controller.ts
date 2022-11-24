@@ -16,9 +16,6 @@ import { JwtGuard } from 'src/guard';
 import { ArticleService } from './article.service';
 import { PatchArticleDTO, PostArticleDTO } from './dto';
 import { Create, Update } from './swagger';
-import * as fs from 'fs';
-import * as path from 'path';
-
 
 @Controller('article')
 export class ArticleController {
@@ -54,6 +51,5 @@ export class ArticleController {
         @Param('id', ParseIntPipe) id: number,
     ) {
         return await this.articleService.delete(user, id);
-
     }
 }

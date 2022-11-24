@@ -8,6 +8,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Article, User } from '@prisma/client';
 import { AxiosInstance } from 'axios';
+import * as path from 'path';
+import * as fs from 'fs';
 import { repoName } from '../auth/test';
 import { PrismaService } from '../prisma/prisma.service';
 import {
@@ -40,6 +42,17 @@ export class ArticleService {
         });
 
         await this.commit(user, dto, article);
+
+        const goalPath = path.resolve(
+            __dirname,
+            `../../../articles/${article.id}`,
+        );
+        if (fs.existsSync(goalPath)) {
+            throw new Error('fileId already exists.');
+        }
+        fs.mkdirSync(goalPath, { recursive: true });
+        fs.writeFileSync(goalPath + `/${dto.title}.md`, dto.content);
+
         return { id: article.id };
     }
 
@@ -73,6 +86,16 @@ export class ArticleService {
                 data: { title: dto.title },
             }),
         ]);
+
+        let basePath = path.resolve(__dirname, `../../../articles/${dto.id}`);
+        if (!fs.existsSync(basePath + `/${article.title}.md`)) {
+            throw new Error('수정하려는 파일이 존재하지 않습니다.');
+        }
+        fs.renameSync(
+            basePath + `/${article.title}.md`,
+            basePath + `/${dto.title}.md`,
+        );
+        fs.writeFileSync(basePath + `/${dto.title}.md`, dto.content);
 
         return { id: article.id };
     }
@@ -132,77 +155,3 @@ export class ArticleService {
         return data;
     }
 }
-
-/**
- * =======
-    @Post('')
-    async write(@CurrentUser() user: User, @Body() dto: PostArticleDTO) {
-        await this.articleService.commit(user, dto);
-
-        //=> DB에 정보를 저장한다.
-        const fileId = 123; // db에서 file id를 가져온다.
-
-        //=> 로컬 파일을 생성한다.
-        const goalPath = path.resolve(__dirname, `../../../articles/${fileId}`);
-        if (fs.existsSync(goalPath)) {
-            throw new Error('fileId already exists.');
-        }
-        fs.mkdirSync(goalPath, { recursive: true });
-        fs.writeFileSync(goalPath + `/${dto.title}.md`, dto.content);
-
-        return null;
-    }
-
-    @ApiOperation(UpdateFile.Operation)
-    @ApiResponse(UpdateFile._200)
-    @ApiResponse(UpdateFile._401)
-    // @UseGuards(JwtGuard)
-    @Patch('/:postId')
-    async updateFile(
-        @CurrentUser() user: User,
-        @Body() dto: PostArticleDTO,
-        @Param('postId') postId: number,
-    ) {
-        // 수정 내용인 dto를 그대로 커밋하면 될까요?
-        // await this.articleService.commit(user, dto);
-
-        //=> DB에 정보를 저장한다.
-
-        //=> 로컬 파일을 수정한다.
-        // 삭제 후 새로 생성?
-        const goalPath = path.resolve(
-            __dirname,
-            `../../../articles/${postId}/${dto.title}.md`,
-        );
-        if (!fs.existsSync(goalPath)) {
-            throw new Error('수정하려는 파일이 존재하지 않습니다.');
-        }
-        fs.writeFileSync(goalPath, dto.content);
-
-        return null;
-    }
-
-    @ApiOperation(DeleteFile.Operation)
-    @ApiResponse(DeleteFile._200)
-    @ApiResponse(DeleteFile._401)
-    // @UseGuards(JwtGuard)
-    @Delete('/:postId')
-    async deleteFile(
-        @CurrentUser() user: User,
-        @Param('postId') postId: number,
-    ) {
-        // 삭제한 내용은 어떻게 커밋해야하나요?
-        // await this.articleService.commit(user, dto);
-
-        //=> DB에 정보를 저장한다.
-
-        //=> 로컬 파일을 삭제한다.
-        const goalPath = path.resolve(__dirname, `../../../articles/${postId}`);
-        if (!fs.existsSync(goalPath)) {
-            throw new Error('삭제하려는 폴더가 존재하지 않습니다.');
-        }
-        fs.rmdirSync(goalPath, { recursive: true });
-
-        return null;
->>>>>>> Stashed changes
- */

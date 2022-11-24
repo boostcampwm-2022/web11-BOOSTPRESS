@@ -4,8 +4,13 @@ import Header from 'components/Header';
 import IntroBanner from 'components/IntroBanner';
 import FeaturedPost from 'components/FeaturedPost';
 import { getFeaturePostInfo } from 'api/api';
+import { useQuery } from '@tanstack/react-query';
 
 const Main = () => {
+    const { isLoading, isError, data } = useQuery({
+        queryKey: ['recentPosts'],
+        queryFn: getFeaturePostInfo,
+    });
     return (
         <>
             <Header isLogoActive={true} isLogin={true} />
@@ -21,8 +26,13 @@ const Main = () => {
 
             /> */}
             <IntroBanner isLogin={true} />
-            <FeaturedPost title="" postInfo={getFeaturePostInfo()} />
-            <FeaturedPost title="" postInfo={getFeaturePostInfo()} />
+            {isLoading ? (
+                <span>Loading...</span>
+            ) : isError ? (
+                <span>Error</span>
+            ) : (
+                <FeaturedPost title="" postInfo={data.articles} />
+            )}
         </>
     );
 };

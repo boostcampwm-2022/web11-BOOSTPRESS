@@ -25,16 +25,13 @@ export class AuthController {
     async github(
         @CurrentUser() user: User,
         @Res({ passthrough: true }) res: Response,
-    ): Promise<LoginResponseDTO> {
+    ) {
         const jwt = this.tokenService.create(user);
 
         res.cookie(Auth, `Bearer ${jwt}`, this.tokenService.bearerOption());
         await this.tokenService.setToken(user, jwt);
 
-        return {
-            nickname: user.nickname,
-            email: user.email,
-        };
+        res.redirect('https://localhost:3000');
     }
 
     @ApiOperation(DeleteLogout.Operation)
@@ -47,7 +44,7 @@ export class AuthController {
         @Res({ passthrough: true }) res: Response,
     ) {
         await this.authService.logout(user, res);
-        return {};
+        res.redirect('https://localhost:3000');
     }
 
     @ApiOperation(GetMe.Operation)

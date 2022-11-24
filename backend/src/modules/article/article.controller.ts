@@ -15,7 +15,7 @@ import { CurrentUser } from 'src/decorator';
 import { JwtGuard } from 'src/guard';
 import { ArticleService } from './article.service';
 import { PatchArticleDTO, PostArticleDTO } from './dto';
-import { Create, Update } from './swagger';
+import { Create, ReadOne, Remove, Update } from './swagger';
 
 @Controller('article')
 export class ArticleController {
@@ -30,6 +30,8 @@ export class ArticleController {
         return await this.articleService.create(user, dto);
     }
 
+    @ApiOperation(ReadOne.Operation)
+    @ApiResponse(ReadOne._200)
     @Get(':id')
     async readOne(@Param('id', ParseIntPipe) id: number) {
         return await this.articleService.readOne(id);
@@ -44,6 +46,9 @@ export class ArticleController {
         return await this.articleService.update(user, dto);
     }
 
+    @ApiOperation(Remove.Operation)
+    @ApiResponse(Remove._200)
+    @ApiResponse(Remove._401)
     @UseGuards(JwtGuard)
     @Delete(':id')
     async delete(

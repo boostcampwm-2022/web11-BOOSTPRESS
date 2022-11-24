@@ -37,6 +37,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
             this.prisma.session.findUnique({ where: { userId: id } }),
         ]);
 
+        // 사용자 혹은 사용자의 세션에 대응되는 DB 레코드가 없다면 에러 반환
         if (user === null || session === null) {
             req.res.clearCookie(Auth);
             throw new UnauthorizedException('사용자 정보를 찾을 수 없습니다!');
@@ -47,15 +48,20 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
             new Date().getTime() - session.expiresAt.getTime() <= 0;
 
         if (!isTokenValid && !isLoginValid) this.forceLogout(req, user);
-        else if (!isTokenValid) this.resetAccessToken(req, user);
-        else if (!isLoginValid) this.resetExpiration(user);
+        else if (!isTokenValid) await this.resetAccessToken(req, user);
+        else if (!isLoginValid) await this.resetExpiration(user);
+
+        // 로그인 수명 검증을 마친 사용자가 잘못된 토큰을 이용해 접근한다면
+        // 토큰이 탈취된 것으로 보고 강제로 로그아웃
+        if (session.accessToken !== cookieToToken(req))
+            this.forceLogout(req, user);
 
         return user;
     }
 
     // 사용자를 강제로 로그아웃
     private async forceLogout(req: Request, user: User) {
-        this.authService.logout(user, req.res.clearCookie);
+        await this.authService.logout(user, req.res.clearCookie);
         throw new UnauthorizedException('로그인이 만료되었습니다!');
     }
 

@@ -31,7 +31,7 @@ export class AuthController {
         res.cookie(Auth, `Bearer ${jwt}`, this.tokenService.bearerOption());
         await this.tokenService.setToken(user, jwt);
 
-        res.redirect('https://localhost:3000');
+        res.redirect('http://localhost:3000');
     }
 
     @ApiOperation(DeleteLogout.Operation)
@@ -44,7 +44,7 @@ export class AuthController {
         @Res({ passthrough: true }) res: Response,
     ) {
         await this.authService.logout(user, res);
-        res.redirect('https://localhost:3000');
+        res.redirect('http://localhost:3000');
     }
 
     @ApiOperation(GetMe.Operation)

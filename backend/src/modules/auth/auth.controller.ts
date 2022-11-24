@@ -46,7 +46,7 @@ export class AuthController {
         @CurrentUser() user: User,
         @Res({ passthrough: true }) res: Response,
     ) {
-        await this.authService.logout(user, res.clearCookie);
+        await this.authService.logout(user, res);
         return {};
     }
 

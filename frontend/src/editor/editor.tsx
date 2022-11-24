@@ -1,8 +1,11 @@
+/* @jsxRuntime automatic @jsxImportSource react */
 import React from 'react';
 
 import EasyMDE from 'easymde';
 import { renderToStaticMarkup } from 'react-dom/server';
 import ReactMarkdown from 'react-markdown';
+import Content from './sample.mdx';
+import { MDXProvider } from '@mdx-js/react';
 
 export default function mdxEditor({
     components = [],
@@ -28,12 +31,17 @@ export default function mdxEditor({
         },
         ...easymdeConfig,
     };
+    const component = {
+        em: (props: any) => <i {...props} />,
+    };
 
     const easymde = new EasyMDE({
         ...config,
-        previewRender: (plainText) => {
+        previewRender: (plainText: any) => {
             return renderToStaticMarkup(
-                <ReactMarkdown>{plainText}</ReactMarkdown>,
+                <MDXProvider components={replacements}>
+                    {plainText}
+                </MDXProvider>,
             );
         },
     });

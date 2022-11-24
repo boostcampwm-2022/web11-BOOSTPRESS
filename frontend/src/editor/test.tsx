@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 
 import { Grid } from './mdx/Grid';
-import defaultMarkdownValue from './default.md';
+// import defaultMarkdownValue from './default.md';
 import mdxEditor from './editor';
 
 const Textarea = styled.textarea`
@@ -20,7 +20,7 @@ const components = [
         icon: 'grip-horizontal',
         demo: `<Grid>
   <img src="https://source.unsplash.com/weekly?water" alt="" />
-  <img src="https://source.unsplash.com/weekly?nature" alt="" />
+  <img src="https0://source.unsplash.com/weekly?nature" alt="" />
   <img src="https://source.unsplash.com/weekly?air" alt="" />
 </Grid>`,
     },

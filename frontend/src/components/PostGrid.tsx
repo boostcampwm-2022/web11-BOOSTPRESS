@@ -12,7 +12,7 @@ interface PostGridType {
 const PostGrid = ({ postInfo, title }: PostGridType) => {
     return (
         <>
-            {title ? <Title>{title}</Title> : ''}
+            {title ? <Title>{title}</Title> : null}
             <PostCardWrap>
                 {postInfo.map((post) => (
                     <PostCard postInfo={post} width="100%" height="300px" />

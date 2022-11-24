@@ -22,7 +22,12 @@ const IntroBanner = ({ isLogin }: IntroBannerType) => {
                     </Description>
                 </BannerTextArea>
                 <LoadingSVG />
-                <GitHubBtn isLogin={isLogin}>
+                <GitHubBtn
+                    isLogin={isLogin}
+                    onClick={() =>
+                        (window.location.href = `http://localhost:8080/auth/github`)
+                    }
+                >
                     <GitHubSVG stroke="black" />
                     GitHub로 로그인
                 </GitHubBtn>

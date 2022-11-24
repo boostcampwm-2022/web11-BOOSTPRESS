@@ -1,5 +1,9 @@
 import { HttpService } from '@nestjs/axios';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+    ForbiddenException,
+    Injectable,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Article, User } from '@prisma/client';
 import { AxiosInstance } from 'axios';
@@ -7,7 +11,12 @@ import { Direction } from 'readline';
 import { distinct } from 'rxjs';
 import { repoName } from '../auth/test';
 import { PrismaService } from '../prisma/prisma.service';
-import { CommitResponseDTO, PatchArticleDTO, PostArticleDTO } from './dto';
+import {
+    CommitResponseDTO,
+    FetchResponseDTO,
+    PatchArticleDTO,
+    PostArticleDTO,
+} from './dto';
 
 @Injectable()
 export class ArticleService {
@@ -33,6 +42,26 @@ export class ArticleService {
 
         await this.commit(user, dto, article);
         return { id: article.id };
+    }
+
+    async readOne(id: number) {
+        const article = await this.prisma.article.findUnique({
+            where: { id },
+            select: { author: true, deleted: true },
+        });
+
+        if (article === null || article.deleted) {
+            const message = `게시글 #${id}이(가) 존재하지 않습니다!`;
+            throw new UnauthorizedException(message);
+        }
+
+        const { data } = await this.axios.get<FetchResponseDTO>(
+            `https://api.github.com/repos/${article.author.login}/${repoName}/readme/${id}`,
+        );
+
+        data.content = Buffer.from(data.content, 'base64').toString();
+
+        return { content: data.content };
     }
 
     async update(user: User, dto: PatchArticleDTO) {

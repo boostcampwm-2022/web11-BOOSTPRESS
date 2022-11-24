@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { CurrentUser } from 'src/decorator';
@@ -20,12 +29,17 @@ export class ArticleController {
         return await this.articleService.create(user, dto);
     }
 
+    @Get(':id')
+    async readOne(@Param('id', ParseIntPipe) id: number) {
+        return await this.articleService.readOne(id);
+    }
+
     @ApiOperation(Update.Operation)
     @ApiResponse(Update._200)
     @ApiResponse(Update._401)
     @UseGuards(JwtGuard)
     @Patch()
-    async patch(@CurrentUser() user: User, @Body() dto: PatchArticleDTO) {
+    async update(@CurrentUser() user: User, @Body() dto: PatchArticleDTO) {
         return await this.articleService.update(user, dto);
     }
 }

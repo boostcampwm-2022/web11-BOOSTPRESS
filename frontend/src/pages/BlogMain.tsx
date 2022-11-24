@@ -61,9 +61,7 @@ const Main = styled.main`
     align-items: center;
     justify-content: center;
     gap: 100px;
-    div:first-child {
-        justify-content: center;
-    }
+
     .pagination {
         align-self: center;
         bottom: 80px;

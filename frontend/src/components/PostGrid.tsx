@@ -33,10 +33,10 @@ const Title = styled.p`
 const PostCardWrap = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(230px, 230px));
+    justify-content: center;
     width: 80%;
     margin: 0 auto;
     margin-top: 5rem;
-    justify-content: center;
     row-gap: 2rem;
     column-gap: 3rem;
 `;

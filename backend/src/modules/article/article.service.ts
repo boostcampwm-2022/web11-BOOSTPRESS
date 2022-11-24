@@ -80,9 +80,6 @@ export class ArticleService {
     async delete(user: User, id: number) {
         const article = await this.getArticleWithUser(id, user.id);
 
-        if (article.deleted)
-            throw new BadRequestException('이미 삭제된 게시글입니다.');
-
         await this.prisma.article.update({
             where: { id },
             data: { deleted: true },
@@ -92,14 +89,20 @@ export class ArticleService {
     }
 
     private async getArticleWithUser(id: number, authorId: number) {
-        try {
-            return await this.prisma.article.findFirstOrThrow({
-                where: { id, authorId },
-            });
-        } catch (error) {
+        const article = await this.prisma.article.findFirst({
+            where: { id },
+        });
+
+        if (article.authorId !== authorId) {
             const message = '게시글이 현재 사용자가 작성한 게시글이 아닙니다!';
             throw new ForbiddenException(message);
         }
+        if (article.deleted) {
+            const message = '삭제된 게시글입니다!';
+            throw new BadRequestException(message);
+        }
+
+        return article;
     }
 
     private async commit(user: User, dto: PostArticleDTO, article: Article) {

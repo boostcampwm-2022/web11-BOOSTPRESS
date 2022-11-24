@@ -2,7 +2,6 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-
     provider = "prisma-client-js"
 }
 
@@ -17,9 +16,8 @@ model User {
     login    String @unique
     email    String
 
-    session Session?
-
-    // posts Post[]
+    session  Session?
+    articles Article[]
 }
 
 model Session {
@@ -27,14 +25,20 @@ model Session {
     user        User     @relation(fields: [userId], references: [id])
     accessToken String
     expiresAt   DateTime @default(now())
-
 }
 
-// model Post {
-//   id        Int      @id @default(autoincrement())
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
+model Article {
+    // 게시글 파일
+    id    Int    @id @default(autoincrement())
+    title String
 
-//   authorId Int
-//   author   User @relation(fields: [authorId], references: [id])
-// }
+    // GitHub 관련
+    updateSHA String @default("")
+
+    // prisma 관련
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    deleted   Boolean  @default(false)
+    authorId  Int
+    author    User     @relation(fields: [authorId], references: [id])
+}

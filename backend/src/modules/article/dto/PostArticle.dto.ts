@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class PostArticle {
+export class PostArticleDTO {
     @ApiProperty({ description: '게시글의 제목' })
     @IsString()
     @IsNotEmpty()

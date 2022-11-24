@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import styled from '@emotion/styled/macro';
-import FeaturedPost from 'components/FeaturedPost';
 import Header from 'components/Header';
 import Pagination from 'components/Pagination';
 import Sidebar from 'components/Sidebar';
 import { getBlogSideBarInfo, getArticlesWithUserId } from 'api/api';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import PostGrid from 'components/PostGrid';
 
 const BlogMain = () => {
     const userId = useParams().userId as string;
@@ -35,10 +35,7 @@ const BlogMain = () => {
                 ) : articlesQuery.isError ? (
                     <span>Error</span>
                 ) : (
-                    <FeaturedPost
-                        title=""
-                        postInfo={articlesQuery.data.articles}
-                    />
+                    <PostGrid postInfo={articlesQuery.data.articles} />
                 )}
                 <Pagination
                     curPage={pageIdx}
@@ -64,9 +61,7 @@ const Main = styled.main`
     align-items: center;
     justify-content: center;
     gap: 100px;
-    div:first-child {
-        justify-content: center;
-    }
+
     .pagination {
         align-self: center;
         bottom: 80px;

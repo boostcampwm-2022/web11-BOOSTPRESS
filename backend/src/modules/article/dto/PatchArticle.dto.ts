@@ -7,11 +7,4 @@ export class PatchArticleDTO extends PostArticleDTO {
     @IsNumber()
     @IsNotEmpty()
     id: number;
-
-    // @ApiProperty({
-    //     description: 'GitHub에서 게시글을 수정할 때 필요한 blob SHA',
-    // })
-    // @IsString()
-    // @IsNotEmpty()
-    // sha: string;
 }

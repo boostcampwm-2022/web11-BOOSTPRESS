@@ -15,23 +15,21 @@ const IntroBanner = ({ isLogin }: IntroBannerType) => {
     };
 
     return (
-        <>
-            <BannerWrapper>
-                <BannerTextArea>
-                    <Title>
-                        <span>The Ultimate</span> Platform <span>For Dev</span>
-                    </Title>
-                    <Description>
-                        블라블라 어쩌구저쩌구 설명블라블라 어쩌구저쩌구
-                    </Description>
-                </BannerTextArea>
-                <LoadingSVG />
-                <GitHubBtn isLogin={isLogin} onClick={moveGitHubAuth}>
-                    <GitHubSVG stroke="black" />
-                    GitHub로 로그인
-                </GitHubBtn>
-            </BannerWrapper>
-        </>
+        <BannerWrapper>
+            <BannerTextArea>
+                <Title>
+                    <span>The Ultimate</span> Platform <span>For Dev</span>
+                </Title>
+                <Description>
+                    블라블라 어쩌구저쩌구 설명블라블라 어쩌구저쩌구
+                </Description>
+            </BannerTextArea>
+            <LoadingSVG />
+            <GitHubBtn isLogin={isLogin} onClick={moveGitHubAuth}>
+                <GitHubSVG stroke="black" />
+                GitHub로 로그인
+            </GitHubBtn>
+        </BannerWrapper>
     );
 };
 

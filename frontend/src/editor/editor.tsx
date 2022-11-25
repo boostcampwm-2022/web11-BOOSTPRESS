@@ -5,6 +5,7 @@ import EasyMDE from 'easymde';
 import { renderToStaticMarkup } from 'react-dom/server';
 import ReactMarkdown from 'react-markdown';
 import Content from './sample.mdx';
+import { compile, compileSync, evaluate, evaluateSync } from '@mdx-js/mdx';
 import { MDXProvider } from '@mdx-js/react';
 
 export default function mdxEditor({
@@ -35,14 +36,21 @@ export default function mdxEditor({
         em: (props: any) => <i {...props} />,
     };
 
+    const test = (plainText: string) => {
+        const w = compileSync(plainText, {
+            format: 'mdx',
+            jsx: true,
+        });
+        console.log(w);
+
+        return <MDXProvider>{w.value}</MDXProvider>;
+    };
+
     const easymde = new EasyMDE({
         ...config,
         previewRender: (plainText: any) => {
-            return renderToStaticMarkup(
-                <MDXProvider components={replacements}>
-                    {plainText}
-                </MDXProvider>,
-            );
+            console.log(test(plainText));
+            return renderToStaticMarkup(test(plainText));
         },
     });
     EasyMDE.toggleSideBySide(easymde);

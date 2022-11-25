@@ -16,6 +16,8 @@ model User {
     login    String @unique
     email    String
 
+    repoName String
+
     session  Session?
     articles Article[]
 }

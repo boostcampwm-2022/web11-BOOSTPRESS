@@ -10,21 +10,21 @@ import { Article, User } from '@prisma/client';
 import { AxiosInstance } from 'axios';
 import * as path from 'path';
 import * as fs from 'fs';
-import { repoName } from '../auth/test';
 import { PrismaService } from '../prisma/prisma.service';
 import { ArticleDTO, CommitResponseDTO, FetchResponseDTO } from './dto';
+import { Env } from 'src/types';
 
 @Injectable()
 export class ArticleService {
-    private readonly TEST_ACCESS_TOKEN: string;
+    private readonly SERVER_ACCESS_TOKEN: string;
     private readonly axios: AxiosInstance;
 
     constructor(
         private readonly prisma: PrismaService,
-        config: ConfigService,
+        config: ConfigService<Env>,
         httpService: HttpService,
     ) {
-        this.TEST_ACCESS_TOKEN = config.get('TEST_ACCESS_TOKEN');
+        this.SERVER_ACCESS_TOKEN = config.get('SERVER_ACCESS_TOKEN');
         this.axios = httpService.axiosRef;
     }
 
@@ -63,7 +63,7 @@ export class ArticleService {
         }
 
         const { data } = await this.axios.get<FetchResponseDTO>(
-            `https://api.github.com/repos/${article.author.login}/${repoName}/readme/${id}`,
+            `https://api.github.com/repos/${article.author.login}/${article.author.repoName}/readme/${id}`,
         );
 
         data.content = Buffer.from(data.content, 'base64').toString();
@@ -133,13 +133,16 @@ export class ArticleService {
             },
             sha: article.updateSHA ?? '',
         };
+        const headers = {
+            Authorization: `Bearer ${this.SERVER_ACCESS_TOKEN}`,
+        };
 
         if (requestData.sha === '') delete requestData.sha;
 
         const { data } = await this.axios.put<CommitResponseDTO>(
-            `https://api.github.com/repos/${user.login}/${repoName}/contents/${article.id}/README.md`,
+            `https://api.github.com/repos/${user.login}/${user.repoName}/contents/${article.id}/README.md`,
             requestData,
-            { headers: { Authorization: `Bearer ${this.TEST_ACCESS_TOKEN}` } },
+            { headers },
         );
 
         await this.prisma.article.update({

@@ -13,6 +13,7 @@ const Main = () => {
     });
     return (
         <>
+
             <Header isLogoActive={true} isLogin={true} />
             <IntroBanner isLogin={true} />
             {isLoading ? (

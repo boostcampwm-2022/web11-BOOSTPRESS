@@ -12,12 +12,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { repoName } from '../auth/test';
 import { PrismaService } from '../prisma/prisma.service';
-import {
-    CommitResponseDTO,
-    FetchResponseDTO,
-    PatchArticleDTO,
-    PostArticleDTO,
-} from './dto';
+import { ArticleDTO, CommitResponseDTO, FetchResponseDTO } from './dto';
 
 @Injectable()
 export class ArticleService {
@@ -33,7 +28,7 @@ export class ArticleService {
         this.axios = httpService.axiosRef;
     }
 
-    async create(user: User, dto: PostArticleDTO) {
+    async create(user: User, dto: ArticleDTO) {
         const article = await this.prisma.article.create({
             data: {
                 authorId: user.id,
@@ -76,18 +71,18 @@ export class ArticleService {
         return { content: data.content };
     }
 
-    async update(user: User, dto: PatchArticleDTO) {
-        const article = await this.getArticleWithUser(dto.id, user.id);
+    async update(user: User, dto: ArticleDTO, id: number) {
+        const article = await this.getArticleWithUser(id, user.id);
 
         await Promise.all([
             this.commit(user, dto, article),
             this.prisma.article.update({
-                where: { id: dto.id },
+                where: { id },
                 data: { title: dto.title },
             }),
         ]);
 
-        let basePath = path.resolve(__dirname, `../../../articles/${dto.id}`);
+        let basePath = path.resolve(__dirname, `../../../articles/${id}`);
         if (!fs.existsSync(basePath + `/${article.title}.md`)) {
             throw new Error('수정하려는 파일이 존재하지 않습니다.');
         }
@@ -128,7 +123,7 @@ export class ArticleService {
         return article;
     }
 
-    private async commit(user: User, dto: PostArticleDTO, article: Article) {
+    private async commit(user: User, dto: ArticleDTO, article: Article) {
         const requestData = {
             message: dto.title,
             content: Buffer.from(dto.content).toString('base64'),

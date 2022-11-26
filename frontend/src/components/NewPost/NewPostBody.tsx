@@ -1,11 +1,11 @@
 /*  */
 import styled from '@emotion/styled';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import colors from 'styles/color';
 import { Successbtn } from 'styles/common';
 import { dateToStrYYYYMMDD } from 'utils/utils';
-import Editor from './Editor';
-import 'styles/editor.css';
+import mdxEditor from 'editor/editor';
+import MDXEditor from 'editor/mdxEditor';
 
 const NewPostBody = () => {
     const [title, setTitle] = useState('');
@@ -38,9 +38,7 @@ const NewPostBody = () => {
             </PostInfo>
 
             <EditorWrapper>
-                <div className="markdown-body">
-                    <Editor content={content} setContent={setContent} />
-                </div>
+                <MDXEditor />
             </EditorWrapper>
 
             <SubmitButton>글쓰기</SubmitButton>
@@ -86,6 +84,7 @@ const PostInfoItem = styled.div`
 const EditorWrapper = styled.div`
     width: 80%;
     margin: 3rem auto;
+    position: relative;
 `;
 
 const SubmitButton = styled(Successbtn)`

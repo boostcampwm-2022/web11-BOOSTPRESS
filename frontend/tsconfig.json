@@ -24,7 +24,8 @@
       "styles/*": ["styles/*"],
       "utils/*": ["utils/*"],
       "api/*": ["api/*"],
-      "hooks/*": ["hooks/*"]
+      "hooks/*": ["hooks/*"],
+      "editor/*": ["editor/*"]
     }
   },
   "include": ["src"]

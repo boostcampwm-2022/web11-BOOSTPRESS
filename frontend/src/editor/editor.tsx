@@ -5,14 +5,18 @@ import EasyMDE from 'easymde';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { evaluateSync } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
+import 'easymde/dist/easymde.min.css';
 
-function generate(body: string) {
+//string으로 된 mdx => 컴포넌트로 변환
+const generate = (body: string) => {
     const mdx = evaluateSync(body, {
         ...(runtime as any),
     }).default;
 
     return renderToStaticMarkup(createElement(mdx));
-}
+};
+
+//설정할 mdx문법
 const mdxContent = `
 export const planet = 'World'
 export const Highlight = ({children, color}) => (
@@ -29,12 +33,13 @@ export const Highlight = ({children, color}) => (
 
 `;
 
-export default function mdxEditor({
+export default function EasyEditer({
     toolbar = null,
     easymde: easymdeConfig = {},
-}: any) {
+}) {
     const config = {
         ...{
+            sideBySideFullscreen: false,
             autoDownloadFontAwesome: true,
             forceSync: true,
             autofocus: true,

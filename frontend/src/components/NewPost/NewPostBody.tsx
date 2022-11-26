@@ -1,6 +1,6 @@
 /*  */
 import styled from '@emotion/styled';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import colors from 'styles/color';
 import { Successbtn } from 'styles/common';
 import { dateToStrYYYYMMDD } from 'utils/utils';

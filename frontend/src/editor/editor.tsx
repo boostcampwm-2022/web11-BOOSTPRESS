@@ -1,27 +1,38 @@
 /* @jsxRuntime automatic @jsxImportSource react */
-import React from 'react';
+import React, { createElement } from 'react';
 
 import EasyMDE from 'easymde';
 import { renderToStaticMarkup } from 'react-dom/server';
-import ReactMarkdown from 'react-markdown';
-import Content from './sample.mdx';
-import { compile, compileSync, evaluate, evaluateSync } from '@mdx-js/mdx';
-import { MDXProvider } from '@mdx-js/react';
+import { evaluateSync } from '@mdx-js/mdx';
+import * as runtime from 'react/jsx-runtime';
+
+function generate(body: string) {
+    const mdx = evaluateSync(body, {
+        ...(runtime as any),
+    }).default;
+
+    return renderToStaticMarkup(createElement(mdx));
+}
+const mdxContent = `
+export const planet = 'World'
+export const Highlight = ({children, color}) => (
+    <span
+      style={{
+        backgroundColor: color,
+        borderRadius: '2px',
+        color: '#fff',
+        padding: '0.2rem',
+      }}>
+      {children}
+    </span>
+  );
+
+`;
 
 export default function mdxEditor({
-    components = [],
-    replacements = {},
     toolbar = null,
     easymde: easymdeConfig = {},
 }: any) {
-    const scope = components.reduce(
-        (scope: any, { tagname, component }: any) => ({
-            ...scope,
-            [tagname]: component,
-        }),
-        {},
-    );
-
     const config = {
         ...{
             autoDownloadFontAwesome: true,
@@ -32,25 +43,11 @@ export default function mdxEditor({
         },
         ...easymdeConfig,
     };
-    const component = {
-        em: (props: any) => <i {...props} />,
-    };
-
-    const test = (plainText: string) => {
-        const w = compileSync(plainText, {
-            format: 'mdx',
-            jsx: true,
-        });
-        console.log(w);
-
-        return <MDXProvider>{w.value}</MDXProvider>;
-    };
 
     const easymde = new EasyMDE({
         ...config,
         previewRender: (plainText: any) => {
-            console.log(test(plainText));
-            return renderToStaticMarkup(test(plainText));
+            return generate(mdxContent + plainText);
         },
     });
     EasyMDE.toggleSideBySide(easymde);

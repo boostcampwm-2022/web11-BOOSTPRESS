@@ -23,7 +23,8 @@
       "components/*": ["components/*"],
       "styles/*": ["styles/*"],
       "utils/*": ["utils/*"],
-      "api/*": ["api/*"]
+      "api/*": ["api/*"],
+      "hooks/*": ["hooks/*"]
     }
   },
   "include": ["src"]

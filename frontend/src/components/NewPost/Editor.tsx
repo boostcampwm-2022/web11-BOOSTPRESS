@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import SimpleMdeReact from 'react-simplemde-editor';
 import EasyMDE from 'easymde';
@@ -13,6 +13,8 @@ interface EditorType {
 }
 
 const Editor = ({ content, setContent }: EditorType) => {
+    const [renderCtx, setRenderCtx] = useState<any>();
+
     const onChange = useCallback(
         (value: string) => setContent(() => value),
         [],

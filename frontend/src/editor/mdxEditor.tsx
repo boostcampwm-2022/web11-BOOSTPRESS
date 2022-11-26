@@ -15,9 +15,16 @@ const Textarea = styled.textarea`
 
 interface MDXEditorType {
     guideLine: string;
+    setContent: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function MDXEditor({ guideLine }: MDXEditorType) {
+/**
+ *
+ * @param guideLine 에디터에 가이드라인을 제시
+ * @param setContent 에디터안의 값을 useState로 관리할 수있게
+ * @returns
+ */
+export default function MDXEditor({ guideLine, setContent }: MDXEditorType) {
     const editorRef = useRef(null);
     const [, setEditor] = useState<any>(null);
 
@@ -27,6 +34,7 @@ export default function MDXEditor({ guideLine }: MDXEditorType) {
                 easymde: { element: editorRef.current },
                 mdxComponents,
                 toolbar: toolbarOption,
+                setContent,
             }),
         );
     }, []);

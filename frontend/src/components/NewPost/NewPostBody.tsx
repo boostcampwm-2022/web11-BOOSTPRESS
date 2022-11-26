@@ -19,13 +19,22 @@ const NewPostBody = () => {
         setTitle(e.target.value);
     };
 
+    const submitPost = () => {
+        const postData = {
+            title,
+            content,
+        };
+
+        console.log(postData);
+    };
+
     return (
         <NewPostBodyWrapper>
             <PostInfo>
                 <Title placeholder="제목을 입력하세요" onChange={handleTitle} />
                 <PostInfoItem>
                     <p>Posted Date : </p>
-                    <p>&nbsp;{dateToStrYYYYMMDD(new Date())}</p>
+                    <DateArea>{dateToStrYYYYMMDD(new Date())}</DateArea>
                 </PostInfoItem>
                 <PostInfoItem>
                     <p>Tag :</p>
@@ -38,10 +47,13 @@ const NewPostBody = () => {
             </PostInfo>
 
             <EditorWrapper>
-                <MDXEditor guideLine={guideLine.testguide} />
+                <MDXEditor
+                    guideLine={guideLine.testguide}
+                    setContent={setContent}
+                />
             </EditorWrapper>
 
-            <SubmitButton>글쓰기</SubmitButton>
+            <SubmitButton onClick={submitPost}>글쓰기</SubmitButton>
         </NewPostBodyWrapper>
     );
 };
@@ -79,6 +91,10 @@ const PostInfoItem = styled.div`
     p:nth-of-type(2) {
         margin-top: 0.1rem;
     }
+`;
+
+const DateArea = styled.p`
+    margin-left: 0.5rem;
 `;
 
 const EditorWrapper = styled.div`

@@ -5,7 +5,6 @@ import EasyMDE from 'easymde';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { evaluateSync } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
-import mdxComponents from './mdxComponent';
 
 //string으로 된 mdx => 컴포넌트로 변환
 export const generate = (body: string) => {
@@ -20,12 +19,22 @@ interface EasyEditerType {
     toolbar: any;
     easymde: any;
     mdxComponents: string;
+    setContent: React.Dispatch<React.SetStateAction<string>>;
 }
 
+/**
+ *
+ * @param toolbar toolbar 커스텀
+ * @param easymde easymde
+ * @param mdxComponents 커스텀할 컴포넌트 목록
+ * @param setContent 에디터 값을 useState로 관리할 수 있게
+ * @returns
+ */
 export function EasyEditer({
     toolbar = [],
     easymde: easymdeConfig = {},
     mdxComponents = '',
+    setContent,
 }: EasyEditerType) {
     const config = {
         ...{
@@ -43,6 +52,8 @@ export function EasyEditer({
     const easymde = new EasyMDE({
         ...config,
         previewRender: (plainText: any) => {
+            setContent(plainText);
+
             return generate(mdxComponents + plainText);
         },
     });

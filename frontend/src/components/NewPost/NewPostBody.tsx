@@ -4,8 +4,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import colors from 'styles/color';
 import { Successbtn } from 'styles/common';
 import { dateToStrYYYYMMDD } from 'utils/utils';
-import mdxEditor from 'editor/editor';
-import MDXEditor from 'editor/mdxEditor';
+import MDXEditor from 'editor/MdxEditor';
+import guideLine from 'editor/guideLine';
 
 const NewPostBody = () => {
     const [title, setTitle] = useState('');
@@ -38,7 +38,7 @@ const NewPostBody = () => {
             </PostInfo>
 
             <EditorWrapper>
-                <MDXEditor />
+                <MDXEditor guideLine={guideLine.testguide} />
             </EditorWrapper>
 
             <SubmitButton>글쓰기</SubmitButton>

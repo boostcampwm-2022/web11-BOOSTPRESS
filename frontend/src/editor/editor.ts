@@ -5,10 +5,10 @@ import EasyMDE from 'easymde';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { evaluateSync } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
-import 'easymde/dist/easymde.min.css';
+import mdxComponents from './mdxComponent';
 
 //string으로 된 mdx => 컴포넌트로 변환
-const generate = (body: string) => {
+export const generate = (body: string) => {
     const mdx = evaluateSync(body, {
         ...(runtime as any),
     }).default;
@@ -16,27 +16,17 @@ const generate = (body: string) => {
     return renderToStaticMarkup(createElement(mdx));
 };
 
-//설정할 mdx문법
-const mdxContent = `
-export const planet = 'World'
-export const Highlight = ({children, color}) => (
-    <span
-      style={{
-        backgroundColor: color,
-        borderRadius: '2px',
-        color: '#fff',
-        padding: '0.2rem',
-      }}>
-      {children}
-    </span>
-  );
+interface EasyEditerType {
+    toolbar: any;
+    easymde: any;
+    mdxComponents: string;
+}
 
-`;
-
-export default function EasyEditer({
-    toolbar = null,
+export function EasyEditer({
+    toolbar = [],
     easymde: easymdeConfig = {},
-}) {
+    mdxComponents = '',
+}: EasyEditerType) {
     const config = {
         ...{
             sideBySideFullscreen: false,
@@ -46,13 +36,14 @@ export default function EasyEditer({
             indentWithTabs: false,
             spellChecker: false,
         },
+        toolbar,
         ...easymdeConfig,
     };
 
     const easymde = new EasyMDE({
         ...config,
         previewRender: (plainText: any) => {
-            return generate(mdxContent + plainText);
+            return generate(mdxComponents + plainText);
         },
     });
     EasyMDE.toggleSideBySide(easymde);

@@ -1,31 +1,39 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import styled from '@emotion/styled';
-import mdxEditor from './editor';
+import { EasyEditer } from 'editor/editor';
 
 import 'styles/editor.css';
 import 'easymde/dist/easymde.min.css';
+import mdxComponents from 'editor/mdxComponent';
+import toolbarOption from 'editor/toolbar';
 
 const Textarea = styled.textarea`
     min-width: 100%;
     min-height: 100%;
 `;
 
-export default function MDXEditor() {
+interface MDXEditorType {
+    guideLine: string;
+}
+
+export default function MDXEditor({ guideLine }: MDXEditorType) {
     const editorRef = useRef(null);
-    const [editor, setEditor] = useState<any>(null);
+    const [, setEditor] = useState<any>(null);
 
     useEffect(() => {
         setEditor(
-            mdxEditor({
+            EasyEditer({
                 easymde: { element: editorRef.current },
+                mdxComponents,
+                toolbar: toolbarOption,
             }),
         );
     }, []);
 
     return (
         <div className="markdown-body">
-            <Textarea ref={editorRef} id="editor" defaultValue={`# 안녕`} />
+            <Textarea ref={editorRef} id="editor" defaultValue={guideLine} />
         </div>
     );
 }

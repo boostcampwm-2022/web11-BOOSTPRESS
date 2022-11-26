@@ -3,8 +3,8 @@
     "backend:dev": "cd backend && npm run start:dev",
     "frontend:dev": "cd frontend && npm start",
     "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
-    "backend": "cd backend && npm start",
-    "frontend": "cd frontend && npm run start",
+    "backend": "cd backend && npm i && npm start",
+    "frontend": "cd frontend && npm i && npm run start",
     "start": "concurrently \"npm run backend\" \"npm run frontend\""
   },
   "devDependencies": {

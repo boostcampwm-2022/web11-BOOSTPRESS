@@ -30,6 +30,10 @@ const Header = ({ isLogoActive, isLogin }: headerType) => {
         setuserSettingModalActive(!userSettingModalActive);
     };
 
+    const moveGitHubAuth = () => {
+        window.location.href = `http://localhost:8080/auth/github`;
+    };
+
     return (
         <HeaderWrapper>
             <LogoArea isLogoActive={isLogoActive}>
@@ -52,12 +56,15 @@ const Header = ({ isLogoActive, isLogin }: headerType) => {
                     />
                 )}
 
-                <GitHubLoginArea Active={gitHubLoginModalActive}>
+                <GitHubLoginArea
+                    active={gitHubLoginModalActive}
+                    onClick={moveGitHubAuth}
+                >
                     <GitHubIconSVG />
                     <p>Github로 계속하기</p>
                 </GitHubLoginArea>
 
-                <UserSettingModalArea Active={userSettingModalActive}>
+                <UserSettingModalArea active={userSettingModalActive}>
                     <UserSettingModalItem>
                         <HomeSVG /> <p>내 블로그 페이지</p>
                     </UserSettingModalItem>
@@ -124,8 +131,8 @@ const UserIcon = css`
     cursor: pointer;
 `;
 
-const GitHubLoginArea = styled(BasicShadowBox)<{ Active: boolean }>`
-    display: ${(props) => (props.Active ? 'flex' : 'none')};
+const GitHubLoginArea = styled(BasicShadowBox)<{ active: boolean }>`
+    display: ${(props) => (props.active ? 'flex' : 'none')};
     align-content: center;
     position: absolute;
     right: 0;
@@ -141,8 +148,8 @@ const GitHubLoginArea = styled(BasicShadowBox)<{ Active: boolean }>`
     }
 `;
 
-const UserSettingModalArea = styled(BasicShadowBox)<{ Active: boolean }>`
-    display: ${(props) => (props.Active ? 'flex' : 'none')};
+const UserSettingModalArea = styled(BasicShadowBox)<{ active: boolean }>`
+    display: ${(props) => (props.active ? 'flex' : 'none')};
     flex-direction: column;
     align-content: center;
 

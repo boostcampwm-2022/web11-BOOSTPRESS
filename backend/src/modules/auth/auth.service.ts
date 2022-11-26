@@ -1,4 +1,3 @@
-
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -69,9 +68,8 @@ export class AuthService {
         return user ?? (await this.signup(data, accessToken));
     }
 
-    logout(user: User, clearCookie: Response['clearCookie']) {
-        clearCookie(Auth);
-        return this.tokenService.softDelete(user);
-
+    async logout(user: User, res: Response) {
+        res.clearCookie(Auth);
+        return await this.tokenService.softDelete(user);
     }
 }

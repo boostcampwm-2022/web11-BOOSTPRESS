@@ -47,7 +47,7 @@ export class ArticleController {
         @Param('id', ParseIntPipe) id: number,
         @Body() dto: ArticleDTO,
     ) {
-        return await this.articleService.update(user, dto);
+        return await this.articleService.update(user, dto, id);
     }
 
     @ApiOperation(Remove.Operation)

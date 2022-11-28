@@ -1,0 +1,35 @@
+name: test deploy
+on:
+    push:
+        branches: [main]
+jobs:
+    build:
+        runs-on: ubuntu-18.04
+
+        #     env:
+        #       CI: false
+
+        strategy:
+            matrix:
+                node-version: [17.x]
+
+        steps:
+            - uses: actions/checkout@v3
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'npm'
+
+            - name: Deploy to Server
+              uses: appleboy/ssh-action@v0.1.4
+              with:
+                  host: ${{ secrets.HOST }}
+                  username: ${{ secrets.USERNAME }}
+                  password: ${{ secrets.PASSWORD }}
+                  port: ${{ secrets.PORT }}
+                  script: |
+                      cd /root/test/web11-BOOSTPRESS
+                      git pull
+                      npm install
+                      npm run build

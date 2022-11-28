@@ -16,12 +16,18 @@ import { Create } from './swagger';
 
 @Controller('category')
 export class CategoryController {
+    constructor(private readonly categoryService: CategoryService) {}
+
     @Get(':id')
-    async getAll(@Param('id', ParseIntPipe) id: number) {}
+    async getAll(@Param('id', ParseIntPipe) id: number) {
+        return await this.categoryService.getAll(id);
+    }
 
     @ApiOperation(Create.Operation)
     @ApiResponse(Create._200)
     @UseGuards(JwtGuard)
     @Post()
-    async create(@CurrentUser() user, @Body() dto: CategoryDTO) {}
+    async create(@CurrentUser() user, @Body() dto: CategoryDTO) {
+        return await this.categoryService.create(user, dto);
+    }
 }

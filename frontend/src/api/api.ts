@@ -37,6 +37,8 @@ export async function createArticle(param: createArticleType) {
         headers: {
             'Content-Type': 'application/json',
         },
+
+        credentials: 'include',
         body: JSON.stringify(param),
     });
 

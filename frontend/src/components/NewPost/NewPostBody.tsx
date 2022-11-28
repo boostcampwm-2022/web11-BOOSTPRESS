@@ -7,8 +7,10 @@ import { dateToStr } from 'utils/utils';
 import MDXEditor from 'editor/MdxEditor';
 import guideLine from 'editor/guideLine';
 import { createArticle } from 'api/api';
+import { useNavigate } from 'react-router-dom';
 
 const NewPostBody = () => {
+    const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
@@ -27,7 +29,10 @@ const NewPostBody = () => {
         };
         const res = await createArticle(postData);
 
-        console.log(res);
+        if (res.id) {
+            alert('글쓰기가 완료되었습니다');
+            navigate('/');
+        }
     };
 
     return (

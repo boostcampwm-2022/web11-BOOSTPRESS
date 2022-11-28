@@ -1,7 +1,8 @@
 name: test deploy
 on:
     push:
-        branches: [main]
+        branches: [main, fix/38-github-actions를-이용한-배포-자동화2]
+    workflow_dispatch:
 jobs:
     build:
         runs-on: ubuntu-18.04
@@ -9,18 +10,7 @@ jobs:
         #     env:
         #       CI: false
 
-        strategy:
-            matrix:
-                node-version: [17.x]
-
         steps:
-            - uses: actions/checkout@v3
-#             - name: Use Node.js ${{ matrix.node-version }}
-#               uses: actions/setup-node@v3
-#               with:
-#                   node-version: ${{ matrix.node-version }}
-#                   cache: 'npm'
-
             - name: Deploy to Server
               uses: appleboy/ssh-action@v0.1.4
               with:
@@ -29,7 +19,5 @@ jobs:
                   password: ${{ secrets.PASSWORD }}
                   port: ${{ secrets.PORT }}
                   script: |
-                      cd /root/test/web11-BOOSTPRESS
-                      git pull
-                      npm install
-                      npm run build
+                      cd /root
+                      ./deploy.sh

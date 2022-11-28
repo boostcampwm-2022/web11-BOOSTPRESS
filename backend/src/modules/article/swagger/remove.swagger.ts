@@ -1,6 +1,6 @@
 import { ApiOperationOptions, ApiResponseOptions } from '@nestjs/swagger';
 import { ExceptionResponse } from 'src/types';
-import { PostArticleResponseDTO } from '../dto';
+import { ArticleResponseDTO } from '../dto';
 
 export const Operation: ApiOperationOptions = {
     summary: '게시글 삭제 API',
@@ -10,7 +10,7 @@ export const Operation: ApiOperationOptions = {
 export const _200: ApiResponseOptions = {
     status: 200,
     description: '삭제한 게시글의 정보',
-    type: PostArticleResponseDTO,
+    type: ArticleResponseDTO,
 };
 
 export const _401: ApiResponseOptions = {

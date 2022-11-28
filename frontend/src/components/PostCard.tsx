@@ -3,7 +3,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import colors from 'styles/color';
-import { dateToStrMMDD } from 'utils/utils';
+import { dateToStr } from 'utils/utils';
 import { Link } from 'react-router-dom';
 import { postCardInfoType } from 'api/apiTypes';
 
@@ -26,7 +26,7 @@ const PostCard = ({ postInfo, width, height }: postCardType) => {
                         date={new Date(postInfo.date)}
                         writer={postInfo.authorId}
                     >
-                        {dateToStrMMDD(new Date(postInfo.date))} ·{' '}
+                        {dateToStr(new Date(postInfo.date), 'MMDD')} ·{' '}
                         {postInfo.authorId}
                     </BottomInfo>
                 </DescriptionArea>

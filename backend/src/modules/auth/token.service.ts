@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ParseIntPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { CookieOptions } from 'express';
+import { Env } from 'src/types';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -14,10 +15,10 @@ export class TokenService {
     constructor(
         private readonly prisma: PrismaService,
         private readonly jwtService: JwtService,
-        config: ConfigService,
+        config: ConfigService<Env>,
     ) {
         this.LOGIN_LIFESPAN = parseInt(config.get('LOGIN_LIFESPAN'));
-        this.JWT_LIFESPAN = config.get<number>('JWT_LIFESPAN');
+        this.JWT_LIFESPAN = parseInt(config.get('JWT_LIFESPAN'));
         this.JWT_SECRET = config.get('JWT_SECRET');
     }
 

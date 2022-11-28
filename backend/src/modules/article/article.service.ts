@@ -10,30 +10,25 @@ import { Article, User } from '@prisma/client';
 import { AxiosInstance } from 'axios';
 import * as path from 'path';
 import * as fs from 'fs';
-import { repoName } from '../auth/test';
 import { PrismaService } from '../prisma/prisma.service';
-import {
-    CommitResponseDTO,
-    FetchResponseDTO,
-    PatchArticleDTO,
-    PostArticleDTO,
-} from './dto';
+import { ArticleDTO, CommitResponseDTO, FetchResponseDTO } from './dto';
+import { Env } from 'src/types';
 
 @Injectable()
 export class ArticleService {
-    private readonly TEST_ACCESS_TOKEN: string;
+    private readonly SERVER_ACCESS_TOKEN: string;
     private readonly axios: AxiosInstance;
 
     constructor(
         private readonly prisma: PrismaService,
-        config: ConfigService,
+        config: ConfigService<Env>,
         httpService: HttpService,
     ) {
-        this.TEST_ACCESS_TOKEN = config.get('TEST_ACCESS_TOKEN');
+        this.SERVER_ACCESS_TOKEN = config.get('SERVER_ACCESS_TOKEN');
         this.axios = httpService.axiosRef;
     }
 
-    async create(user: User, dto: PostArticleDTO) {
+    async create(user: User, dto: ArticleDTO) {
         const connect = dto.tagId.map((value) => ({ id: value }));
         const article = await this.prisma.article.create({
             data: {
@@ -70,7 +65,7 @@ export class ArticleService {
         }
 
         const { data } = await this.axios.get<FetchResponseDTO>(
-            `https://api.github.com/repos/${article.author.login}/${repoName}/readme/${id}`,
+            `https://api.github.com/repos/${article.author.login}/${article.author.repoName}/readme/${id}`,
         );
 
         data.content = Buffer.from(data.content, 'base64').toString();
@@ -78,22 +73,22 @@ export class ArticleService {
         return { content: data.content };
     }
 
-    async update(user: User, dto: PatchArticleDTO) {
+    async update(user: User, dto: ArticleDTO, id: number) {
         const data = {
             title: dto.title,
             tags: { connect: dto.tagId.map((value) => ({ id: value })) },
         };
-        const article = await this.getArticleWithUser(dto.id, user.id);
+        const article = await this.getArticleWithUser(id, user.id);
 
         await Promise.all([
             this.commit(user, dto, article),
             this.prisma.article.update({
-                where: { id: dto.id },
-                data,
+                where: { id },
+                data: { title: dto.title },
             }),
         ]);
 
-        let basePath = path.resolve(__dirname, `../../../articles/${dto.id}`);
+        let basePath = path.resolve(__dirname, `../../../articles/${id}`);
         if (!fs.existsSync(basePath + `/${article.title}.md`)) {
             throw new Error('수정하려는 파일이 존재하지 않습니다.');
         }
@@ -134,7 +129,7 @@ export class ArticleService {
         return article;
     }
 
-    private async commit(user: User, dto: PostArticleDTO, article: Article) {
+    private async commit(user: User, dto: ArticleDTO, article: Article) {
         const requestData = {
             message: dto.title,
             content: Buffer.from(dto.content).toString('base64'),
@@ -144,11 +139,14 @@ export class ArticleService {
             },
             sha: article.updateSHA,
         };
+        const headers = {
+            Authorization: `Bearer ${this.SERVER_ACCESS_TOKEN}`,
+        };
 
         const { data } = await this.axios.put<CommitResponseDTO>(
-            `https://api.github.com/repos/${user.login}/${repoName}/contents/${article.id}/README.md`,
+            `https://api.github.com/repos/${user.login}/${user.repoName}/contents/${article.id}/README.md`,
             requestData,
-            { headers: { Authorization: `Bearer ${this.TEST_ACCESS_TOKEN}` } },
+            { headers },
         );
 
         await this.prisma.article.update({

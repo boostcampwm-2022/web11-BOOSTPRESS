@@ -5,7 +5,10 @@
     "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
     "backend": "cd backend && npm i && npm start",
     "frontend": "cd frontend && npm i && npm run start",
-    "start": "concurrently \"npm run backend\" \"npm run frontend\""
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend:build": "cd backend && npm install && npm run build",
+    "frontend:build": "cd frontend && npm install && npm run build",
+    "build": "concurrently \"npm run backend:build\" \"npm run frontend:build\""
   },
   "devDependencies": {
     "concurrently": "^7.5.0",

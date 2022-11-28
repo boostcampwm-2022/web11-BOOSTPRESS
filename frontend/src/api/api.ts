@@ -46,3 +46,11 @@ export async function createArticle(param: createArticleType) {
 
     return await res.json();
 }
+
+export async function getIsLogin() {
+    const res = await fetch(url + '/auth/me', {
+        method: 'GET',
+        credentials: 'include',
+    });
+    return await res.json();
+}

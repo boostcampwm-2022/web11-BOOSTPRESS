@@ -4,6 +4,8 @@ import {
     MultipleArticleAPIType,
 } from './apiTypes';
 
+const url = 'http://localhost:8080';
+
 export async function getBlogSideBarInfo(userId: string) {
     const res = await fetch(`/api/blog/${userId}`);
     return (await res.json()) as blogSideBarInfoType;
@@ -32,7 +34,7 @@ export async function getArticlesWithUserId(
 }
 
 export async function createArticle(param: createArticleType) {
-    const res = await fetch('http://localhost:8080/article', {
+    const res = await fetch(url + '/article', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

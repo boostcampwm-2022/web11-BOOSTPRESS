@@ -18,8 +18,9 @@ model User {
 
     repoName String
 
-    session  Session?
-    articles Article[]
+    session    Session?
+    categories Category[]
+    articles   Article[]
 }
 
 model Session {
@@ -34,6 +35,10 @@ model Article {
     id    Int    @id @default(autoincrement())
     title String
 
+    // 분류 관련
+    categoryId Int?
+    category   Category? @relation(fields: [categoryId], references: [id])
+
     // GitHub 관련
     updateSHA String @default("")
 
@@ -43,4 +48,14 @@ model Article {
     deleted   Boolean  @default(false)
     authorId  Int
     author    User     @relation(fields: [authorId], references: [id])
+}
+
+model Category {
+    id   Int    @id @default(autoincrement())
+    name String
+
+    ownerId Int
+    owner   User @relation(fields: [ownerId], references: [id])
+
+    articles Article[]
 }

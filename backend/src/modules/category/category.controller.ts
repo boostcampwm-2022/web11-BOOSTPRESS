@@ -1,9 +1,11 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Param,
     ParseIntPipe,
+    Patch,
     Post,
     UseGuards,
 } from '@nestjs/common';
@@ -29,5 +31,19 @@ export class CategoryController {
     @Post()
     async create(@CurrentUser() user, @Body() dto: CategoryDTO) {
         return await this.categoryService.create(user, dto);
+    }
+
+    @Patch(':id')
+    async update(
+        @CurrentUser() user,
+        @Param('id', ParseIntPipe) id: number,
+        @Body() dto: CategoryDTO,
+    ) {
+        return await this.categoryService.update(user, dto, id);
+    }
+
+    @Delete(':id')
+    async delete(@CurrentUser() user, @Param('id', ParseIntPipe) id: number) {
+        return await this.categoryService.delete(user, id);
     }
 }

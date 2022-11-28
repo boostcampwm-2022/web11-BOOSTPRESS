@@ -51,8 +51,9 @@ model Article {
 }
 
 model Category {
-    id   Int    @id @default(autoincrement())
-    name String
+    id      Int     @id @default(autoincrement())
+    name    String
+    deleted Boolean @default(false)
 
     ownerId Int
     owner   User @relation(fields: [ownerId], references: [id])

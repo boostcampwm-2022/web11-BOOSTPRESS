@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import React, { useState } from 'react';
 import colors from 'styles/color';
 import { Successbtn } from 'styles/common';
-import { dateToStrYYYYMMDD } from 'utils/utils';
+import { dateToStr } from 'utils/utils';
 import MDXEditor from 'editor/MdxEditor';
 import guideLine from 'editor/guideLine';
 
@@ -34,7 +34,7 @@ const NewPostBody = () => {
                 <Title placeholder="제목을 입력하세요" onChange={handleTitle} />
                 <PostInfoItem>
                     <p>Posted Date : </p>
-                    <DateArea>{dateToStrYYYYMMDD(new Date())}</DateArea>
+                    <DateArea>{dateToStr(new Date(), 'YYYYMMDD')}</DateArea>
                 </PostInfoItem>
                 <PostInfoItem>
                     <p>Tag :</p>

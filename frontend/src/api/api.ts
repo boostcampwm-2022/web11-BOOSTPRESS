@@ -1,4 +1,8 @@
-import { blogSideBarInfoType, MultipleArticleAPIType } from './apiTypes';
+import {
+    blogSideBarInfoType,
+    MultipleArticleAPIType,
+    tagType,
+} from './apiTypes';
 
 export async function getBlogSideBarInfo(userId: string) {
     const res = await fetch(`/api/blog/${userId}`);
@@ -25,4 +29,9 @@ export async function getArticlesWithUserId(
             }),
     );
     return (await res.json()) as MultipleArticleAPIType;
+}
+
+export async function getAllTags() {
+    const res = await fetch('/api/tags');
+    return (await res.json()) as { tags: tagType[] };
 }

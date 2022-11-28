@@ -34,7 +34,9 @@ export class AuthService {
             Authorization: `Bearer ${this.SERVER_ACCESS_TOKEN}`,
         };
 
-        const repoName = `BoostPress-${data.login}-${randomUUID().split('-')}`;
+        const repoName = `BoostPress-${data.login}-${
+            randomUUID().split('-')[0]
+        }`;
 
         // 사용자 github에 repoName으로 repo 생성
         await this.axios.post(

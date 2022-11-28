@@ -13,9 +13,8 @@ const Main = () => {
     });
     return (
         <>
-
-            <Header isLogoActive={true} isLogin={true} />
-            <IntroBanner isLogin={true} />
+            <Header isLogoActive={true} isLogin={false} />
+            <IntroBanner isLogin={false} />
             {isLoading ? (
                 <span>Loading...</span>
             ) : isError ? (

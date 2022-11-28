@@ -6,6 +6,7 @@ import { Successbtn } from 'styles/common';
 import { dateToStr } from 'utils/utils';
 import MDXEditor from 'editor/MdxEditor';
 import guideLine from 'editor/guideLine';
+import { createArticle } from 'api/api';
 
 const NewPostBody = () => {
     const [title, setTitle] = useState('');
@@ -19,13 +20,14 @@ const NewPostBody = () => {
         setTitle(e.target.value);
     };
 
-    const submitPost = () => {
+    const submitPost = async () => {
         const postData = {
             title,
             content,
         };
+        const res = await createArticle(postData);
 
-        console.log(postData);
+        console.log(res);
     };
 
     return (

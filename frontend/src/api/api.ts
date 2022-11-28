@@ -1,4 +1,8 @@
-import { blogSideBarInfoType, MultipleArticleAPIType } from './apiTypes';
+import {
+    blogSideBarInfoType,
+    createArticleType,
+    MultipleArticleAPIType,
+} from './apiTypes';
 
 export async function getBlogSideBarInfo(userId: string) {
     const res = await fetch(`/api/blog/${userId}`);
@@ -25,4 +29,16 @@ export async function getArticlesWithUserId(
             }),
     );
     return (await res.json()) as MultipleArticleAPIType;
+}
+
+export async function createArticle(param: createArticleType) {
+    const res = await fetch('http://localhost:8080/article', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(param),
+    });
+
+    return await res.json();
 }

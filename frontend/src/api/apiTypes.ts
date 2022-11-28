@@ -32,6 +32,12 @@ export interface postType {
 export interface MultipleArticleAPIType {
     articles: postCardInfoType[];
 }
+
+export interface createArticleType {
+    title: string;
+    content: string;
+}
+
 export interface postCardInfoType {
     imgURL: string;
     title: string;

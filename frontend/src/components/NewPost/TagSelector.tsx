@@ -1,38 +1,97 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { ReactComponent as SaveIconSVG } from 'assets/svg/save.svg';
 import styled from '@emotion/styled';
+import { useQuery } from '@tanstack/react-query';
+import { getAllTags } from 'api/api';
+import { tagType } from 'api/apiTypes';
 
-const TagSelector = () => {
-    const [numberOfSelectedTags, setNumberOfSelectedTags] = useState(0);
+interface Props {
+    selectedTags: tagType[];
+    setSelectedTags: React.Dispatch<React.SetStateAction<tagType[]>>;
+    onSaveClick: (e: React.MouseEvent) => void;
+}
+
+const TagSelector = ({ selectedTags, setSelectedTags, onSaveClick }: Props) => {
+    const tagQuery = useQuery({ queryKey: ['tags'], queryFn: getAllTags });
     const [searchBarContent, setSearchBarContent] = useState('');
+
+    const handleTagSelection = (selectedTag: tagType) => {
+        setSelectedTags((prev) => [...prev, selectedTag]);
+    };
+    const handleTagUnSelection = (selectedTag: tagType) => {
+        const filteredSelected = selectedTags.filter(
+            (tag) => tag.id !== selectedTag.id,
+        );
+        setSelectedTags(filteredSelected);
+    };
+
     return (
         <Wrapper>
-            <Section>
-                <SectionTitle>
-                    선택된 태그 ({numberOfSelectedTags}/10)
-                </SectionTitle>
-                <TagsGrid>{[...Array(3)].fill(<Tag>태그{1}</Tag>)}</TagsGrid>
-            </Section>
-            <Section>
-                <SectionTitle>태그 입력</SectionTitle>
-                <SearchBar
-                    placeholder="태그 검색"
-                    value={searchBarContent}
-                    onChange={(e) => {
-                        setSearchBarContent(e.target.value);
-                    }}
-                />
-                <TagsGrid>{[...Array(9)].fill(<Tag>태그{1}</Tag>)}</TagsGrid>
-            </Section>
-            <SaveButton>
-                <SaveIconSVG />
-                <span>저장</span>
-            </SaveButton>
+            {tagQuery.isLoading ? (
+                <span>loading</span>
+            ) : tagQuery.isError ? (
+                <span>error</span>
+            ) : (
+                <>
+                    <Section>
+                        <SectionTitle>
+                            선택된 태그 ({selectedTags.length}/10)
+                        </SectionTitle>
+                        <TagsGrid>
+                            {tagQuery.data.tags
+                                .filter((tag) =>
+                                    selectedTags.find(
+                                        (selectedTag) =>
+                                            selectedTag.id === tag.id,
+                                    ),
+                                )
+                                .map((tag) => (
+                                    <Tag
+                                        id={tag.id}
+                                        onClick={() =>
+                                            handleTagUnSelection(tag)
+                                        }
+                                    >
+                                        {tag.title}
+                                    </Tag>
+                                ))}
+                        </TagsGrid>
+                    </Section>
+                    <Section>
+                        <SectionTitle>태그 입력</SectionTitle>
+                        <SearchBar
+                            placeholder="태그 검색"
+                            value={searchBarContent}
+                            onChange={(e) => {
+                                setSearchBarContent(e.target.value);
+                            }}
+                        />
+
+                        <TagsGrid>
+                            {tagQuery.data.tags
+                                .filter((tag) => !selectedTags.includes(tag))
+                                .map((tag) => (
+                                    <Tag
+                                        id={tag.id}
+                                        onClick={() => handleTagSelection(tag)}
+                                    >
+                                        {tag.title}
+                                    </Tag>
+                                ))}
+                        </TagsGrid>
+                    </Section>
+                    <SaveButton onClick={onSaveClick}>
+                        <SaveIconSVG />
+                        <span>저장</span>
+                    </SaveButton>
+                </>
+            )}
         </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
+    width: 405px;
     padding: 20px;
     border: 1px solid #d8d8d8;
     border-radius: 5px;

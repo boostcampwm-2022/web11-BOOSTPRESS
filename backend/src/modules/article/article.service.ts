@@ -11,7 +11,12 @@ import { AxiosInstance } from 'axios';
 import * as path from 'path';
 import * as fs from 'fs';
 import { PrismaService } from '../prisma/prisma.service';
-import { ArticleDTO, CommitResponseDTO, FetchResponseDTO } from './dto';
+import {
+    ArticleDTO,
+    ArticleResponseDTO,
+    CommitResponseDTO,
+    FetchResponseDTO,
+} from './dto';
 import { Env } from 'src/types';
 
 @Injectable()
@@ -69,7 +74,7 @@ export class ArticleService {
 
         data.content = Buffer.from(data.content, 'base64').toString();
 
-        return { content: data.content };
+        return ArticleDTO.fromArticle(article, data.content);
     }
 
     async update(user: User, dto: ArticleDTO, id: number) {

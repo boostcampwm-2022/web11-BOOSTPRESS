@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Article } from '@prisma/client';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class ArticleDTO {
@@ -14,4 +15,12 @@ export class ArticleDTO {
 
     @IsNumber()
     categoryId?: number | undefined;
+
+    static fromArticle(article: Article, content: string): ArticleDTO {
+        return {
+            title: article.title,
+            content,
+            categoryId: article.categoryId,
+        };
+    }
 }

@@ -12,6 +12,11 @@ export class ArticleDTO {
     @IsNotEmpty()
     content: string;
 
+    @ApiProperty({
+        description: '게시글의 태그의 id 목록',
+        type: 'array',
+        items: { type: 'number' },
+    })
     @IsNumber({}, { each: true })
     tagId: number[];
 }

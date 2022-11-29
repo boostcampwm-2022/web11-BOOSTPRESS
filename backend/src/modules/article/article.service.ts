@@ -60,7 +60,7 @@ export class ArticleService {
     async readOne(id: number) {
         const article = await this.prisma.article.findUnique({
             where: { id },
-            select: { author: true, deleted: true },
+            include: { author: true },
         });
 
         if (article === null || article.deleted) {

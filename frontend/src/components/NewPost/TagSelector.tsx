@@ -52,7 +52,7 @@ const TagSelector = ({ selectedTags, setSelectedTags, onSaveClick }: Props) => {
                                             handleTagUnSelection(tag)
                                         }
                                     >
-                                        {tag.title}
+                                        {tag.name}
                                     </Tag>
                                 ))}
                         </TagsGrid>
@@ -75,7 +75,7 @@ const TagSelector = ({ selectedTags, setSelectedTags, onSaveClick }: Props) => {
                                         id={tag.id}
                                         onClick={() => handleTagSelection(tag)}
                                     >
-                                        {tag.title}
+                                        {tag.name}
                                     </Tag>
                                 ))}
                         </TagsGrid>

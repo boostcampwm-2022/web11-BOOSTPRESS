@@ -53,6 +53,6 @@ interface snsLinkType {
 }
 
 export interface tagType {
-    title: string;
+    name: string;
     id: string;
 }

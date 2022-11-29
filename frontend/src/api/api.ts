@@ -35,7 +35,11 @@ export async function getArticlesWithUserId(
 }
 
 export async function getAllTags() {
-    const res = await fetch(url + '/tag');
+    const res = await fetch(url + '/tag', {
+        method: 'GET',
+        credentials: 'include',
+    });
+    console.log(res);
     return (await res.json()) as { tags: tagType[] };
 }
 

@@ -68,7 +68,7 @@ const NewPostBody = () => {
                             <span>태그 선택</span>
                         ) : (
                             selectedTags.map((tag) => (
-                                <p key={tag.id}>{tag.title}</p>
+                                <p key={tag.id}>{tag.name}</p>
                             ))
                         )}
                     </TitleArea>

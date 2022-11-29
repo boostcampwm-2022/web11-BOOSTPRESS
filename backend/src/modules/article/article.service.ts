@@ -33,11 +33,13 @@ export class ArticleService {
         this.axios = httpService.axiosRef;
     }
 
-    async create(user: User, dto: ArticleDTO) {
+    async create(user: User, dto: ArticleDTO): Promise<ArticleResponseDTO> {
+        const connect = dto.tagId.map((value) => ({ id: value }));
         const article = await this.prisma.article.create({
             data: {
                 authorId: user.id,
                 title: dto.title,
+                tags: { connect },
                 categoryId: dto.categoryId,
             },
         });
@@ -54,13 +56,13 @@ export class ArticleService {
         fs.mkdirSync(goalPath, { recursive: true });
         fs.writeFileSync(goalPath + `/${dto.title}.md`, dto.content);
 
-        return { id: article.id };
+        return ArticleResponseDTO.toBreif(article);
     }
 
     async readOne(id: number) {
         const article = await this.prisma.article.findUnique({
             where: { id },
-            include: { author: true },
+            include: { author: true, tags: true },
         });
 
         if (article === null || article.deleted) {
@@ -72,12 +74,17 @@ export class ArticleService {
             `https://api.github.com/repos/${article.author.login}/${article.author.repoName}/readme/${id}`,
         );
 
-        data.content = Buffer.from(data.content, 'base64').toString();
-
-        return ArticleDTO.fromArticle(article, data.content);
+        return ArticleResponseDTO.toDetail(
+            article,
+            Buffer.from(data.content, 'base64').toString(),
+        );
     }
 
-    async update(user: User, dto: ArticleDTO, id: number) {
+    async update(
+        user: User,
+        dto: ArticleDTO,
+        id: number,
+    ): Promise<ArticleResponseDTO> {
         const article = await this.getArticleWithUser(id, user.id);
 
         await Promise.all([
@@ -87,6 +94,9 @@ export class ArticleService {
                 data: {
                     title: dto.title,
                     categoryId: dto.categoryId,
+                    tags: {
+                        connect: dto.tagId.map((value) => ({ id: value })),
+                    },
                 },
             }),
         ]);
@@ -101,10 +111,10 @@ export class ArticleService {
         );
         fs.writeFileSync(basePath + `/${dto.title}.md`, dto.content);
 
-        return { id: article.id };
+        return ArticleResponseDTO.toBreif(article);
     }
 
-    async delete(user: User, id: number) {
+    async delete(user: User, id: number): Promise<ArticleResponseDTO> {
         const article = await this.getArticleWithUser(id, user.id);
 
         await this.prisma.article.update({
@@ -112,7 +122,7 @@ export class ArticleService {
             data: { deleted: true },
         });
 
-        return { id: article.id };
+        return ArticleResponseDTO.toBreif(article);
     }
 
     private async getArticleWithUser(id: number, authorId: number) {
@@ -140,13 +150,11 @@ export class ArticleService {
                 name: user.login,
                 email: user.email,
             },
-            sha: article.updateSHA ?? '',
+            sha: article.updateSHA,
         };
         const headers = {
             Authorization: `Bearer ${this.SERVER_ACCESS_TOKEN}`,
         };
-
-        if (requestData.sha === '') delete requestData.sha;
 
         const { data } = await this.axios.put<CommitResponseDTO>(
             `https://api.github.com/repos/${user.login}/${user.repoName}/contents/${article.id}/README.md`,

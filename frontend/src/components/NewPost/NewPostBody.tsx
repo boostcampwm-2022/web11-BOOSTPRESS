@@ -1,31 +1,48 @@
 /*  */
-import styled from '@emotion/styled';
+import styled from '@emotion/styled/macro';
 import React, { useState } from 'react';
 import colors from 'styles/color';
 import { Successbtn } from 'styles/common';
+
 import { dateToStr } from 'utils/utils';
 import MDXEditor from 'editor/MdxEditor';
 import guideLine from 'editor/guideLine';
+import { createArticle } from 'api/api';
+import { useNavigate } from 'react-router-dom';
+import TagSelector from './TagSelector';
+import { tagType } from 'api/apiTypes';
 
 const NewPostBody = () => {
+    const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
     //태그,카테고리는 후에 선택
-    const [tag, setTag] = useState('');
+    const [selectedTags, setSelectedTags] = useState<tagType[]>([]);
     const [category, setCategory] = useState('');
+
+    const [toggleActive, setToggleActive] = useState<
+        '' | 'tag' | 'category' | 'series'
+    >('');
 
     const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
     };
 
-    const submitPost = () => {
+    console.log(toggleActive);
+
+    const submitPost = async () => {
         const postData = {
             title,
             content,
         };
+        const res = await createArticle(postData);
+        console.log(selectedTags);
 
-        console.log(postData);
+        if (res.id) {
+            alert('글쓰기가 완료되었습니다');
+            navigate('/');
+        }
     };
 
     return (
@@ -33,16 +50,44 @@ const NewPostBody = () => {
             <PostInfo>
                 <Title placeholder="제목을 입력하세요" onChange={handleTitle} />
                 <PostInfoItem>
-                    <p>Posted Date : </p>
-                    <DateArea>{dateToStr(new Date(), 'YYYYMMDD')}</DateArea>
+                    <TitleArea>
+                        <p>Posted Date : </p>
+                        <DateArea>{dateToStr(new Date(), 'YYYYMMDD')}</DateArea>
+                    </TitleArea>
                 </PostInfoItem>
                 <PostInfoItem>
-                    <p>Tag :</p>
-                    <p>태그 선택</p>
+                    <TitleArea
+                        onClick={() =>
+                            setToggleActive((prev) =>
+                                prev === 'tag' ? '' : 'tag',
+                            )
+                        }
+                    >
+                        <p>Tag :</p>
+                        {selectedTags.length === 0 ? (
+                            <span>태그 선택</span>
+                        ) : (
+                            selectedTags.map((tag) => (
+                                <p key={tag.id}>{tag.title}</p>
+                            ))
+                        )}
+                    </TitleArea>
+                    {toggleActive === 'tag' ? (
+                        <TagSelector
+                            selectedTags={selectedTags}
+                            setSelectedTags={setSelectedTags}
+                            onSaveClick={(e: React.MouseEvent) => {
+                                e.stopPropagation();
+                                setToggleActive('');
+                            }}
+                        />
+                    ) : null}
                 </PostInfoItem>
-                <PostInfoItem>
-                    <p>Category : </p>
-                    <p>카테고리 선택</p>
+                <PostInfoItem onClick={() => setToggleActive('category')}>
+                    <TitleArea>
+                        <p>Category : </p>
+                        <p>카테고리 선택</p>
+                    </TitleArea>
                 </PostInfoItem>
             </PostInfo>
 
@@ -83,12 +128,17 @@ const Title = styled.input`
     font-weight: 700;
 `;
 
+const TitleArea = styled.div`
+    display: flex;
+`;
+
 const PostInfoItem = styled.div`
     display: flex;
+    flex-direction: column;
     color: ${colors.postDescription};
     margin: 0.3rem 0;
 
-    p:nth-of-type(2) {
+    ${TitleArea} {
         margin-top: 0.1rem;
     }
 `;

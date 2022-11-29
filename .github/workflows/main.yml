@@ -1,0 +1,23 @@
+name: test deploy
+on:
+    push:
+        branches: [main, fix/38-github-actions를-이용한-배포-자동화2]
+    workflow_dispatch:
+jobs:
+    build:
+        runs-on: ubuntu-18.04
+
+        #     env:
+        #       CI: false
+
+        steps:
+            - name: Deploy to Server
+              uses: appleboy/ssh-action@v0.1.4
+              with:
+                  host: ${{ secrets.HOST }}
+                  username: ${{ secrets.USERNAME }}
+                  password: ${{ secrets.PASSWORD }}
+                  port: ${{ secrets.PORT }}
+                  script: |
+                      cd /root
+                      ./deploy.sh

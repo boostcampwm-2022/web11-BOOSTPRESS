@@ -1,4 +1,11 @@
-import { blogSideBarInfoType, MultipleArticleAPIType } from './apiTypes';
+import {
+    blogSideBarInfoType,
+    MultipleArticleAPIType,
+    tagType,
+    createArticleType,
+} from './apiTypes';
+
+const url = 'http://localhost:8080';
 
 export async function getBlogSideBarInfo(userId: string) {
     const res = await fetch(`/api/blog/${userId}`);
@@ -25,4 +32,31 @@ export async function getArticlesWithUserId(
             }),
     );
     return (await res.json()) as MultipleArticleAPIType;
+}
+
+export async function getAllTags() {
+    const res = await fetch('/api/tags');
+    return (await res.json()) as { tags: tagType[] };
+}
+
+export async function createArticle(param: createArticleType) {
+    const res = await fetch(url + '/article', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+
+        credentials: 'include',
+        body: JSON.stringify(param),
+    });
+
+    return await res.json();
+}
+
+export async function getIsLogin() {
+    const res = await fetch(url + '/auth/me', {
+        method: 'GET',
+        credentials: 'include',
+    });
+    return await res.json();
 }

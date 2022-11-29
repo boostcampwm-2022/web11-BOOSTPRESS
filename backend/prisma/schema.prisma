@@ -38,6 +38,7 @@ model Article {
     // 분류 관련
     categoryId Int?
     category   Category? @relation(fields: [categoryId], references: [id])
+    tags       Tag[]
 
     // GitHub 관련
     updateSHA String @default("")
@@ -57,6 +58,13 @@ model Category {
 
     ownerId Int
     owner   User @relation(fields: [ownerId], references: [id])
+
+    articles Article[]
+}
+
+model Tag {
+    id   Int    @id @default(autoincrement())
+    name String
 
     articles Article[]
 }

@@ -7,6 +7,7 @@ const App = () => {
     return (
         <Routes>
             <Route path="" element={<Main />} />
+
             <Route path="/newpost" element={<NewPost />} />
             <Route path="/blog/:userId" element={<BlogMain />} />
         </Routes>

@@ -11,6 +11,7 @@ import { ReactComponent as SettingSVG } from 'assets/svg/setting.svg';
 import { ReactComponent as PencilSVG } from 'assets/svg/pencil.svg';
 import { css } from '@emotion/react';
 import colors from 'styles/color';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface headerType {
     isLogoActive: boolean;
@@ -19,6 +20,8 @@ interface headerType {
 
 // 로고는 안보일때도 있을 수 있음
 const Header = ({ isLogoActive, isLogin }: headerType) => {
+    const navigate = useNavigate();
+
     const [gitHubLoginModalActive, setGitHubLoginModalActive] = useState(false);
     const [userSettingModalActive, setuserSettingModalActive] = useState(false);
 
@@ -36,9 +39,11 @@ const Header = ({ isLogoActive, isLogin }: headerType) => {
 
     return (
         <HeaderWrapper>
-            <LogoArea isLogoActive={isLogoActive}>
-                <LogoTitle>BOOSTPRESS</LogoTitle>
-            </LogoArea>
+            <Link to="/">
+                <LogoArea isLogoActive={isLogoActive}>
+                    <LogoTitle>BOOSTPRESS</LogoTitle>
+                </LogoArea>
+            </Link>
             <HeaderRightArea>
                 <SearchArea placeholder="검색어 입력 " />
                 <SearchIconSVG css={SearchIcon} />
@@ -71,7 +76,7 @@ const Header = ({ isLogoActive, isLogin }: headerType) => {
                     <UserSettingModalItem>
                         <SettingSVG /> <p>내 블로그 설정</p>
                     </UserSettingModalItem>
-                    <UserSettingModalItem>
+                    <UserSettingModalItem onClick={() => navigate('/newpost')}>
                         <PencilSVG /> <p>글 쓰기</p>
                     </UserSettingModalItem>
                 </UserSettingModalArea>

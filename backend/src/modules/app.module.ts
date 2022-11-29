@@ -8,6 +8,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ArticleModule } from './article/article.module';
 import { BlogModule } from './blog/blog.module';
 import { UserModule } from './user/user.module';
+import { TagModule } from './tag/tag.module';
 import { CategoryModule } from './category/category.module';
 
 @Module({
@@ -19,6 +20,7 @@ import { CategoryModule } from './category/category.module';
         ArticleModule,
         BlogModule,
         UserModule,
+        TagModule,
         CategoryModule,
     ],
     controllers: [AppController],

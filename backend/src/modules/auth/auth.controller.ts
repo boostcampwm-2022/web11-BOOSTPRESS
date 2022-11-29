@@ -1,10 +1,11 @@
 import { Controller, Delete, Get, Res, UseGuards } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { Response } from 'express';
 import { CurrentUser } from 'src/decorator';
 import { GitHubGuard, JwtGuard } from 'src/guard';
-import { Auth } from 'src/types';
+import { Auth, Env } from 'src/types';
 import { AuthService } from './auth.service';
 import { LoginResponseDTO } from './dto';
 import { GetGitHub, DeleteLogout, GetMe } from './swagger';
@@ -12,10 +13,15 @@ import { TokenService } from './token.service';
 
 @Controller('auth')
 export class AuthController {
+    private readonly REDIRECT_URL: string;
+
     constructor(
         private readonly authService: AuthService,
         private readonly tokenService: TokenService,
-    ) {}
+        config: ConfigService<Env>,
+    ) {
+        this.REDIRECT_URL = config.get('REDIRECT_URL');
+    }
 
     @ApiOperation(GetGitHub.Operation)
     @ApiResponse(GetGitHub._200)
@@ -31,7 +37,7 @@ export class AuthController {
         res.cookie(Auth, `Bearer ${jwt}`, this.tokenService.bearerOption());
         await this.tokenService.setToken(user, jwt);
 
-        res.redirect('http://localhost:3000');
+        res.redirect(this.REDIRECT_URL);
     }
 
     @ApiOperation(DeleteLogout.Operation)
@@ -44,7 +50,7 @@ export class AuthController {
         @Res({ passthrough: true }) res: Response,
     ) {
         await this.authService.logout(user, res);
-        res.redirect('http://localhost:3000');
+        res.redirect(this.REDIRECT_URL);
     }
 
     @ApiOperation(GetMe.Operation)

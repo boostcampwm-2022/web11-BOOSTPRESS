@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { User } from '@prisma/client';
 import { AxiosInstance } from 'axios';
@@ -7,7 +7,7 @@ import { Response } from 'express';
 import { randomUUID } from 'node:crypto';
 import { Auth, Env } from 'src/types';
 import { PrismaService } from '../prisma/prisma.service';
-import { GitHubUser } from './dto';
+import { Email, GitHubUser } from './dto';
 import { TokenService } from './token.service';
 
 @Injectable()
@@ -34,7 +34,9 @@ export class AuthService {
             Authorization: `Bearer ${this.SERVER_ACCESS_TOKEN}`,
         };
 
-        const repoName = `BoostPress-${data.login}-${randomUUID().split('-')}`;
+        const repoName = `BoostPress-${data.login}-${
+            randomUUID().split('-')[0]
+        }`;
 
         // 사용자 github에 repoName으로 repo 생성
         await this.axios.post(
@@ -56,8 +58,26 @@ export class AuthService {
         return repoName;
     }
 
+    private async getEmail(accessToken: string) {
+        const headers = { Authorization: `Bearer ${accessToken}` };
+        const { data } = await this.axios.get<Email[]>(
+            'https://api.github.com/user/emails',
+            { headers },
+        );
+
+        if (data.length === 0) {
+            const message = '이메일을 가져올 수 없습니다!';
+            throw new BadRequestException(message);
+        }
+
+        return data[0].email;
+    }
+
     private async signup(data: GitHubUser, accessToken: string) {
-        const { id, login, email } = data;
+        const { id, login } = data;
+        let { email } = data;
+
+        if (email === null) email = await this.getEmail(accessToken);
 
         // 사용자가 작성한 글을 백업하기 위한 repo를 생성
         const repoName = await this.createRepo(data, accessToken);

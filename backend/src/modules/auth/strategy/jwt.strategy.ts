@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+    HttpException,
+    Injectable,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { User } from '@prisma/client';
@@ -29,6 +33,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         });
     }
 
+    handleRequest(err: any, user: any, info: any, context: any, status: any) {
+        console.log('errorGuard', err);
+        if (err || !user) {
+            throw new HttpException(err.message, err.status);
+        }
+        return user;
+    }
+
     async validate(req: Request, payload: any) {
         const id = payload.sub as number;
 
@@ -44,7 +56,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         }
         // 사용자가 DB에 없는 토큰을 이용해 접근한다면 강제로 로그아웃
         if (session.accessToken !== cookieToToken(req))
-            this.forceLogout(req, user);
+            await this.forceLogout(req, user);
 
         const isTokenValid = new Date().getTime() - payload.exp * 1000 <= 0;
         const isLoginValid =

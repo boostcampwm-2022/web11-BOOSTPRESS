@@ -7,6 +7,7 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Query,
     UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -14,7 +15,7 @@ import { User } from '@prisma/client';
 import { CurrentUser } from 'src/decorator';
 import { JwtGuard } from 'src/guard';
 import { ArticleService } from './article.service';
-import { ArticleDTO } from './dto';
+import { ArticleDTO, ArticleFilterDTO } from './dto';
 import { Create, ReadOne, Remove, Update } from './swagger';
 
 @Controller('article')
@@ -35,6 +36,17 @@ export class ArticleController {
     @Get(':id')
     async readOne(@Param('id', ParseIntPipe) id: number) {
         return await this.articleService.readOne(id);
+    }
+
+    @Get()
+    async readMany(@Query() query: ArticleFilterDTO) {
+        query = {
+            page: 1,
+            authorId: null,
+            tagId: null,
+            categoryId: null,
+            ...query,
+        };
     }
 
     @ApiOperation(Update.Operation)

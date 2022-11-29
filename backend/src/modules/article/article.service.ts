@@ -33,6 +33,7 @@ export class ArticleService {
             data: {
                 authorId: user.id,
                 title: dto.title,
+                categoryId: dto.categoryId,
             },
         });
 
@@ -78,7 +79,10 @@ export class ArticleService {
             this.commit(user, dto, article),
             this.prisma.article.update({
                 where: { id },
-                data: { title: dto.title },
+                data: {
+                    title: dto.title,
+                    categoryId: dto.categoryId,
+                },
             }),
         ]);
 

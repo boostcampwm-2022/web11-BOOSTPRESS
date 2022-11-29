@@ -3,13 +3,17 @@ import styled from '@emotion/styled/macro';
 import React, { useState } from 'react';
 import colors from 'styles/color';
 import { Successbtn } from 'styles/common';
-import { dateToStrYYYYMMDD } from 'utils/utils';
-import Editor from './Editor';
-import 'styles/editor.css';
+
+import { dateToStr } from 'utils/utils';
+import MDXEditor from 'editor/MdxEditor';
+import guideLine from 'editor/guideLine';
+import { createArticle } from 'api/api';
+import { useNavigate } from 'react-router-dom';
 import TagSelector from './TagSelector';
 import { tagType } from 'api/apiTypes';
 
 const NewPostBody = () => {
+    const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
@@ -26,6 +30,21 @@ const NewPostBody = () => {
     };
 
     console.log(toggleActive);
+
+    const submitPost = async () => {
+        const postData = {
+            title,
+            content,
+        };
+        const res = await createArticle(postData);
+        console.log(selectedTags);
+
+        if (res.id) {
+            alert('글쓰기가 완료되었습니다');
+            navigate('/');
+        }
+    };
+
     return (
         <NewPostBodyWrapper>
             <PostInfo>
@@ -33,7 +52,7 @@ const NewPostBody = () => {
                 <PostInfoItem>
                     <TitleArea>
                         <p>Posted Date : </p>
-                        <p>&nbsp;{dateToStrYYYYMMDD(new Date())}</p>
+                        <DateArea>{dateToStr(new Date(), 'YYYYMMDD')}</DateArea>
                     </TitleArea>
                 </PostInfoItem>
                 <PostInfoItem>
@@ -73,12 +92,13 @@ const NewPostBody = () => {
             </PostInfo>
 
             <EditorWrapper>
-                <div className="markdown-body">
-                    <Editor content={content} setContent={setContent} />
-                </div>
+                <MDXEditor
+                    guideLine={guideLine.testguide}
+                    setContent={setContent}
+                />
             </EditorWrapper>
 
-            <SubmitButton>글쓰기</SubmitButton>
+            <SubmitButton onClick={submitPost}>글쓰기</SubmitButton>
         </NewPostBodyWrapper>
     );
 };
@@ -123,9 +143,14 @@ const PostInfoItem = styled.div`
     }
 `;
 
+const DateArea = styled.p`
+    margin-left: 0.5rem;
+`;
+
 const EditorWrapper = styled.div`
     width: 80%;
     margin: 3rem auto;
+    position: relative;
 `;
 
 const SubmitButton = styled(Successbtn)`

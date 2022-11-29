@@ -14,7 +14,7 @@ import { User } from '@prisma/client';
 import { CurrentUser } from 'src/decorator';
 import { JwtGuard } from 'src/guard';
 import { ArticleService } from './article.service';
-import { PatchArticleDTO, PostArticleDTO } from './dto';
+import { ArticleDTO } from './dto';
 import { Create, ReadOne, Remove, Update } from './swagger';
 
 @Controller('article')
@@ -26,7 +26,7 @@ export class ArticleController {
     @ApiResponse(Create._401)
     @UseGuards(JwtGuard)
     @Post()
-    async create(@CurrentUser() user: User, @Body() dto: PostArticleDTO) {
+    async create(@CurrentUser() user: User, @Body() dto: ArticleDTO) {
         return await this.articleService.create(user, dto);
     }
 
@@ -41,9 +41,13 @@ export class ArticleController {
     @ApiResponse(Update._200)
     @ApiResponse(Update._401)
     @UseGuards(JwtGuard)
-    @Patch()
-    async update(@CurrentUser() user: User, @Body() dto: PatchArticleDTO) {
-        return await this.articleService.update(user, dto);
+    @Patch(':id')
+    async update(
+        @CurrentUser() user: User,
+        @Param('id', ParseIntPipe) id: number,
+        @Body() dto: ArticleDTO,
+    ) {
+        return await this.articleService.update(user, dto, id);
     }
 
     @ApiOperation(Remove.Operation)

@@ -11,6 +11,7 @@ import { ReactComponent as SettingSVG } from 'assets/svg/setting.svg';
 import { ReactComponent as PencilSVG } from 'assets/svg/pencil.svg';
 import { css } from '@emotion/react';
 import colors from 'styles/color';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface headerType {
     isLogoActive: boolean;
@@ -19,6 +20,8 @@ interface headerType {
 
 // 로고는 안보일때도 있을 수 있음
 const Header = ({ isLogoActive, isLogin }: headerType) => {
+    const navigate = useNavigate();
+
     const [gitHubLoginModalActive, setGitHubLoginModalActive] = useState(false);
     const [userSettingModalActive, setuserSettingModalActive] = useState(false);
 
@@ -30,11 +33,17 @@ const Header = ({ isLogoActive, isLogin }: headerType) => {
         setuserSettingModalActive(!userSettingModalActive);
     };
 
+    const moveGitHubAuth = () => {
+        window.location.href = `http://localhost:8080/auth/github`;
+    };
+
     return (
         <HeaderWrapper>
-            <LogoArea isLogoActive={isLogoActive}>
-                <LogoTitle>BOOSTPRESS</LogoTitle>
-            </LogoArea>
+            <Link to="/">
+                <LogoArea isLogoActive={isLogoActive}>
+                    <LogoTitle>BOOSTPRESS</LogoTitle>
+                </LogoArea>
+            </Link>
             <HeaderRightArea>
                 <SearchArea placeholder="검색어 입력 " />
                 <SearchIconSVG css={SearchIcon} />
@@ -52,19 +61,22 @@ const Header = ({ isLogoActive, isLogin }: headerType) => {
                     />
                 )}
 
-                <GitHubLoginArea Active={gitHubLoginModalActive}>
+                <GitHubLoginArea
+                    active={gitHubLoginModalActive}
+                    onClick={moveGitHubAuth}
+                >
                     <GitHubIconSVG />
                     <p>Github로 계속하기</p>
                 </GitHubLoginArea>
 
-                <UserSettingModalArea Active={userSettingModalActive}>
+                <UserSettingModalArea active={userSettingModalActive}>
                     <UserSettingModalItem>
                         <HomeSVG /> <p>내 블로그 페이지</p>
                     </UserSettingModalItem>
                     <UserSettingModalItem>
                         <SettingSVG /> <p>내 블로그 설정</p>
                     </UserSettingModalItem>
-                    <UserSettingModalItem>
+                    <UserSettingModalItem onClick={() => navigate('/newpost')}>
                         <PencilSVG /> <p>글 쓰기</p>
                     </UserSettingModalItem>
                 </UserSettingModalArea>
@@ -124,8 +136,8 @@ const UserIcon = css`
     cursor: pointer;
 `;
 
-const GitHubLoginArea = styled(BasicShadowBox)<{ Active: boolean }>`
-    display: ${(props) => (props.Active ? 'flex' : 'none')};
+const GitHubLoginArea = styled(BasicShadowBox)<{ active: boolean }>`
+    display: ${(props) => (props.active ? 'flex' : 'none')};
     align-content: center;
     position: absolute;
     right: 0;
@@ -141,8 +153,8 @@ const GitHubLoginArea = styled(BasicShadowBox)<{ Active: boolean }>`
     }
 `;
 
-const UserSettingModalArea = styled(BasicShadowBox)<{ Active: boolean }>`
-    display: ${(props) => (props.Active ? 'flex' : 'none')};
+const UserSettingModalArea = styled(BasicShadowBox)<{ active: boolean }>`
+    display: ${(props) => (props.active ? 'flex' : 'none')};
     flex-direction: column;
     align-content: center;
 

@@ -4,15 +4,15 @@ import { postCardInfoType } from 'api/apiTypes';
 import React from 'react';
 import PostCard from './PostCard';
 
-interface FeaturePostType {
-    title: string;
+interface PostGridType {
     postInfo: postCardInfoType[];
+    title?: string;
 }
 
-const FeaturedPost = ({ title, postInfo }: FeaturePostType) => {
+const PostGrid = ({ postInfo, title }: PostGridType) => {
     return (
         <>
-            <Title>{title}</Title>
+            {title ? <Title>{title}</Title> : null}
             <PostCardWrap>
                 {postInfo.map((post) => (
                     <PostCard postInfo={post} width="100%" height="300px" />
@@ -23,7 +23,7 @@ const FeaturedPost = ({ title, postInfo }: FeaturePostType) => {
 };
 
 const Title = styled.p`
-    margin: 5rem;
+    margin-top: 5rem;
     margin-left: 10%;
     font-weight: 700;
     font-size: 1.2rem;
@@ -33,10 +33,12 @@ const Title = styled.p`
 const PostCardWrap = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(230px, 230px));
+    justify-content: center;
     width: 80%;
     margin: 0 auto;
+    margin-top: 5rem;
     row-gap: 2rem;
     column-gap: 3rem;
 `;
 
-export default FeaturedPost;
+export default PostGrid;

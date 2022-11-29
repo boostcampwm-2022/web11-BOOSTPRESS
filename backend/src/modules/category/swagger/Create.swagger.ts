@@ -7,5 +7,5 @@ export const Operation: ApiOperationOptions = {
 
 export const _200 = {
     status: 200,
-    description: 'GitHub API로 commit한 결과',
+    description: '생성된 카테고리',
 };

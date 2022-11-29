@@ -14,12 +14,14 @@ import { CurrentUser } from 'src/decorator';
 import { JwtGuard } from 'src/guard';
 import { CategoryService } from './category.service';
 import { CategoryDTO } from './dto';
-import { Create } from './swagger';
+import { Create, ReadAll, Remove, Update } from './swagger';
 
 @Controller('category')
 export class CategoryController {
     constructor(private readonly categoryService: CategoryService) {}
 
+    @ApiOperation(ReadAll.Operation)
+    @ApiResponse(ReadAll._200)
     @Get(':id')
     async read(@Param('id', ParseIntPipe) id: number) {
         return await this.categoryService.readByUserId(id);
@@ -33,6 +35,8 @@ export class CategoryController {
         return await this.categoryService.create(user, dto);
     }
 
+    @ApiOperation(Update.Operation)
+    @ApiResponse(Update._200)
     @Patch(':id')
     async update(
         @CurrentUser() user,
@@ -42,6 +46,8 @@ export class CategoryController {
         return await this.categoryService.update(user, dto, id);
     }
 
+    @ApiOperation(Remove.Operation)
+    @ApiResponse(Remove._200)
     @Delete(':id')
     async delete(@CurrentUser() user, @Param('id', ParseIntPipe) id: number) {
         return await this.categoryService.delete(user, id);

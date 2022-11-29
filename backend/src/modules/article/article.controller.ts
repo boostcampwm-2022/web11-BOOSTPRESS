@@ -9,6 +9,7 @@ import {
     Post,
     Query,
     UseGuards,
+    ValidationPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from '@prisma/client';
@@ -34,19 +35,22 @@ export class ArticleController {
     @ApiOperation(ReadOne.Operation)
     @ApiResponse(ReadOne._200)
     @Get(':id')
-    async readOne(@Param('id', ParseIntPipe) id: number) {
+    async readOne(@Param('id') id: number) {
         return await this.articleService.readOne(id);
     }
 
     @Get()
-    async readMany(@Query() query: ArticleFilterDTO) {
-        query = {
-            page: 1,
-            authorId: null,
-            tagId: null,
-            categoryId: null,
-            ...query,
-        };
+    async readMany(
+        @Query(
+            new ValidationPipe({
+                transform: true,
+                transformOptions: { enableImplicitConversion: true },
+                forbidNonWhitelisted: true,
+            }),
+        )
+        query: ArticleFilterDTO,
+    ) {
+        return this.articleService.readMany(query);
     }
 
     @ApiOperation(Update.Operation)

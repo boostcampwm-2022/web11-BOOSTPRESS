@@ -1,15 +1,19 @@
-import { IsNumber } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
 
 export class ArticleFilterDTO {
     @IsNumber()
+    @IsOptional()
     page: number;
 
     @IsNumber()
+    @IsOptional()
     authorId: number;
 
     @IsNumber()
+    @IsOptional()
     tagId: number;
 
     @IsNumber()
+    @IsOptional()
     categoryId: number;
 }

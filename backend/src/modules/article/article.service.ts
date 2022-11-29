@@ -13,6 +13,7 @@ import * as fs from 'fs';
 import { PrismaService } from '../prisma/prisma.service';
 import {
     ArticleDTO,
+    ArticleFilterDTO,
     ArticleResponseDTO,
     CommitResponseDTO,
     FetchResponseDTO,
@@ -23,6 +24,7 @@ import { Env } from 'src/types';
 export class ArticleService {
     private readonly SERVER_ACCESS_TOKEN: string;
     private readonly axios: AxiosInstance;
+    private readonly take = 12;
 
     constructor(
         private readonly prisma: PrismaService,
@@ -77,6 +79,19 @@ export class ArticleService {
             article,
             Buffer.from(data.content, 'base64').toString(),
         );
+    }
+
+    async readMany(query: ArticleFilterDTO) {
+        const page: number = query.page ?? 1;
+        delete query.page;
+
+        const articles = await this.prisma.article.findMany({
+            where: query,
+            skip: (page - 1) * this.take,
+            take: this.take,
+        });
+
+        return articles.map(ArticleResponseDTO.toBreif);
     }
 
     async update(

@@ -3,7 +3,7 @@ export interface blogSideBarInfoType {
     imageURL: string;
     sns_link: snsLinkType[];
     category: categoryType[];
-    tag: tagType[];
+    tag: tagType & { article_count: number }[];
 }
 
 export interface categoryType {
@@ -52,7 +52,7 @@ interface snsLinkType {
     link: string;
 }
 
-interface tagType {
-    name: string;
-    article_count: number;
+export interface tagType {
+    title: string;
+    id: string;
 }

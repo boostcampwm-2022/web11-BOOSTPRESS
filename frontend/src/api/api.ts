@@ -1,7 +1,8 @@
 import {
     blogSideBarInfoType,
-    createArticleType,
     MultipleArticleAPIType,
+    tagType,
+    createArticleType,
 } from './apiTypes';
 
 const url = 'http://localhost:8080';
@@ -31,6 +32,11 @@ export async function getArticlesWithUserId(
             }),
     );
     return (await res.json()) as MultipleArticleAPIType;
+}
+
+export async function getAllTags() {
+    const res = await fetch('/api/tags');
+    return (await res.json()) as { tags: tagType[] };
 }
 
 export async function createArticle(param: createArticleType) {

@@ -5,7 +5,7 @@ import {
     createArticleType,
 } from './apiTypes';
 
-const url = 'http://localhost:8080';
+const url = process.env.REACT_APP_API_URL;
 
 export async function getBlogSideBarInfo(userId: string) {
     const res = await fetch(`/api/blog/${userId}`);
@@ -35,7 +35,7 @@ export async function getArticlesWithUserId(
 }
 
 export async function getAllTags() {
-    const res = await fetch('/api/tags');
+    const res = await fetch(url + '/tag');
     return (await res.json()) as { tags: tagType[] };
 }
 
@@ -54,6 +54,7 @@ export async function createArticle(param: createArticleType) {
 }
 
 export async function getIsLogin() {
+    console.log(url);
     const res = await fetch(url + '/auth/me', {
         method: 'GET',
         credentials: 'include',

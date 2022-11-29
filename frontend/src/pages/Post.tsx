@@ -1,0 +1,58 @@
+/* 게시글 조회 페이지 */
+import styled from '@emotion/styled';
+import { useQuery } from '@tanstack/react-query';
+import { getArticleInfo, getBlogSideBarInfo, getUserInfo } from 'api/api';
+import Header from 'components/Header';
+import PostHead from 'components/Post/PostHead';
+import SidebarComponent from 'components/Sidebar';
+import React from 'react';
+import { useParams } from 'react-router-dom';
+
+const Post = () => {
+    const postId = useParams().postId as string;
+    const userId = useParams().userId as string;
+
+    const postQuery = useQuery({
+        queryKey: ['postInfo', postId],
+        queryFn: () => getArticleInfo(postId),
+    });
+
+    const sideBarQuery = useQuery({
+        queryKey: ['blogSideBar', userId],
+        queryFn: () => getBlogSideBarInfo(userId),
+    });
+
+    console.log(postQuery.data);
+
+    return (
+        <Wrapper>
+            <Header isLogoActive={false} isLogin={false} />
+            {sideBarQuery.isLoading ? (
+                <span>Loading</span>
+            ) : sideBarQuery.isError ? (
+                <span>Error</span>
+            ) : (
+                <SidebarComponent blogSideBarInfo={sideBarQuery.data} />
+            )}
+            <PostBody>
+                {postQuery.isLoading ? (
+                    <span>Loading</span>
+                ) : postQuery.isError ? (
+                    <span>Error</span>
+                ) : (
+                    <PostHead postInfo={postQuery.data} />
+                )}
+            </PostBody>
+        </Wrapper>
+    );
+};
+
+const Wrapper = styled.div`
+    display: flex;
+`;
+
+const PostBody = styled.div`
+    margin-top: 10rem;
+`;
+
+export default Post;

@@ -52,7 +52,7 @@ const NewPostBody = () => {
                 <Title placeholder="제목을 입력하세요" onChange={handleTitle} />
                 <PostInfoItem>
                     <TitleArea>
-                        <p>Posted Date : </p>
+                        a<p>Posted Date : </p>
                         <DateArea>{dateToStr(new Date(), 'YYYYMMDD')}</DateArea>
                     </TitleArea>
                 </PostInfoItem>
@@ -114,7 +114,7 @@ const PostInfo = styled.div`
     width: 60%;
     margin: auto;
     padding: 2rem 3rem;
-    border: 1px solid #d8d8d8;
+    border: 1px solid ${colors.boxGrayLine};
 
     input {
         border: none;

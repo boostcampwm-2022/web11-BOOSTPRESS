@@ -5,19 +5,23 @@ import {
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { CategoryResponse, CategoryDTO } from './dto';
+import { CategoryResponseDTO, CategoryDTO } from './dto';
 
 @Injectable()
 export class CategoryService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async getAll(ownerId: number) {
-        return await this.prisma.category.findMany({
+    async readByUserId(ownerId: number) {
+        const categories = await this.prisma.category.findMany({
             where: { ownerId, deleted: false },
         });
+
+        return categories.map((category) =>
+            CategoryResponseDTO.fromCategory(category),
+        );
     }
 
-    async create(user: User, dto: CategoryDTO): Promise<CategoryResponse> {
+    async create(user: User, dto: CategoryDTO): Promise<CategoryResponseDTO> {
         const category = await this.prisma.category.create({
             data: {
                 ownerId: user.id,
@@ -25,7 +29,7 @@ export class CategoryService {
             },
         });
 
-        return CategoryResponse.fromCategory(category);
+        return CategoryResponseDTO.fromCategory(category);
     }
 
     async update(user: User, dto: CategoryDTO, id: number) {
@@ -37,7 +41,7 @@ export class CategoryService {
             data: { name },
         });
 
-        return CategoryResponse.fromCategory(category);
+        return CategoryResponseDTO.fromCategory(category);
     }
 
     async delete(user: User, id: number) {
@@ -47,7 +51,7 @@ export class CategoryService {
             data: { deleted: true },
         });
 
-        return CategoryResponse.fromCategory(category);
+        return CategoryResponseDTO.fromCategory(category);
     }
 
     private async getCategoryWithUser(id: number, user: User) {

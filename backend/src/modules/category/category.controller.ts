@@ -21,8 +21,8 @@ export class CategoryController {
     constructor(private readonly categoryService: CategoryService) {}
 
     @Get(':id')
-    async getAll(@Param('id', ParseIntPipe) id: number) {
-        return await this.categoryService.getAll(id);
+    async read(@Param('id', ParseIntPipe) id: number) {
+        return await this.categoryService.readByUserId(id);
     }
 
     @ApiOperation(Create.Operation)

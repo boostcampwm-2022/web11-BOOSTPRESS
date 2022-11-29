@@ -37,6 +37,7 @@ export class CategoryController {
 
     @ApiOperation(Update.Operation)
     @ApiResponse(Update._200)
+    @UseGuards(JwtGuard)
     @Patch(':id')
     async update(
         @CurrentUser() user,
@@ -48,6 +49,7 @@ export class CategoryController {
 
     @ApiOperation(Remove.Operation)
     @ApiResponse(Remove._200)
+    @UseGuards(JwtGuard)
     @Delete(':id')
     async delete(@CurrentUser() user, @Param('id', ParseIntPipe) id: number) {
         return await this.categoryService.delete(user, id);

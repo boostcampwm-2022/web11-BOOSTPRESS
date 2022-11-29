@@ -35,6 +35,7 @@ const NewPostBody = () => {
         const postData = {
             title,
             content,
+            tagId: selectedTags.map((el) => parseInt(el.id)),
         };
         const res = await createArticle(postData);
         console.log(selectedTags);

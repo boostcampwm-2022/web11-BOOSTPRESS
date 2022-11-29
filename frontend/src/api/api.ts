@@ -39,8 +39,7 @@ export async function getAllTags() {
         method: 'GET',
         credentials: 'include',
     });
-    console.log(res);
-    return (await res.json()) as { tags: tagType[] };
+    return (await res.json()) as tagType[];
 }
 
 export async function createArticle(param: createArticleType) {

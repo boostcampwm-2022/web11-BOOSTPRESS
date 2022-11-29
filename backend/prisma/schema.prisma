@@ -34,6 +34,8 @@ model Article {
     id    Int    @id @default(autoincrement())
     title String
 
+    tags Tag[]
+
     // GitHub 관련
     updateSHA String @default("")
 
@@ -43,4 +45,11 @@ model Article {
     deleted   Boolean  @default(false)
     authorId  Int
     author    User     @relation(fields: [authorId], references: [id])
+}
+
+model Tag {
+    id   Int    @id @default(autoincrement())
+    name String
+
+    articles Article[]
 }

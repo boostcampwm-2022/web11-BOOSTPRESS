@@ -29,10 +29,12 @@ export class ArticleService {
     }
 
     async create(user: User, dto: ArticleDTO) {
+        const connect = dto.tagId.map((value) => ({ id: value }));
         const article = await this.prisma.article.create({
             data: {
                 authorId: user.id,
                 title: dto.title,
+                tags: { connect },
             },
         });
 
@@ -72,6 +74,10 @@ export class ArticleService {
     }
 
     async update(user: User, dto: ArticleDTO, id: number) {
+        const data = {
+            title: dto.title,
+            tags: { connect: dto.tagId.map((value) => ({ id: value })) },
+        };
         const article = await this.getArticleWithUser(id, user.id);
 
         await Promise.all([
@@ -131,13 +137,11 @@ export class ArticleService {
                 name: user.login,
                 email: user.email,
             },
-            sha: article.updateSHA ?? '',
+            sha: article.updateSHA,
         };
         const headers = {
             Authorization: `Bearer ${this.SERVER_ACCESS_TOKEN}`,
         };
-
-        if (requestData.sha === '') delete requestData.sha;
 
         const { data } = await this.axios.put<CommitResponseDTO>(
             `https://api.github.com/repos/${user.login}/${user.repoName}/contents/${article.id}/README.md`,

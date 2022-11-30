@@ -1,6 +1,6 @@
 # additional ignores
 /articles
-/images
+/storages
 
 # compiled output
 /dist

@@ -83,7 +83,15 @@ export class AuthService {
         const repoName = await this.createRepo(data, accessToken);
 
         return await this.prisma.user.create({
-            data: { id, login, email, nickname: login, repoName },
+            data: {
+                id,
+                login,
+                email,
+                nickname: login,
+                repoName,
+                blogName: `${login}의 블로그`,
+                bio: `${login}의 블로그입니다`,
+            },
         });
     }
 

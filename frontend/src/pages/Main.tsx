@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Header from 'components/Header';
 import IntroBanner from 'components/IntroBanner';
-import { getFeaturePostInfo, getIsLogin } from 'api/api';
+import { getFeaturePostInfo, getUserInfo } from 'api/api';
 import { useQuery } from '@tanstack/react-query';
 import PostGrid from 'components/PostGrid';
 
@@ -14,7 +14,7 @@ const Main = () => {
     });
 
     const checkLogin = async () => {
-        const res = await getIsLogin();
+        const res = await getUserInfo();
         if (res.nickname) setIsLogin(true);
         else setIsLogin(false);
     };

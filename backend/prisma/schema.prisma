@@ -30,8 +30,9 @@ model User {
     userFacebook UserFacebook?
 
     // join 관련
-    session  Session?
-    articles Article[]
+    session    Session?
+    categories Category[]
+    articles   Article[]
 }
 
 model UserTwitter {
@@ -56,7 +57,10 @@ model Article {
     id    Int    @id @default(autoincrement())
     title String
 
-    tags Tag[]
+    // 분류 관련
+    categoryId Int?
+    category   Category? @relation(fields: [categoryId], references: [id])
+    tags       Tag[]
 
     // GitHub 관련
     updateSHA String @default("")
@@ -67,6 +71,21 @@ model Article {
     deleted   Boolean  @default(false)
     authorId  Int
     author    User     @relation(fields: [authorId], references: [id])
+}
+
+model Category {
+    id      Int     @id @default(autoincrement())
+    name    String
+    deleted Boolean @default(false)
+
+    ownerId Int
+    owner   User @relation(fields: [ownerId], references: [id])
+
+    parentCategoryId Int?
+    parentCategory   Category?  @relation(name: "CategoryTree", fields: [parentCategoryId], references: [id])
+    childCategory    Category[] @relation(name: "CategoryTree")
+
+    articles Article[]
 }
 
 model Tag {

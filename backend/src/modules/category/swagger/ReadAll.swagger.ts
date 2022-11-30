@@ -1,4 +1,5 @@
 import { ApiOperationOptions } from '@nestjs/swagger';
+import { CategoryResponseDTO } from '../dto';
 
 export const Operation: ApiOperationOptions = {
     summary: '카테고리 조회 API',
@@ -8,4 +9,6 @@ export const Operation: ApiOperationOptions = {
 export const _200 = {
     status: 200,
     description: '사용자가 가진 모든 카테고리',
+    type: CategoryResponseDTO,
+    isArray: true,
 };

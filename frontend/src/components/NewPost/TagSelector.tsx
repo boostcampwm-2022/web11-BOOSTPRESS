@@ -15,8 +15,6 @@ const TagSelector = ({ selectedTags, setSelectedTags, onSaveClick }: Props) => {
     const tagQuery = useQuery({ queryKey: ['tags'], queryFn: getAllTags });
     const [searchBarContent, setSearchBarContent] = useState('');
 
-    console.log(tagQuery.data);
-
     const handleTagSelection = (selectedTag: tagType) => {
         setSelectedTags((prev) => [...prev, selectedTag]);
     };

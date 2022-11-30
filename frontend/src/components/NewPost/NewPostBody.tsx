@@ -3,7 +3,6 @@ import styled from '@emotion/styled/macro';
 import React, { useState } from 'react';
 import colors from 'styles/color';
 import { Successbtn } from 'styles/common';
-
 import { dateToStr } from 'utils/utils';
 import MDXEditor from 'editor/MdxEditor';
 import guideLine from 'editor/guideLine';
@@ -11,6 +10,14 @@ import { createArticle } from 'api/api';
 import { useNavigate } from 'react-router-dom';
 import TagSelector from './TagSelector';
 import { tagType } from 'api/apiTypes';
+import CategorySelector from './CategorySelector';
+
+//TODO: 카테고리 타입에 관한 협의가 완료되면 픽스 해야함
+interface categoryType {
+    name: string;
+    id: number;
+    children: categoryType[];
+}
 
 const NewPostBody = () => {
     const navigate = useNavigate();
@@ -19,7 +26,9 @@ const NewPostBody = () => {
 
     //태그,카테고리는 후에 선택
     const [selectedTags, setSelectedTags] = useState<tagType[]>([]);
-    const [category, setCategory] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState<categoryType>(
+        {} as categoryType,
+    );
 
     const [toggleActive, setToggleActive] = useState<
         '' | 'tag' | 'category' | 'series'
@@ -66,7 +75,7 @@ const NewPostBody = () => {
                     >
                         <p>Tag :</p>
                         {selectedTags.length === 0 ? (
-                            <span>태그 선택</span>
+                            <span className="empty">태그 선택</span>
                         ) : (
                             selectedTags.map((tag) => (
                                 <p key={tag.id}>{tag.name}</p>
@@ -84,11 +93,41 @@ const NewPostBody = () => {
                         />
                     ) : null}
                 </PostInfoItem>
-                <PostInfoItem onClick={() => setToggleActive('category')}>
+                <PostInfoItem
+                    onClick={() =>
+                        setToggleActive((prev) =>
+                            prev === 'category' ? '' : 'category',
+                        )
+                    }
+                >
                     <TitleArea>
                         <p>Category : </p>
-                        <p>카테고리 선택</p>
+                        {selectedCategory.name ? (
+                            <p>{selectedCategory.name}</p>
+                        ) : (
+                            <p className="empty">카테고리 선택</p>
+                        )}
                     </TitleArea>
+                    {toggleActive === 'category' ? (
+                        <CategorySelector
+                            setSelectedCategory={setSelectedCategory}
+                            categories={[
+                                {
+                                    name: '상위',
+                                    id: 1,
+                                    children: [
+                                        { name: '하위1', id: 2, children: [] },
+                                        { name: '하위2', id: 3, children: [] },
+                                    ],
+                                },
+                                {
+                                    name: '하위없음',
+                                    id: 4,
+                                    children: [],
+                                },
+                            ]}
+                        />
+                    ) : null}
                 </PostInfoItem>
             </PostInfo>
 
@@ -136,7 +175,10 @@ const TitleArea = styled.div`
 const PostInfoItem = styled.div`
     display: flex;
     flex-direction: column;
-    color: ${colors.postDescription};
+    color: #1e2222;
+    .empty {
+        color: ${colors.postDescription};
+    }
     margin: 0.3rem 0;
 
     ${TitleArea} {

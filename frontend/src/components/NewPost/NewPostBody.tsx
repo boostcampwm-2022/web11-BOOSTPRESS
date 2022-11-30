@@ -35,6 +35,7 @@ const NewPostBody = () => {
         const postData = {
             title,
             content,
+            tagId: selectedTags.map((el) => parseInt(el.id)),
         };
         const res = await createArticle(postData);
         console.log(selectedTags);
@@ -68,7 +69,7 @@ const NewPostBody = () => {
                             <span>태그 선택</span>
                         ) : (
                             selectedTags.map((tag) => (
-                                <p key={tag.id}>{tag.title}</p>
+                                <p key={tag.id}>{tag.name}</p>
                             ))
                         )}
                     </TitleArea>

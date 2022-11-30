@@ -1,7 +1,6 @@
 /* 포스트 상단 */
 import styled from '@emotion/styled';
 import { postType } from 'api/apiTypes';
-import mdxComponents from 'editor/mdxComponent';
 import colors from 'styles/color';
 import { dateToStr } from 'utils/utils';
 

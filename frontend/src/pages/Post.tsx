@@ -6,12 +6,12 @@ import Header from 'components/Header';
 import PostContent from 'components/Post/PostContent';
 import PostHead from 'components/Post/PostHead';
 import SidebarComponent from 'components/Sidebar';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const Post = () => {
     const postId = useParams().postId as string;
-    const userId = useParams().userId as string;
+    const [userId, setUserId] = useState('');
 
     const postQuery = useQuery({
         queryKey: ['postInfo', postId],
@@ -23,7 +23,9 @@ const Post = () => {
         queryFn: () => getBlogSideBarInfo(userId),
     });
 
-    console.log(postQuery.data);
+    useEffect(() => {
+        if (postQuery.data) setUserId(String(postQuery.data.authorId));
+    }, [postQuery]);
 
     return (
         <Wrapper>

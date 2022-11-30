@@ -14,10 +14,29 @@ export class CategoryService {
     async readByUserId(ownerId: number) {
         const categories = await this.prisma.category.findMany({
             where: { ownerId, deleted: false },
+            include: { childCategory: true },
         });
 
-        return categories.map((category) =>
-            CategoryResponseDTO.fromCategory(category),
+        // 카테고리의 배열을 트리 형태로 만들기 위한 객체
+        const categoryObj = categories
+            .map((category) => CategoryResponseDTO.fromCategory(category))
+            .reduce(
+                (acc, category) => ((acc[category.id] = category), acc),
+                {} as { [id: string]: CategoryResponseDTO },
+            );
+
+        // 부모가 있는 카테고리는 부모 카테고리의 자식으로 삽입
+        // 객체를 가리키는 포인터가 삽입되므로 메모리를 크게 낭비하지 않음
+        Object.values(categoryObj).forEach((category) => {
+            const { parentId } = category;
+            if (parentId !== null)
+                categoryObj[parentId].children.push(category);
+        });
+
+        // 부모 카테고리가 있는 카테고리를 제거하여
+        // 부모 카테고리가 있는 카테고리는 부모 카테고리의 children에서만 찾아볼 수 있도록 변경
+        return Object.values(categoryObj).filter(
+            (category) => category.parentId === null,
         );
     }
 
@@ -26,6 +45,7 @@ export class CategoryService {
             data: {
                 ownerId: user.id,
                 name: dto.name,
+                parentCategoryId: dto.parentId,
             },
         });
 
@@ -33,12 +53,12 @@ export class CategoryService {
     }
 
     async update(user: User, dto: CategoryDTO, id: number) {
-        const { name } = dto;
+        const { name, parentId: parentCategoryId } = dto;
 
         await this.getCategoryWithUser(id, user);
         const category = await this.prisma.category.update({
             where: { id },
-            data: { name },
+            data: { name, parentCategoryId },
         });
 
         return CategoryResponseDTO.fromCategory(category);

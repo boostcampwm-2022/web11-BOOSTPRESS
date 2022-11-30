@@ -9,6 +9,7 @@ import { ArticleModule } from './article/article.module';
 import { BlogModule } from './blog/blog.module';
 import { UserModule } from './user/user.module';
 import { TagModule } from './tag/tag.module';
+import { CategoryModule } from './category/category.module';
 import { ImageModule } from './image/image.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
@@ -26,6 +27,7 @@ import { join } from 'path';
         BlogModule,
         UserModule,
         TagModule,
+        CategoryModule,
         ImageModule,
     ],
     controllers: [AppController],

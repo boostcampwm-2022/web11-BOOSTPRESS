@@ -11,15 +11,38 @@ datasource db {
 }
 
 model User {
+    // 사용자 정보 관련
     id       Int    @id
     nickname String
     login    String @unique
     email    String
 
+    // 블로그 관련
     repoName String
+    blogName String
+    bio      String
+    imageURL String?
 
-    session  Session?
-    articles Article[]
+    // SNS 관련
+    // SNS 계정을 모두 연결하는 사람은 적을 것
+    // 별개 테이블로 빼서 저장공간을 절약하면 어떨까?
+    userTwitter  UserTwitter?
+    userFacebook UserFacebook?
+
+    // join 관련
+    session    Session?
+    categories Category[]
+    articles   Article[]
+}
+
+model UserTwitter {
+    userId Int  @unique
+    user   User @relation(fields: [userId], references: [id])
+}
+
+model UserFacebook {
+    userId Int  @unique
+    user   User @relation(fields: [userId], references: [id])
 }
 
 model Session {
@@ -34,7 +57,10 @@ model Article {
     id    Int    @id @default(autoincrement())
     title String
 
-    tags Tag[]
+    // 분류 관련
+    categoryId Int?
+    category   Category? @relation(fields: [categoryId], references: [id])
+    tags       Tag[]
 
     // GitHub 관련
     updateSHA String @default("")
@@ -45,6 +71,21 @@ model Article {
     deleted   Boolean  @default(false)
     authorId  Int
     author    User     @relation(fields: [authorId], references: [id])
+}
+
+model Category {
+    id      Int     @id @default(autoincrement())
+    name    String
+    deleted Boolean @default(false)
+
+    ownerId Int
+    owner   User @relation(fields: [ownerId], references: [id])
+
+    parentCategoryId Int?
+    parentCategory   Category?  @relation(name: "CategoryTree", fields: [parentCategoryId], references: [id])
+    childCategory    Category[] @relation(name: "CategoryTree")
+
+    articles Article[]
 }
 
 model Tag {

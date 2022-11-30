@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 
 export const handlers = [
-    rest.get('/api/blog/:userId', (req, res, ctx) => {
+    rest.get('/blog/:userId', (req, res, ctx) => {
         return res(
             ctx.delay(1500),
             ctx.status(200),
@@ -32,7 +32,7 @@ export const handlers = [
             }),
         );
     }),
-    rest.get('/api/articles', (req, res, ctx) => {
+    rest.get('/articles', (req, res, ctx) => {
         return res(
             ctx.delay(1500),
             ctx.status(200),
@@ -48,7 +48,7 @@ export const handlers = [
             }),
         );
     }),
-    rest.get('/api/article', (req, res, ctx) => {
+    rest.get('/article', (req, res, ctx) => {
         return res(
             ctx.delay(1500),
             ctx.status(200),
@@ -61,18 +61,6 @@ export const handlers = [
                     authorId: 'supersfel',
                     postURL: 'post/123s',
                 }),
-            }),
-        );
-    }),
-    rest.get('/api/tags', (req, res, ctx) => {
-        return res(
-            ctx.delay(1500),
-            ctx.status(200),
-            ctx.json({
-                tags: [...Array(13)].map((_, idx) => ({
-                    id: idx,
-                    title: `태그 ${idx}`,
-                })),
             }),
         );
     }),

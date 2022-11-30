@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { useQuery } from '@tanstack/react-query';
 import { getArticleInfo, getBlogSideBarInfo, getUserInfo } from 'api/api';
 import Header from 'components/Header';
+import PostContent from 'components/Post/PostContent';
 import PostHead from 'components/Post/PostHead';
 import SidebarComponent from 'components/Sidebar';
 import React from 'react';
@@ -42,6 +43,7 @@ const Post = () => {
                 ) : (
                     <PostHead postInfo={postQuery.data} />
                 )}
+                <PostContent content={postQuery.data?.content} />
             </PostBody>
         </Wrapper>
     );
@@ -49,6 +51,7 @@ const Post = () => {
 
 const Wrapper = styled.div`
     display: flex;
+    width: 100%;
 `;
 
 const PostBody = styled.div`

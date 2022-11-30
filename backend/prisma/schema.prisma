@@ -59,6 +59,10 @@ model Category {
     ownerId Int
     owner   User @relation(fields: [ownerId], references: [id])
 
+    parentCategoryId Int
+    parentCategory   Category   @relation(name: "CategoryTree", fields: [parentCategoryId], references: [id])
+    childCategory    Category[] @relation(name: "CategoryTree")
+
     articles Article[]
 }
 

@@ -1,4 +1,3 @@
-/*  */
 import styled from '@emotion/styled/macro';
 import React, { useState } from 'react';
 import colors from 'styles/color';
@@ -9,22 +8,13 @@ import guideLine from 'editor/guideLine';
 import { createArticle } from 'api/api';
 import { useNavigate } from 'react-router-dom';
 import TagSelector from './TagSelector';
-import { tagType } from 'api/apiTypes';
+import { tagType, categoryType } from 'api/apiTypes';
 import CategorySelector from './CategorySelector';
-
-//TODO: 카테고리 타입에 관한 협의가 완료되면 픽스 해야함
-interface categoryType {
-    name: string;
-    id: number;
-    children: categoryType[];
-}
 
 const NewPostBody = () => {
     const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-
-    //태그,카테고리는 후에 선택
     const [selectedTags, setSelectedTags] = useState<tagType[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<categoryType>(
         {} as categoryType,
@@ -38,8 +28,6 @@ const NewPostBody = () => {
         setTitle(e.target.value);
     };
 
-    console.log(toggleActive);
-
     const submitPost = async () => {
         const postData = {
             title,
@@ -47,7 +35,6 @@ const NewPostBody = () => {
             tagId: selectedTags.map((el) => parseInt(el.id)),
         };
         const res = await createArticle(postData);
-        console.log(selectedTags);
 
         if (res.id) {
             alert('글쓰기가 완료되었습니다');
@@ -114,14 +101,26 @@ const NewPostBody = () => {
                             categories={[
                                 {
                                     name: '상위',
+                                    parentId: 0,
                                     id: 1,
                                     children: [
-                                        { name: '하위1', id: 2, children: [] },
-                                        { name: '하위2', id: 3, children: [] },
+                                        {
+                                            name: '하위1',
+                                            parentId: 0,
+                                            id: 2,
+                                            children: [],
+                                        },
+                                        {
+                                            name: '하위2',
+                                            parentId: 0,
+                                            id: 3,
+                                            children: [],
+                                        },
                                     ],
                                 },
                                 {
                                     name: '하위없음',
+                                    parentId: 0,
                                     id: 4,
                                     children: [],
                                 },

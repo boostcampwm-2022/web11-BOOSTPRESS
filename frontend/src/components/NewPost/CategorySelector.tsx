@@ -1,11 +1,6 @@
 import styled from '@emotion/styled';
 import { ReactComponent as MenuSVG } from 'assets/svg/menu.svg';
-
-interface categoryType {
-    name: string;
-    id: number;
-    children: categoryType[];
-}
+import { categoryType } from 'api/apiTypes';
 
 interface Props {
     categories: categoryType[];

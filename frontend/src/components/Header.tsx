@@ -1,6 +1,6 @@
 /* Header */
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { BasicInput, BasicShadowBox, zIndex } from 'styles/common';
 import { ReactComponent as SearchIconSVG } from 'assets/svg/MagnifyingGlass.svg';
@@ -12,18 +12,29 @@ import { ReactComponent as PencilSVG } from 'assets/svg/pencil.svg';
 import { css } from '@emotion/react';
 import colors from 'styles/color';
 import { Link, useNavigate } from 'react-router-dom';
+import { getUserInfo } from 'api/api';
 
 interface headerType {
     isLogoActive: boolean;
-    isLogin: boolean;
 }
 
 // 로고는 안보일때도 있을 수 있음
-const Header = ({ isLogoActive, isLogin }: headerType) => {
+const Header = ({ isLogoActive }: headerType) => {
     const navigate = useNavigate();
 
     const [gitHubLoginModalActive, setGitHubLoginModalActive] = useState(false);
     const [userSettingModalActive, setuserSettingModalActive] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
+
+    const checkLogin = async () => {
+        const res = await getUserInfo();
+        if (res.nickname) setIsLogin(true);
+        else setIsLogin(false);
+    };
+
+    useEffect(() => {
+        checkLogin();
+    }, []);
 
     const handleGitHubLoginModal = () => {
         setGitHubLoginModalActive(!gitHubLoginModalActive);

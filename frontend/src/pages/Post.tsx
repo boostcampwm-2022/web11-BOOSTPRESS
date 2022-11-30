@@ -29,7 +29,7 @@ const Post = () => {
 
     return (
         <Wrapper>
-            <Header isLogoActive={false} isLogin={false} />
+            <Header isLogoActive={false} />
             {sideBarQuery.isLoading ? (
                 <span>Loading</span>
             ) : sideBarQuery.isError ? (

@@ -14,6 +14,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import {
     ArticleDTO,
     ArticleFilterDTO,
+    ArticleListResponseDTO,
     ArticleResponseDTO,
     CommitResponseDTO,
     FetchResponseDTO,
@@ -81,17 +82,25 @@ export class ArticleService {
         );
     }
 
-    async readMany(query: ArticleFilterDTO) {
+    async readMany(query: ArticleFilterDTO): Promise<ArticleListResponseDTO> {
         const page: number = query.page ?? 1;
         delete query.page;
 
-        const articles = await this.prisma.article.findMany({
-            where: query,
-            skip: (page - 1) * this.take,
-            take: this.take,
-        });
+        const [articles, articleCount] = await Promise.all([
+            this.prisma.article
+                .findMany({
+                    where: query,
+                    skip: (page - 1) * this.take,
+                    take: this.take,
+                })
+                .then((res) => res.map(ArticleResponseDTO.toBreif)),
+            this.prisma.article.count({ where: query }),
+        ]);
 
-        return articles.map(ArticleResponseDTO.toBreif);
+        return {
+            articles,
+            totalPages: Math.ceil(articleCount / this.take),
+        };
     }
 
     async update(

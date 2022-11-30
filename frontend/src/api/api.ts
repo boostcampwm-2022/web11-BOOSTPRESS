@@ -57,7 +57,6 @@ export async function createArticle(param: createArticleType) {
 }
 
 export async function getIsLogin() {
-    console.log(url);
     const res = await fetch(url + '/auth/me', {
         method: 'GET',
         credentials: 'include',

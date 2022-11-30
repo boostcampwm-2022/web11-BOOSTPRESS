@@ -19,4 +19,7 @@ export class ArticleDTO {
     })
     @IsNumber({}, { each: true })
     tagId: number[];
+
+    @IsNumber()
+    categoryId?: number | undefined;
 }

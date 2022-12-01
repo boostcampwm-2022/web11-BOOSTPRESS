@@ -45,7 +45,8 @@ const Header = ({ isLogoActive }: headerType) => {
     };
 
     const moveGitHubAuth = () => {
-        window.location.href = `http://localhost:8080/auth/github`;
+        const url = process.env.REACT_APP_API_URL;
+        window.location.href = `${url}/auth/github`;
     };
 
     return (

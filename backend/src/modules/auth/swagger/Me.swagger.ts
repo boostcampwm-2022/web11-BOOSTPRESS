@@ -1,16 +1,17 @@
 import { ApiOperationOptions, ApiResponseOptions } from '@nestjs/swagger';
 import { ExceptionResponse } from 'src/types';
+import { UserDTO } from '../dto';
 
 export const Operation: ApiOperationOptions = {
-    summary: '로그아웃 API',
+    summary: '사용자 체크 API',
     description:
-        '쿠키에 존재하는 JWT 세션을 제거한 뒤, 세션 테이블에서 현재 세션을 soft delete한다.',
+        '사용자가 로그인되어 있다면 프론트엔드에 노출 가능한 사용자 정보를 반환',
 };
 
 export const _200: ApiResponseOptions = {
     status: 200,
-    description: '빈 객체',
-    type: typeof {},
+    description: '로그인된 사용자 데이터',
+    type: UserDTO,
 };
 
 export const _401: ApiResponseOptions = {

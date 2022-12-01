@@ -8,7 +8,7 @@ import { GitHubGuard, JwtGuard } from 'src/guard';
 import { Auth, Env } from 'src/types';
 import { AuthService } from './auth.service';
 import { UserDTO } from './dto';
-import { GetGitHub, DeleteLogout, GetMe } from './swagger';
+import { Login, Logout, Me } from './swagger';
 import { TokenService } from './token.service';
 
 @Controller('auth')
@@ -23,9 +23,9 @@ export class AuthController {
         this.REDIRECT_URL = config.get('REDIRECT_URL');
     }
 
-    @ApiOperation(GetGitHub.Operation)
-    @ApiResponse(GetGitHub._200)
-    @ApiResponse(GetGitHub._401)
+    @ApiOperation(Login.Operation)
+    @ApiResponse(Login._200)
+    @ApiResponse(Login._401)
     @UseGuards(GitHubGuard)
     @Get('github')
     async github(
@@ -40,9 +40,9 @@ export class AuthController {
         res.redirect(this.REDIRECT_URL);
     }
 
-    @ApiOperation(DeleteLogout.Operation)
-    @ApiResponse(DeleteLogout._200)
-    @ApiResponse(DeleteLogout._401)
+    @ApiOperation(Logout.Operation)
+    @ApiResponse(Logout._200)
+    @ApiResponse(Logout._401)
     @UseGuards(JwtGuard)
     @Delete('logout')
     async logout(
@@ -53,9 +53,9 @@ export class AuthController {
         res.redirect(this.REDIRECT_URL);
     }
 
-    @ApiOperation(GetMe.Operation)
-    @ApiResponse(GetMe._200)
-    @ApiResponse(GetMe._401)
+    @ApiOperation(Me.Operation)
+    @ApiResponse(Me._200)
+    @ApiResponse(Me._401)
     @UseGuards(JwtGuard)
     @Get('me')
     async me(@CurrentUser() user: User): Promise<UserDTO> {

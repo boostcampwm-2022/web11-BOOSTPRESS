@@ -7,7 +7,7 @@ import { CurrentUser } from 'src/decorator';
 import { GitHubGuard, JwtGuard } from 'src/guard';
 import { Auth, Env } from 'src/types';
 import { AuthService } from './auth.service';
-import { LoginResponseDTO } from './dto';
+import { UserDTO } from './dto';
 import { GetGitHub, DeleteLogout, GetMe } from './swagger';
 import { TokenService } from './token.service';
 
@@ -58,8 +58,9 @@ export class AuthController {
     @ApiResponse(GetMe._401)
     @UseGuards(JwtGuard)
     @Get('me')
-    async me(@CurrentUser() user: User): Promise<LoginResponseDTO> {
+    async me(@CurrentUser() user: User): Promise<UserDTO> {
         return {
+            id: user.id,
             nickname: user.nickname,
             email: user.email,
         };

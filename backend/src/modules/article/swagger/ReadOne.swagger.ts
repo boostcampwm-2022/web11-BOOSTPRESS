@@ -2,7 +2,7 @@ import { ApiOperationOptions, ApiResponseOptions } from '@nestjs/swagger';
 import { DetailedResponseDTO } from '../dto';
 
 export const Operation: ApiOperationOptions = {
-    summary: '단일 게시글 API',
+    summary: '단일 게시글 조회 API',
     description: '특정 게시글의 컨텐츠를 포함한 정보를 가져오는 API',
 };
 

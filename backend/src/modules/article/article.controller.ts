@@ -17,7 +17,7 @@ import { CurrentUser } from 'src/decorator';
 import { JwtGuard } from 'src/guard';
 import { ArticleService } from './article.service';
 import { UpsertDTO, FilterDTO } from './dto';
-import { Create, ReadOne, Remove, Update } from './swagger';
+import { Create, ReadMany, ReadOne, Remove, Update } from './swagger';
 
 @Controller('article')
 export class ArticleController {
@@ -39,6 +39,8 @@ export class ArticleController {
         return await this.articleService.readOne(id);
     }
 
+    @ApiOperation(ReadMany.Operation)
+    @ApiResponse(ReadMany._200)
     @Get()
     async readMany(
         @Query(

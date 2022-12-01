@@ -10,19 +10,17 @@ interface PostHeadPropsType {
 
 const PostHead = ({ postInfo }: PostHeadPropsType) => {
     return (
-        <>
-            <PostInfo>
-                <Title>{postInfo.title}</Title>
-                <DateArea>
-                    <p>Posted date : </p>
-                    {dateToStr(new Date(postInfo.updatedAt), 'YYYYMMDD')}
-                </DateArea>
-                <TagArea>
-                    <p>tag : </p>
-                    <p>{postInfo.tagId}</p>
-                </TagArea>
-            </PostInfo>
-        </>
+        <PostInfo>
+            <Title>{postInfo.title}</Title>
+            <DateArea>
+                <p>Posted date : </p>
+                {dateToStr(new Date(postInfo.updatedAt), 'YYYYMMDD')}
+            </DateArea>
+            <TagArea>
+                <p>tag : </p>
+                <p>{postInfo.tagId}</p>
+            </TagArea>
+        </PostInfo>
     );
 };
 

@@ -1,7 +1,6 @@
 import {
     Controller,
     Post,
-    Res,
     UploadedFile,
     UseGuards,
     UseInterceptors,
@@ -22,8 +21,8 @@ export class ImageController {
     @UseGuards(JwtGuard)
     @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
-    async uploadImage(@UploadedFile() file, @Res() res) {
+    async uploadImage(@UploadedFile() file) {
         const imageURL = await this.imageService.create(file);
-        return res.send({ imageURL });
+        return { imageURL };
     }
 }

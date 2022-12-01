@@ -15,6 +15,8 @@ const TagSelector = ({ selectedTags, setSelectedTags, onSaveClick }: Props) => {
     const tagQuery = useQuery({ queryKey: ['tags'], queryFn: getAllTags });
     const [searchBarContent, setSearchBarContent] = useState('');
 
+    console.log(tagQuery.data);
+
     const handleTagSelection = (selectedTag: tagType) => {
         setSelectedTags((prev) => [...prev, selectedTag]);
     };
@@ -38,7 +40,7 @@ const TagSelector = ({ selectedTags, setSelectedTags, onSaveClick }: Props) => {
                             선택된 태그 ({selectedTags.length}/10)
                         </SectionTitle>
                         <TagsGrid>
-                            {tagQuery.data.tags
+                            {tagQuery.data
                                 .filter((tag) =>
                                     selectedTags.find(
                                         (selectedTag) =>
@@ -52,7 +54,7 @@ const TagSelector = ({ selectedTags, setSelectedTags, onSaveClick }: Props) => {
                                             handleTagUnSelection(tag)
                                         }
                                     >
-                                        {tag.title}
+                                        {tag.name}
                                     </Tag>
                                 ))}
                         </TagsGrid>
@@ -68,14 +70,14 @@ const TagSelector = ({ selectedTags, setSelectedTags, onSaveClick }: Props) => {
                         />
 
                         <TagsGrid>
-                            {tagQuery.data.tags
+                            {tagQuery.data
                                 .filter((tag) => !selectedTags.includes(tag))
                                 .map((tag) => (
                                     <Tag
                                         id={tag.id}
                                         onClick={() => handleTagSelection(tag)}
                                     >
-                                        {tag.title}
+                                        {tag.name}
                                     </Tag>
                                 ))}
                         </TagsGrid>

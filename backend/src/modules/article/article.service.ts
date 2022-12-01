@@ -43,6 +43,7 @@ export class ArticleService {
                 authorId: user.id,
                 title: dto.title,
                 tags: { connect },
+                categoryId: dto.categoryId,
             },
         });
 
@@ -116,6 +117,7 @@ export class ArticleService {
                 where: { id },
                 data: {
                     title: dto.title,
+                    categoryId: dto.categoryId,
                     tags: {
                         connect: dto.tagId.map((value) => ({ id: value })),
                     },

@@ -35,7 +35,7 @@ export class ArticleController {
     @ApiOperation(ReadOne.Operation)
     @ApiResponse(ReadOne._200)
     @Get(':id')
-    async readOne(@Param('id') id: number) {
+    async readOne(@Param('id', ParseIntPipe) id: number) {
         return await this.articleService.readOne(id);
     }
 

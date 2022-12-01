@@ -3,6 +3,7 @@ import Main from 'pages/Main';
 import BlogMain from 'pages/BlogMain';
 import NewPost from 'pages/NewPost';
 import Post from 'pages/Post';
+import UpdatePost from 'pages/UpdatePost';
 
 const App = () => {
     return (
@@ -12,6 +13,7 @@ const App = () => {
             <Route path="/newpost" element={<NewPost />} />
             <Route path="/blog/:userId" element={<BlogMain />} />
             <Route path="/post/:postId" element={<Post />} />
+            <Route path="/newpost/:postId" element={<UpdatePost />} />
         </Routes>
     );
 };

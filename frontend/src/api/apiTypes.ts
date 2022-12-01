@@ -44,6 +44,13 @@ export interface MultipleArticleAPIType {
 export interface createArticleType {
     title: string;
     content: string;
+    tagId: number[];
+}
+
+export interface updateArticleType {
+    title: string;
+    content: string;
+    tagId: number[];
 }
 
 export interface postCardInfoType {
@@ -68,5 +75,5 @@ interface snsLinkType {
 
 export interface tagType {
     name: string;
-    id: string;
+    id: number;
 }

@@ -5,6 +5,7 @@ import {
     createArticleType,
     postType,
     authUserInfoType,
+    updateArticleType,
 } from './apiTypes';
 
 const url = process.env.REACT_APP_API_URL;
@@ -49,6 +50,20 @@ export async function getAllTags() {
 export async function createArticle(param: createArticleType) {
     const res = await fetch(url + '/article', {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+
+        credentials: 'include',
+        body: JSON.stringify(param),
+    });
+
+    return await res.json();
+}
+
+export async function updateArticle(param: updateArticleType, postId: Number) {
+    const res = await fetch(url + `/article/${postId}`, {
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
         },

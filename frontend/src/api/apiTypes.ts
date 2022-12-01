@@ -55,6 +55,12 @@ export interface postCardInfoType {
     postURL: string;
 }
 
+export interface authUserInfoType {
+    nickname: string;
+    email: string;
+    id: number;
+}
+
 interface snsLinkType {
     sns_name: string;
     link: string;

@@ -17,7 +17,7 @@ const PostHead = ({ postInfo }: PostHeadPropsType) => {
 
     const checkAuthor = async () => {
         const res = await getUserInfo();
-        if (res.nickname === postInfo.author.nickname) setIsAuthor(true);
+        if (res.id === postInfo.author.id) setIsAuthor(true);
     };
 
     useEffect(() => {
@@ -54,7 +54,7 @@ const PostInfo = styled.div`
     flex-direction: column;
     width: 60vw;
     position: relative;
-    margin-left: calc(20vw - 150px);
+    margin-left: calc(20vw + 150px);
     padding: 2rem 3rem;
     border: 1px solid #d8d8d8;
 `;

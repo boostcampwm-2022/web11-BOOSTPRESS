@@ -35,7 +35,9 @@ const Post = () => {
             ) : sideBarQuery.isError ? (
                 <span>Error</span>
             ) : (
-                <SidebarComponent blogSideBarInfo={sideBarQuery.data} />
+                <SideBarWrapper>
+                    <SidebarComponent blogSideBarInfo={sideBarQuery.data} />
+                </SideBarWrapper>
             )}
             <PostBody>
                 {postQuery.isLoading ? (
@@ -54,6 +56,11 @@ const Post = () => {
 const Wrapper = styled.div`
     display: flex;
     width: 100%;
+`;
+
+const SideBarWrapper = styled.div`
+    position: fixed;
+    top: -1.5rem;
 `;
 
 const PostBody = styled.div`

@@ -4,6 +4,7 @@ import {
     tagType,
     createArticleType,
     postType,
+    authUserInfoType,
 } from './apiTypes';
 
 const url = process.env.REACT_APP_API_URL;
@@ -64,7 +65,7 @@ export async function getUserInfo() {
         method: 'GET',
         credentials: 'include',
     });
-    return await res.json();
+    return (await res.json()) as authUserInfoType;
 }
 
 //게시글 조회 페이지에서 게시글 정보를 받아오는 api

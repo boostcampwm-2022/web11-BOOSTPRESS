@@ -28,7 +28,7 @@ const PostContent = ({ content }: PostContentPropsType) => {
 
 const ContentArea = styled.div`
     width: 60vw;
-    margin-left: calc(20vw - 150px);
+    margin-left: calc(20vw + 150px);
     margin-top: 3rem;
     margin-bottom: 3rem;
     position: relative;

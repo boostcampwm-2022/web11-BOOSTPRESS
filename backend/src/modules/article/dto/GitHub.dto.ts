@@ -5,12 +5,12 @@ class ContentDTO {
     sha: string;
 }
 
-export class GitHubCommitDTO {
+export class GitHubPushDTO {
     @ApiProperty({ description: '업로드한 .md 파일' })
     content: ContentDTO;
 }
 
-export class GitHubReadDTO {
+export class GitHubPullDTO {
     @ApiProperty({ description: '깃허브에 존재하는 .md 파일의 내용' })
     content: string;
 }

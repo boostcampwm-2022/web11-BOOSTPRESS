@@ -9,9 +9,11 @@ interface IntroBannerType {
     isLogin: boolean;
 }
 
+const url = process.env.REACT_APP_API_URL;
+
 const IntroBanner = ({ isLogin }: IntroBannerType) => {
     const moveGitHubAuth = () => {
-        window.location.href = `http://localhost:8080/auth/github`;
+        window.location.href = `${url}/auth/github`;
     };
 
     return (

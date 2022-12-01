@@ -1,6 +1,6 @@
 import { IsNumber, IsOptional } from 'class-validator';
 
-export class ArticleFilterDTO {
+export class FilterDTO {
     @IsNumber()
     @IsOptional()
     page: number;

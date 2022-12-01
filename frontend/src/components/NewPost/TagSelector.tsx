@@ -49,7 +49,7 @@ const TagSelector = ({ selectedTags, setSelectedTags, onSaveClick }: Props) => {
                                 )
                                 .map((tag) => (
                                     <Tag
-                                        id={tag.id}
+                                        id={String(tag.id)}
                                         onClick={() =>
                                             handleTagUnSelection(tag)
                                         }
@@ -74,7 +74,7 @@ const TagSelector = ({ selectedTags, setSelectedTags, onSaveClick }: Props) => {
                                 .filter((tag) => !selectedTags.includes(tag))
                                 .map((tag) => (
                                     <Tag
-                                        id={tag.id}
+                                        id={String(tag.id)}
                                         onClick={() => handleTagSelection(tag)}
                                     >
                                         {tag.name}

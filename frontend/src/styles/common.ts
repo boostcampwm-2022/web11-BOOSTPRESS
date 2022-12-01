@@ -37,3 +37,12 @@ export const PlainBtn = styled.button`
         background: #c5dcfa;
     }
 `;
+export const PrimaryBtn = styled.button`
+    height: 48px;
+    border-radius: 4px;
+    background: #4945ff;
+    color: white;
+    &:hover {
+        background: #7879ff;
+    }
+`;

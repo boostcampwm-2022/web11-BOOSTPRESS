@@ -7,18 +7,24 @@ import { Successbtn } from 'styles/common';
 import { dateToStr } from 'utils/utils';
 import MDXEditor from 'editor/MdxEditor';
 import guideLine from 'editor/guideLine';
-import { createArticle } from 'api/api';
+import { createArticle, updateArticle } from 'api/api';
 import { useNavigate } from 'react-router-dom';
 import TagSelector from './TagSelector';
-import { tagType } from 'api/apiTypes';
+import { postType, tagType } from 'api/apiTypes';
 
-const NewPostBody = () => {
+interface NewPostBodyPropsType {
+    postInfo?: postType;
+}
+
+const NewPostBody = ({ postInfo }: NewPostBodyPropsType) => {
     const navigate = useNavigate();
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [title, setTitle] = useState(postInfo ? postInfo.title : '');
+    const [content, setContent] = useState(postInfo ? postInfo.content : '');
 
     //태그,카테고리는 후에 선택
-    const [selectedTags, setSelectedTags] = useState<tagType[]>([]);
+    const [selectedTags, setSelectedTags] = useState<tagType[]>(
+        postInfo ? postInfo.tags : [],
+    );
     const [category, setCategory] = useState('');
 
     const [toggleActive, setToggleActive] = useState<
@@ -29,19 +35,19 @@ const NewPostBody = () => {
         setTitle(e.target.value);
     };
 
-    console.log(toggleActive);
-
     const submitPost = async () => {
         const postData = {
             title,
             content,
-            tagId: selectedTags.map((el) => parseInt(el.id)),
+            tagId: selectedTags.map((el) => el.id),
         };
-        const res = await createArticle(postData);
-        console.log(selectedTags);
+        const res = postInfo
+            ? await updateArticle(postData, postInfo.id)
+            : await createArticle(postData);
 
         if (res.id) {
-            alert('글쓰기가 완료되었습니다');
+            if (postInfo) alert('글수정이 완료되었습니다');
+            else alert('글쓰기가 완료되었습니다.');
             navigate('/');
         }
     };
@@ -49,7 +55,11 @@ const NewPostBody = () => {
     return (
         <NewPostBodyWrapper>
             <PostInfo>
-                <Title placeholder="제목을 입력하세요" onChange={handleTitle} />
+                <Title
+                    value={title}
+                    placeholder="제목을 입력하세요"
+                    onChange={handleTitle}
+                />
                 <PostInfoItem>
                     <TitleArea>
                         a<p>Posted Date : </p>
@@ -94,7 +104,7 @@ const NewPostBody = () => {
 
             <EditorWrapper>
                 <MDXEditor
-                    guideLine={guideLine.testguide}
+                    guideLine={postInfo ? content : guideLine.testguide}
                     setContent={setContent}
                 />
             </EditorWrapper>

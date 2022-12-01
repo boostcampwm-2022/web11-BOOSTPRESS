@@ -19,12 +19,16 @@ interface PostContentPropsType {
 }
 
 const PostContent = ({ content }: PostContentPropsType) => {
-    return <ContentArea>{generate(mdxComponents + content)}</ContentArea>;
+    return (
+        <ContentArea className="markdown-body">
+            {generate(mdxComponents + content)}
+        </ContentArea>
+    );
 };
 
 const ContentArea = styled.div`
     width: 60vw;
-    margin-left: calc(20vw - 150px);
+    margin-left: calc(20vw + 150px);
     margin-top: 3rem;
     margin-bottom: 3rem;
     position: relative;

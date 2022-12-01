@@ -4,6 +4,10 @@ import {
     tagType,
     createArticleType,
     postType,
+    authUserInfoType,
+    updateArticleType,
+    noneType,
+    updateArticleResType,
 } from './apiTypes';
 
 const url = process.env.REACT_APP_API_URL;
@@ -59,12 +63,26 @@ export async function createArticle(param: createArticleType) {
     return await res.json();
 }
 
+export async function updateArticle(param: updateArticleType, postId: Number) {
+    const res = await fetch(url + `/article/${postId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+
+        credentials: 'include',
+        body: JSON.stringify(param),
+    });
+
+    return (await res.json()) as updateArticleResType;
+}
+
 export async function getUserInfo() {
     const res = await fetch(url + '/auth/me', {
         method: 'GET',
         credentials: 'include',
     });
-    return await res.json();
+    return (await res.json()) as authUserInfoType;
 }
 
 //게시글 조회 페이지에서 게시글 정보를 받아오는 api
@@ -73,5 +91,5 @@ export async function getArticleInfo(postId: string) {
         method: 'GET',
         credentials: 'include',
     });
-    return (await res.json()) as postType;
+    return (await res.json()) as postType & noneType;
 }

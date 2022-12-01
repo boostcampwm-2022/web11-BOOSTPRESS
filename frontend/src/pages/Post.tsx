@@ -24,7 +24,7 @@ const Post = () => {
     });
 
     useEffect(() => {
-        if (postQuery.data) setUserId(String(postQuery.data.authorId));
+        if (postQuery.data) setUserId(String(postQuery.data.author.id));
     }, [postQuery]);
 
     return (

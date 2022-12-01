@@ -17,7 +17,10 @@ export interface postType {
     id: number;
     title: string;
     content: string;
-    authorId: number;
+    author: {
+        id: number;
+        nickname: string;
+    };
     tagId: number[];
     createdAt: Date;
     updatedAt: Date;

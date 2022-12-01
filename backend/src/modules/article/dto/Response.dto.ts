@@ -1,11 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { User, Tag, Article, Category } from '@prisma/client';
-
-class ArticleJoin {
-    author: User;
-    tags: Tag[];
-    category: Category;
-}
+import { CategoryDTO } from './Category.dto';
+import { JoinDTO } from './Join.dto';
 
 class AuthorDTO {
     id: number;
@@ -37,11 +33,11 @@ class ResponseDTO {
     tags: Tag[];
 
     @ApiProperty({ description: '게시글의 카테고리' })
-    category: Category;
+    category?: CategoryDTO;
 }
 
 export class BriefResponseDTO extends ResponseDTO {
-    static fromArticle(article: Article & ArticleJoin): BriefResponseDTO {
+    static fromArticle(article: Article & JoinDTO): BriefResponseDTO {
         return {
             id: article.id,
             title: article.title,
@@ -49,7 +45,8 @@ export class BriefResponseDTO extends ResponseDTO {
             createdAt: article.createdAt,
             updatedAt: article.updatedAt,
             tags: article.tags,
-            category: article.category,
+            category:
+                article.category && CategoryDTO.fromCategory(article.category),
         };
     }
 }
@@ -67,7 +64,7 @@ export class DetailedResponseDTO extends ResponseDTO {
     content: string;
 
     static fromArticle(
-        article: Article & ArticleJoin,
+        article: Article & JoinDTO,
         content: string,
     ): DetailedResponseDTO {
         return {

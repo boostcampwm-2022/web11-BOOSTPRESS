@@ -1,11 +1,13 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { ArticleService } from './article.service';
+import { DatabaseService } from './db.service';
 import { ArticleController } from './article.controller';
+import { FileService } from './file.service';
+import { GithubService } from './github.service';
 
 @Module({
     imports: [HttpModule],
-    providers: [ArticleService],
+    providers: [DatabaseService, FileService, GithubService],
     controllers: [ArticleController],
 })
 export class ArticleModule {}

@@ -1,36 +1,36 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Article } from '@prisma/client';
-import { UpsertDTO } from './dto';
 import { resolve } from 'path';
-import fs from 'node:fs';
+import { promises as fs } from 'node:fs';
 
 @Injectable()
 export class FileService {
     constructor() {}
 
-    private folderPath(id: number) {
-        return resolve(`${process.cwd()}/articles/${id}`);
+    private folderPath(articleId: number) {
+        return resolve(`${process.cwd()}/articles/${articleId}`);
     }
 
-    async write(article: Article, dto: UpsertDTO) {
+    async write(article: Article, content: string) {
         const filePath = this.folderPath(article.id);
 
         try {
-            await fs.promises.readdir(filePath);
+            await fs.readdir(filePath);
         } catch {
-            await fs.promises.mkdir(filePath, { recursive: true });
+            await fs.mkdir(filePath, { recursive: true });
         } finally {
-            await fs.promises.writeFile(`${filePath}/README.md`, dto.content);
+            await fs.writeFile(`${filePath}/README.md`, content);
         }
     }
 
-    async read(id: number) {
-        const filePath = this.folderPath(id);
+    async read(articleId: number) {
+        const filePath = this.folderPath(articleId);
 
         try {
-            return await fs.promises.readFile(`${filePath}/README.md`);
+            const content = await fs.readFile(`${filePath}/README.md`);
+            return Buffer.from(content).toString();
         } catch {
-            const message = `게시글 #${id}의 파일이 존재하지 않습니다!`;
+            const message = `게시글 #${articleId}의 파일이 존재하지 않습니다!`;
             throw new BadRequestException(message);
         }
     }

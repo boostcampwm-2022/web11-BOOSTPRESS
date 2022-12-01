@@ -8,7 +8,7 @@ import { GitHubPullDTO, GitHubPushDTO } from './dto';
 import { Env } from 'src/types';
 
 @Injectable()
-export class ArticleService {
+export class GithubService {
     private readonly SERVER_ACCESS_TOKEN: string;
     private readonly axios: AxiosInstance;
 
@@ -21,15 +21,14 @@ export class ArticleService {
         this.axios = httpService.axiosRef;
     }
 
-    async getContent(author: User, id: number) {
-        const { data } = await this.axios.get<GitHubPullDTO>(
-            `https://api.github.com/repos/${author.login}/${author.repoName}/readme/${id}`,
-        );
+    async pull(author: User, articleId: number) {
+        const url = `https://api.github.com/repos/${author.login}/${author.repoName}/readme/${articleId}`;
+        const { data } = await this.axios.get<GitHubPullDTO>(url);
 
         return Buffer.from(data.content, 'base64').toString();
     }
 
-    async commit(article: Article, content: string, author: User) {
+    async push(article: Article, content: string, author: User) {
         const requestData = {
             message: article.title,
             content: Buffer.from(content).toString('base64'),

@@ -7,12 +7,14 @@ import { dateToStr } from 'utils/utils';
 import { ReactComponent as PencilSVG } from 'assets/svg/pencilPost.svg';
 import { getUserInfo } from 'api/api';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface PostHeadPropsType {
     postInfo: postType;
 }
 
 const PostHead = ({ postInfo }: PostHeadPropsType) => {
+    const navigate = useNavigate();
     const [isAuthor, setIsAuthor] = useState(false);
 
     const checkAuthor = async () => {
@@ -23,6 +25,10 @@ const PostHead = ({ postInfo }: PostHeadPropsType) => {
     useEffect(() => {
         checkAuthor();
     }, []);
+
+    const moveUpdatePage = () => {
+        navigate(`/newpost/${postInfo.id}`);
+    };
 
     return (
         <>
@@ -37,7 +43,7 @@ const PostHead = ({ postInfo }: PostHeadPropsType) => {
                     <p>{postInfo.tags?.map((el) => `${el.name} `)}</p>
                 </TagArea>
                 {isAuthor ? (
-                    <EditBtn>
+                    <EditBtn onClick={moveUpdatePage}>
                         <PencilSVG stroke="white" />
                         편집
                     </EditBtn>

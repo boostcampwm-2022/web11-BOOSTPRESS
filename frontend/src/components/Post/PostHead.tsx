@@ -47,9 +47,7 @@ const PostHead = ({ postInfo }: PostHeadPropsType) => {
                         <PencilSVG stroke="white" />
                         편집
                     </EditBtn>
-                ) : (
-                    <></>
-                )}
+                ) : null}
             </PostInfo>
         </>
     );

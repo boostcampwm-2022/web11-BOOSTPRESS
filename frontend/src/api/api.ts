@@ -7,6 +7,7 @@ import {
     authUserInfoType,
     updateArticleType,
     noneType,
+    updateArticleResType,
 } from './apiTypes';
 
 const url = process.env.REACT_APP_API_URL;
@@ -73,7 +74,7 @@ export async function updateArticle(param: updateArticleType, postId: Number) {
         body: JSON.stringify(param),
     });
 
-    return await res.json();
+    return (await res.json()) as updateArticleResType;
 }
 
 export async function getUserInfo() {

@@ -59,6 +59,12 @@ export interface updateArticleType {
     tagId: number[];
 }
 
+export interface updateArticleResType {
+    title: string;
+    content: string;
+    tagId: number[];
+}
+
 export interface postCardInfoType {
     imgURL: string;
     title: string;

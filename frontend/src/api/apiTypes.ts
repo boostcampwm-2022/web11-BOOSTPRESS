@@ -21,7 +21,10 @@ export interface postType {
         id: number;
         nickname: string;
     };
-    tagId: number[];
+    tags: {
+        id: number;
+        name: string;
+    }[];
     createdAt: Date;
     updatedAt: Date;
     category?: {

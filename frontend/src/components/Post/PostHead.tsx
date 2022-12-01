@@ -34,7 +34,7 @@ const PostHead = ({ postInfo }: PostHeadPropsType) => {
                 </DateArea>
                 <TagArea>
                     <p>tag : </p>
-                    <p>{postInfo.tagId}</p>
+                    <p>{postInfo.tags?.map((el) => `${el.name} `)}</p>
                 </TagArea>
                 {isAuthor ? (
                     <EditBtn>
@@ -69,6 +69,9 @@ const Title = styled.div`
 
 const TagArea = styled.div`
     display: flex;
+    p:first-of-type {
+        margin-right: 0.5rem;
+    }
 `;
 
 const DateArea = styled.p`

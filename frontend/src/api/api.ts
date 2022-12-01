@@ -3,6 +3,7 @@ import {
     MultipleArticleAPIType,
     tagType,
     createArticleType,
+    postType,
 } from './apiTypes';
 
 const url = process.env.REACT_APP_API_URL;
@@ -64,4 +65,13 @@ export async function getUserInfo() {
         credentials: 'include',
     });
     return await res.json();
+}
+
+//게시글 조회 페이지에서 게시글 정보를 받아오는 api
+export async function getArticleInfo(postId: string) {
+    const res = await fetch(url + `/article/${postId}`, {
+        method: 'GET',
+        credentials: 'include',
+    });
+    return (await res.json()) as postType;
 }

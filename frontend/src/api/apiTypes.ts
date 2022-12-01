@@ -14,19 +14,21 @@ export interface categoryType {
 }
 
 export interface postType {
-    imgURL: string;
     id: number;
     title: string;
     content: string;
-    author_id: number;
-    created: string;
-    updated: string;
-    category_name?: string;
+    authorId: number;
+    tagId: number[];
+    createdAt: Date;
+    updatedAt: Date;
+    category?: {
+        id: number;
+        name: string;
+    };
     series?: {
         name: string;
         articles: { name: string; id: number }[];
     };
-    tag: string[];
 }
 
 export interface MultipleArticleAPIType {

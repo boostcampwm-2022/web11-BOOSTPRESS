@@ -6,7 +6,7 @@ import React from 'react';
 const NewPost = () => {
     return (
         <>
-            <Header isLogoActive={true} isLogin={true} />
+            <Header isLogoActive={true} />
             <NewPostBody />
         </>
     );

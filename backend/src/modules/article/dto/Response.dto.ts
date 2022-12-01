@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { User, Tag, Article, Category } from '@prisma/client';
+import { CategoryDTO } from './Category.dto';
 import { JoinDTO } from './Join.dto';
 
 class AuthorDTO {
@@ -32,7 +33,7 @@ class ResponseDTO {
     tags: Tag[];
 
     @ApiProperty({ description: '게시글의 카테고리' })
-    category: Category;
+    category?: CategoryDTO;
 }
 
 export class BriefResponseDTO extends ResponseDTO {
@@ -44,7 +45,8 @@ export class BriefResponseDTO extends ResponseDTO {
             createdAt: article.createdAt,
             updatedAt: article.updatedAt,
             tags: article.tags,
-            category: article.category,
+            category:
+                article.category && CategoryDTO.fromCategory(article.category),
         };
     }
 }

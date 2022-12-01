@@ -6,6 +6,7 @@ import {
     postType,
     authUserInfoType,
     updateArticleType,
+    noneType,
 } from './apiTypes';
 
 const url = process.env.REACT_APP_API_URL;
@@ -89,5 +90,5 @@ export async function getArticleInfo(postId: string) {
         method: 'GET',
         credentials: 'include',
     });
-    return (await res.json()) as postType;
+    return (await res.json()) as postType & noneType;
 }

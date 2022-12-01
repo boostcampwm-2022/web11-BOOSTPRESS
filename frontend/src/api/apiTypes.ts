@@ -37,6 +37,12 @@ export interface postType {
     };
 }
 
+export interface noneType {
+    statusCode: number;
+    message: string;
+    error: string;
+}
+
 export interface MultipleArticleAPIType {
     articles: postCardInfoType[];
 }

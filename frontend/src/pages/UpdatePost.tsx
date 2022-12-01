@@ -1,6 +1,6 @@
 /* 글 업데이트 */
 import { useQuery } from '@tanstack/react-query';
-import { getArticleInfo } from 'api/api';
+import { getArticleInfo, getUserInfo } from 'api/api';
 import Header from 'components/Header';
 import NewPostBody from 'components/NewPost/NewPostBody';
 import React from 'react';

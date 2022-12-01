@@ -7,9 +7,10 @@ import PostContent from 'components/Post/PostContent';
 import PostHead from 'components/Post/PostHead';
 import SidebarComponent from 'components/Sidebar';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Post = () => {
+    const navigate = useNavigate();
     const postId = useParams().postId as string;
     const [userId, setUserId] = useState('');
 
@@ -24,7 +25,11 @@ const Post = () => {
     });
 
     useEffect(() => {
-        if (postQuery.data) setUserId(String(postQuery.data.author.id));
+        if (postQuery.data?.author) setUserId(String(postQuery.data.author.id));
+        if (postQuery.data?.message) {
+            alert('존재하지 않는 게시글입니다');
+            navigate('/');
+        }
     }, [postQuery]);
 
     return (

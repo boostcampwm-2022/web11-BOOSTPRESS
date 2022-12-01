@@ -35,8 +35,6 @@ const NewPostBody = ({ postInfo }: NewPostBodyPropsType) => {
         setTitle(e.target.value);
     };
 
-    console.log(postInfo);
-
     const submitPost = async () => {
         const postData = {
             title,
@@ -48,7 +46,8 @@ const NewPostBody = ({ postInfo }: NewPostBodyPropsType) => {
             : await createArticle(postData);
 
         if (res.id) {
-            alert('글쓰기가 완료되었습니다');
+            if (postInfo) alert('글수정이 완료되었습니다');
+            else alert('글쓰기가 완료되었습니다.');
             navigate('/');
         }
     };

@@ -10,10 +10,16 @@ import { BlogModule } from './blog/blog.module';
 import { UserModule } from './user/user.module';
 import { TagModule } from './tag/tag.module';
 import { CategoryModule } from './category/category.module';
+import { ImageModule } from './image/image.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '../..', 'storages'),
+        }),
         HttpModule,
         AuthModule,
         PrismaModule,
@@ -22,6 +28,7 @@ import { CategoryModule } from './category/category.module';
         UserModule,
         TagModule,
         CategoryModule,
+        ImageModule,
     ],
     controllers: [AppController],
     providers: [AppService],

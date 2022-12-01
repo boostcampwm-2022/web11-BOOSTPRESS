@@ -12,10 +12,13 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { PrismaService } from '../prisma/prisma.service';
 import {
-    ArticleDTO,
-    ArticleResponseDTO,
-    CommitResponseDTO,
-    FetchResponseDTO,
+    DetailedResponseDTO,
+    FilterDTO,
+    GitHubReadDTO,
+    ListResponseDTO,
+    BriefResponseDTO,
+    UpsertDTO,
+    GitHubCommitDTO,
 } from './dto';
 import { Env } from 'src/types';
 
@@ -23,6 +26,7 @@ import { Env } from 'src/types';
 export class ArticleService {
     private readonly SERVER_ACCESS_TOKEN: string;
     private readonly axios: AxiosInstance;
+    private readonly take = 12;
 
     constructor(
         private readonly prisma: PrismaService,
@@ -33,7 +37,7 @@ export class ArticleService {
         this.axios = httpService.axiosRef;
     }
 
-    async create(user: User, dto: ArticleDTO): Promise<ArticleResponseDTO> {
+    async create(user: User, dto: UpsertDTO): Promise<BriefResponseDTO> {
         const connect = dto.tagId.map((value) => ({ id: value }));
         const article = await this.prisma.article.create({
             data: {
@@ -42,6 +46,7 @@ export class ArticleService {
                 tags: { connect },
                 categoryId: dto.categoryId,
             },
+            include: this.includeOption(),
         });
 
         await this.commit(user, dto, article);
@@ -56,13 +61,13 @@ export class ArticleService {
         fs.mkdirSync(goalPath, { recursive: true });
         fs.writeFileSync(goalPath + `/${dto.title}.md`, dto.content);
 
-        return ArticleResponseDTO.toBreif(article);
+        return BriefResponseDTO.fromArticle(article);
     }
 
     async readOne(id: number) {
         const article = await this.prisma.article.findUnique({
             where: { id },
-            include: { author: true, tags: true },
+            include: this.includeOption(),
         });
 
         if (article === null || article.deleted) {
@@ -70,21 +75,42 @@ export class ArticleService {
             throw new UnauthorizedException(message);
         }
 
-        const { data } = await this.axios.get<FetchResponseDTO>(
+        const { data } = await this.axios.get<GitHubReadDTO>(
             `https://api.github.com/repos/${article.author.login}/${article.author.repoName}/readme/${id}`,
         );
 
-        return ArticleResponseDTO.toDetail(
+        return DetailedResponseDTO.fromArticle(
             article,
             Buffer.from(data.content, 'base64').toString(),
         );
     }
 
+    async readMany(query: FilterDTO): Promise<ListResponseDTO> {
+        const page: number = query.page ?? 1;
+        delete query.page;
+
+        const [articles, articleCount] = await Promise.all([
+            this.prisma.article
+                .findMany({
+                    where: query,
+                    skip: (page - 1) * this.take,
+                    take: this.take,
+                })
+                .then((res) => res.map(BriefResponseDTO.fromArticle)),
+            this.prisma.article.count({ where: query }),
+        ]);
+
+        return {
+            articles,
+            totalPages: Math.ceil(articleCount / this.take),
+        };
+    }
+
     async update(
         user: User,
-        dto: ArticleDTO,
+        dto: UpsertDTO,
         id: number,
-    ): Promise<ArticleResponseDTO> {
+    ): Promise<BriefResponseDTO> {
         const article = await this.getArticleWithUser(id, user.id);
 
         await Promise.all([
@@ -111,10 +137,10 @@ export class ArticleService {
         );
         fs.writeFileSync(basePath + `/${dto.title}.md`, dto.content);
 
-        return ArticleResponseDTO.toBreif(article);
+        return BriefResponseDTO.fromArticle(article);
     }
 
-    async delete(user: User, id: number): Promise<ArticleResponseDTO> {
+    async delete(user: User, id: number): Promise<BriefResponseDTO> {
         const article = await this.getArticleWithUser(id, user.id);
 
         await this.prisma.article.update({
@@ -122,12 +148,21 @@ export class ArticleService {
             data: { deleted: true },
         });
 
-        return ArticleResponseDTO.toBreif(article);
+        return BriefResponseDTO.fromArticle(article);
+    }
+
+    private includeOption() {
+        return {
+            author: true,
+            tags: true,
+            category: true,
+        };
     }
 
     private async getArticleWithUser(id: number, authorId: number) {
         const article = await this.prisma.article.findFirst({
             where: { id },
+            include: this.includeOption(),
         });
 
         if (article.authorId !== authorId) {
@@ -142,7 +177,7 @@ export class ArticleService {
         return article;
     }
 
-    private async commit(user: User, dto: ArticleDTO, article: Article) {
+    private async commit(user: User, dto: UpsertDTO, article: Article) {
         const requestData = {
             message: dto.title,
             content: Buffer.from(dto.content).toString('base64'),
@@ -156,7 +191,7 @@ export class ArticleService {
             Authorization: `Bearer ${this.SERVER_ACCESS_TOKEN}`,
         };
 
-        const { data } = await this.axios.put<CommitResponseDTO>(
+        const { data } = await this.axios.put<GitHubCommitDTO>(
             `https://api.github.com/repos/${user.login}/${user.repoName}/contents/${article.id}/README.md`,
             requestData,
             { headers },

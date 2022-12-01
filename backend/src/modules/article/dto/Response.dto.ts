@@ -1,11 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { User, Tag, Article, Category } from '@prisma/client';
-
-class ArticleJoin {
-    author: User;
-    tags: Tag[];
-    category: Category;
-}
+import { JoinDTO } from './Join.dto';
 
 class AuthorDTO {
     id: number;
@@ -41,7 +36,7 @@ class ResponseDTO {
 }
 
 export class BriefResponseDTO extends ResponseDTO {
-    static fromArticle(article: Article & ArticleJoin): BriefResponseDTO {
+    static fromArticle(article: Article & JoinDTO): BriefResponseDTO {
         return {
             id: article.id,
             title: article.title,
@@ -67,7 +62,7 @@ export class DetailedResponseDTO extends ResponseDTO {
     content: string;
 
     static fromArticle(
-        article: Article & ArticleJoin,
+        article: Article & JoinDTO,
         content: string,
     ): DetailedResponseDTO {
         return {

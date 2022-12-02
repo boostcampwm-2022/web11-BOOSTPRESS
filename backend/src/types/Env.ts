@@ -13,4 +13,10 @@ export interface Env {
     JWT_SECRET: string;
     JWT_LIFESPAN: number;
     LOGIN_LIFESPAN: number;
+
+    NCLOUD_IMAGE_ENDPOINT: string;
+    NCLOUD_IMAGE_ACCESSKEY: string;
+    NCLOUD_IMAGE_SECRETKEY: string;
+    NCLOUD_IMAGE_BUCKET: string;
+    NCLOUD_IMAGE_REGION: string;
 }

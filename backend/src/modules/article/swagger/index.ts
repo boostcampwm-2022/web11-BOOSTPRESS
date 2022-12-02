@@ -1,4 +1,5 @@
-export * as Create from './create.swagger';
-export * as Update from './update.swagger';
-export * as ReadOne from './readone.swagger';
-export * as Remove from './remove.swagger';
+export * as Create from './Create.swagger';
+export * as Update from './Update.swagger';
+export * as ReadOne from './ReadOne.swagger';
+export * as ReadMany from './ReadMany.swagger';
+export * as Remove from './Remove.swagger';

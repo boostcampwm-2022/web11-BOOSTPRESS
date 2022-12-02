@@ -1,6 +1,6 @@
 import { ApiOperationOptions, ApiResponseOptions } from '@nestjs/swagger';
 import { ExceptionResponse } from 'src/types';
-import { LoginResponseDTO } from '../dto';
+import { UserDTO } from '../dto';
 
 export const Operation: ApiOperationOptions = {
     summary: '사용자 체크 API',
@@ -11,7 +11,7 @@ export const Operation: ApiOperationOptions = {
 export const _200: ApiResponseOptions = {
     status: 200,
     description: '로그인된 사용자 데이터',
-    type: LoginResponseDTO,
+    type: UserDTO,
 };
 
 export const _401: ApiResponseOptions = {

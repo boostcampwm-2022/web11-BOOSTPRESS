@@ -1,17 +1,17 @@
 import { ApiOperationOptions, ApiResponseOptions } from '@nestjs/swagger';
 import { ExceptionResponse } from 'src/types';
-import { LoginResponseDTO } from '../dto';
+import { UrlDto } from '../dto';
 
 export const Operation: ApiOperationOptions = {
-    summary: '로그인 API',
+    summary: '이미지 업로드 API',
     description:
-        'GitHub OAuth를 이용해 로그인한 뒤, JWT 세션을 쿠키로 저장한다.',
+        '이미지를 ncloud object storage에 올린 후 해당 URL을 가져온다.',
 };
 
-export const _200: ApiResponseOptions = {
-    status: 200,
-    description: '로그인된 사용자 데이터',
-    type: LoginResponseDTO,
+export const _201: ApiResponseOptions = {
+    status: 201,
+    description: '이미지 업로드 성공',
+    type: UrlDto,
 };
 
 export const _401: ApiResponseOptions = {

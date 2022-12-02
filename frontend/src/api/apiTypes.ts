@@ -14,19 +14,33 @@ export interface categoryType {
 }
 
 export interface postType {
-    imgURL: string;
     id: number;
     title: string;
     content: string;
-    author_id: number;
-    created: string;
-    updated: string;
-    category_name?: string;
+    author: {
+        id: number;
+        nickname: string;
+    };
+    tags: {
+        id: number;
+        name: string;
+    }[];
+    createdAt: Date;
+    updatedAt: Date;
+    category?: {
+        id: number;
+        name: string;
+    };
     series?: {
         name: string;
         articles: { name: string; id: number }[];
     };
-    tag: string[];
+}
+
+export interface noneType {
+    statusCode: number;
+    message: string;
+    error: string;
 }
 
 export interface MultipleArticleAPIType {
@@ -36,6 +50,19 @@ export interface MultipleArticleAPIType {
 export interface createArticleType {
     title: string;
     content: string;
+    tagId: number[];
+}
+
+export interface updateArticleType {
+    title: string;
+    content: string;
+    tagId: number[];
+}
+
+export interface updateArticleResType {
+    title: string;
+    content: string;
+    tagId: number[];
 }
 
 export interface postCardInfoType {
@@ -47,6 +74,12 @@ export interface postCardInfoType {
     postURL: string;
 }
 
+export interface authUserInfoType {
+    nickname: string;
+    email: string;
+    id: number;
+}
+
 interface snsLinkType {
     sns_name: string;
     link: string;
@@ -54,5 +87,5 @@ interface snsLinkType {
 
 export interface tagType {
     name: string;
-    id: string;
+    id: number;
 }

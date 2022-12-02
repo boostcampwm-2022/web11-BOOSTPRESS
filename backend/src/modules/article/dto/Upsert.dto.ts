@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class ArticleDTO {
+export class UpsertDTO {
     @ApiProperty({ description: '게시글의 제목' })
     @IsString()
     @IsNotEmpty()
@@ -19,4 +19,7 @@ export class ArticleDTO {
     })
     @IsNumber({}, { each: true })
     tagId: number[];
+
+    @IsNumber()
+    categoryId?: number | undefined;
 }

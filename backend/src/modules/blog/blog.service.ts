@@ -16,20 +16,23 @@ export class BlogService {
         });
     }
 
-    private articleCountPerTag(id: number) {
+    private articlePerTag(id: number) {
         return this.prisma.tag.findMany({
+            // 사용자가 게시글을 작성하지 않은 태그를 필터링
             where: {
                 articles: {
-                    every: {
+                    some: {
                         authorId: id,
                     },
                 },
             },
+            // 사용자가 게시글을 작성한 적 있는 태그와 그 태그를 가진 게시글의 집합
             select: {
+                id: true,
                 name: true,
-                _count: {
-                    select: {
-                        articles: true,
+                articles: {
+                    where: {
+                        authorId: id,
                     },
                 },
             },
@@ -37,16 +40,16 @@ export class BlogService {
     }
 
     async read(id: number) {
-        const [basicInfo, counts] = await Promise.all([
+        const [basicInfo, articles] = await Promise.all([
             this.getBasicInfo(id),
-            this.articleCountPerTag(id),
+            this.articlePerTag(id),
         ]);
 
         return {
             ...basicInfo,
-            tag: counts.map((item) => ({
+            tag: articles.map((item) => ({
                 name: item.name,
-                articleCount: item._count.articles,
+                articleCount: item.articles.length,
             })),
         };
     }

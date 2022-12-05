@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { PatchDTO } from './dto';
 
 @Injectable()
 export class BlogService {
@@ -16,24 +18,18 @@ export class BlogService {
         });
     }
 
-    private articlePerTag(id: number) {
+    private articlePerTag(authorId: number) {
         return this.prisma.tag.findMany({
             // 사용자가 게시글을 작성하지 않은 태그를 필터링
             where: {
                 articles: {
-                    some: {
-                        authorId: id,
-                    },
+                    some: { authorId },
                 },
             },
             // 사용자가 게시글을 작성한 적 있는 태그와 그 태그를 가진 게시글의 집합
-            select: {
-                id: true,
-                name: true,
+            include: {
                 articles: {
-                    where: {
-                        authorId: id,
-                    },
+                    where: { authorId },
                 },
             },
         });
@@ -52,5 +48,14 @@ export class BlogService {
                 articleCount: item.articles.length,
             })),
         };
+    }
+
+    async patch(user: User, dto: PatchDTO) {
+        const { id } = user;
+        const { bio, blogName } = dto;
+        return this.prisma.user.update({
+            where: { id },
+            data: { bio, blogName },
+        });
     }
 }

@@ -13,7 +13,7 @@ export class UpsertDTO {
     content: string;
 
     @ApiProperty({
-        description: '게시글의 태그의 id 목록',
+        description: '게시글의 태그의 ID 목록',
         type: 'array',
         items: { type: 'number' },
     })
@@ -21,5 +21,6 @@ export class UpsertDTO {
     tagId: number[];
 
     @IsNumber()
+    @ApiProperty({ description: '게시글의 카테고리 ID' })
     categoryId?: number | undefined;
 }

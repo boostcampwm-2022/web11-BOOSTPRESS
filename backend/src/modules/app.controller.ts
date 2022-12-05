@@ -9,9 +9,4 @@ export class AppController {
     getHello(): string {
         return this.appService.getHello();
     }
-
-    @Get('/healthCheck')
-    healthCheck(): string {
-        return 'Server is now available.';
-    }
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User, Tag, Article, Category } from '@prisma/client';
+import { User, Tag, Article } from '@prisma/client';
 import { CategoryDTO } from './Category.dto';
 import { JoinDTO } from './Join.dto';
 

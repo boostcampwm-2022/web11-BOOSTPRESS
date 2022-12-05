@@ -47,17 +47,23 @@ export class DatabaseService {
         const page: number = query.page ?? 1;
         delete query.page;
 
+        const { authorId, tagId, categoryId, searchWord } = query;
+        const where = {
+            authorId,
+            title: { contains: searchWord },
+            categoryId,
+            tags: { every: { id: tagId } },
+            deleted: false,
+        };
+
         const [articles, articleCount] = await Promise.all([
             this.prisma.article.findMany({
-                where: {
-                    ...query,
-                    deleted: false,
-                },
+                where,
                 include: this.includeOption(),
                 skip: (page - 1) * this.take,
                 take: this.take,
             }),
-            this.prisma.article.count({ where: query }),
+            this.prisma.article.count({ where }),
         ]);
 
         return {

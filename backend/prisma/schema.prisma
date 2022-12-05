@@ -21,7 +21,7 @@ model User {
     repoName String
     blogName String
     bio      String
-    imageURL String?
+    imageURL String
 
     // SNS 관련
     // SNS 계정을 모두 연결하는 사람은 적을 것

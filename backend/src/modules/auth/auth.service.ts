@@ -91,6 +91,7 @@ export class AuthService {
                 repoName,
                 blogName: `${login}의 블로그`,
                 bio: `${login}의 블로그입니다`,
+                imageURL: `https://avatars.githubusercontent.com/${login}`,
             },
         });
     }

@@ -52,10 +52,10 @@ export class BlogService {
 
     async patch(user: User, dto: PatchDTO) {
         const { id } = user;
-        const { bio, blogName } = dto;
+        const { bio, blogName, imageURL } = dto;
         return this.prisma.user.update({
             where: { id },
-            data: { bio, blogName },
+            data: { bio, blogName, imageURL },
         });
     }
 }

@@ -8,4 +8,8 @@ export class PatchDTO {
     @IsString()
     @IsOptional()
     blogName: string;
+
+    @IsString()
+    @IsOptional()
+    imageURL: string;
 }

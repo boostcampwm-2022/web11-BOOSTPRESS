@@ -36,8 +36,10 @@ model User {
 }
 
 model UserTwitter {
-    userId Int  @unique
-    user   User @relation(fields: [userId], references: [id])
+    userId   Int    @unique
+    user     User   @relation(fields: [userId], references: [id])
+    id       Int
+    username String
 }
 
 model UserFacebook {

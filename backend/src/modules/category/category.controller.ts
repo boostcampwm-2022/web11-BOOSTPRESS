@@ -10,6 +10,7 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { User } from '@prisma/client';
 import { CurrentUser } from 'src/decorator';
 import { JwtGuard } from 'src/guard';
 import { CategoryService } from './category.service';
@@ -31,7 +32,7 @@ export class CategoryController {
     @ApiResponse(Create._200)
     @UseGuards(JwtGuard)
     @Post()
-    async create(@CurrentUser() user, @Body() dto: CategoryDTO) {
+    async create(@CurrentUser() user: User, @Body() dto: CategoryDTO) {
         return await this.categoryService.create(user, dto);
     }
 
@@ -40,7 +41,7 @@ export class CategoryController {
     @UseGuards(JwtGuard)
     @Patch(':id')
     async update(
-        @CurrentUser() user,
+        @CurrentUser() user: User,
         @Param('id', ParseIntPipe) id: number,
         @Body() dto: CategoryDTO,
     ) {

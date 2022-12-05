@@ -13,6 +13,7 @@ import { CategoryModule } from './category/category.module';
 import { ImageModule } from './image/image.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { OAuthModule } from './oauth/oauth.module';
 
 @Module({
     imports: [
@@ -29,6 +30,7 @@ import { join } from 'path';
         TagModule,
         CategoryModule,
         ImageModule,
+        OAuthModule,
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -19,4 +19,8 @@ export interface Env {
     NCLOUD_IMAGE_SECRETKEY: string;
     NCLOUD_IMAGE_BUCKET: string;
     NCLOUD_IMAGE_REGION: string;
+
+    TWITTER_CLIENT_ID: string;
+    TWITTER_CLIENT_SECRET: string;
+    TWITTER_REDIRECT_URL: string;
 }

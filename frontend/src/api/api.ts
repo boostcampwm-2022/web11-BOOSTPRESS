@@ -19,7 +19,6 @@ export async function getBlogSideBarInfo(userId: string) {
     return (await res.json()) as blogSideBarInfoType;
 }
 
-//추천게시물 받아오는 가상 api (나중에 조회수,추천수 등등 만들어야함)
 export async function getFeaturePostInfo() {
     const res = await fetch(url + '/article');
     return (await res.json()) as MultipleArticleAPIType;

@@ -92,15 +92,13 @@ const Header = ({ isLogoActive }: headerType) => {
                 </GitHubLoginArea>
 
                 <UserSettingModalArea active={userSettingModalActive}>
-                    <UserSettingModalItem
-                        onClick={() => navigate(`/blog/${String(userId)}`)}
-                    >
+                    <UserSettingModalItem to={`/blog/${String(userId)}`}>
                         <HomeSVG /> <p>내 블로그 페이지</p>
                     </UserSettingModalItem>
-                    <UserSettingModalItem>
+                    <UserSettingModalItem to="/">
                         <SettingSVG /> <p>내 블로그 설정</p>
                     </UserSettingModalItem>
-                    <UserSettingModalItem onClick={() => navigate('/newpost')}>
+                    <UserSettingModalItem to={`/`}>
                         <PencilSVG /> <p>글 쓰기</p>
                     </UserSettingModalItem>
                 </UserSettingModalArea>
@@ -190,7 +188,7 @@ const UserSettingModalArea = styled(BasicShadowBox)<{ active: boolean }>`
     color: ${colors.setting};
 `;
 
-const UserSettingModalItem = styled.div`
+const UserSettingModalItem = styled(Link)`
     display: flex;
     align-items: center;
     cursor: pointer;

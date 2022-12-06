@@ -13,7 +13,7 @@ class AuthorDTO {
     }
 }
 
-class ResponseDTO {
+class ArticleResponseDTO {
     @ApiProperty({ description: '게시글의 ID' })
     id: number;
 
@@ -36,8 +36,8 @@ class ResponseDTO {
     category?: CategoryDTO;
 }
 
-export class BriefResponseDTO extends ResponseDTO {
-    static fromArticle(article: Article & JoinDTO): BriefResponseDTO {
+export class ArticleBriefResponseDTO extends ArticleResponseDTO {
+    static fromArticle(article: Article & JoinDTO): ArticleBriefResponseDTO {
         return {
             id: article.id,
             title: article.title,
@@ -51,24 +51,27 @@ export class BriefResponseDTO extends ResponseDTO {
     }
 }
 
-export class ListResponseDTO {
-    @ApiProperty({ description: '게시글의 내용을 포함하지 않는 정보' })
-    articles: BriefResponseDTO[];
+export class ArticleListResponseDTO {
+    @ApiProperty({
+        description: '게시글의 내용을 포함하지 않는 정보',
+        type: [ArticleBriefResponseDTO],
+    })
+    articles: ArticleBriefResponseDTO[];
 
     @ApiProperty({ description: '특정 조건을 지닌 게시글 목록의 페이지 수' })
     totalPages: number;
 }
 
-export class DetailedResponseDTO extends ResponseDTO {
+export class ArticleDetailedResponseDTO extends ArticleResponseDTO {
     @ApiProperty({ description: '게시글의 내용' })
     content: string;
 
     static fromArticle(
         article: Article & JoinDTO,
         content: string,
-    ): DetailedResponseDTO {
+    ): ArticleDetailedResponseDTO {
         return {
-            ...BriefResponseDTO.fromArticle(article),
+            ...ArticleBriefResponseDTO.fromArticle(article),
             content,
         };
     }

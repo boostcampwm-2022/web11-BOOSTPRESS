@@ -12,7 +12,7 @@ class TagInfoDTO {
     articleCount: number;
 }
 
-export class BriefResponseDTO {
+export class BlogBriefResponseDTO {
     @ApiProperty({ description: '사용자의 bio' })
     bio: string;
 
@@ -28,7 +28,7 @@ export class BriefResponseDTO {
     }
 }
 
-export class DetailedResponseDTO extends BriefResponseDTO {
+export class BlogDetailedResponseDTO extends BlogBriefResponseDTO {
     @ApiProperty({
         description: '사용자가 작성한 게시글의 태그 정보',
         isArray: true,

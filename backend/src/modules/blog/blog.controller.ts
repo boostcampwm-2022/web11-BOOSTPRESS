@@ -7,14 +7,15 @@ import {
     Patch,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { CurrentUser } from 'src/decorator';
 import { JwtGuard } from 'src/guard';
 import { BlogService } from './blog.service';
-import { BriefResponseDTO, PatchDTO } from './dto';
+import { BlogBriefResponseDTO, PatchDTO } from './dto';
 import { GetBlog, PatchBlog } from './swagger';
 
+@ApiTags('blog')
 @Controller('blog')
 export class BlogController {
     constructor(private readonly blogService: BlogService) {}
@@ -32,6 +33,6 @@ export class BlogController {
     @UseGuards(JwtGuard)
     async patch(@CurrentUser() user: User, @Body() dto: PatchDTO) {
         const result = await this.blogService.patch(user, dto);
-        return BriefResponseDTO.toBrief(result);
+        return BlogBriefResponseDTO.toBrief(result);
     }
 }

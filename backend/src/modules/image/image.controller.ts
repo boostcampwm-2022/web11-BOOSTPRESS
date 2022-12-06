@@ -8,9 +8,15 @@ import {
 import { ImageService } from './image.service';
 import { JwtGuard } from '../../guard/jwt.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+    ApiConsumes,
+    ApiOperation,
+    ApiResponse,
+    ApiTags,
+} from '@nestjs/swagger';
 import { UploadImage } from './swagger';
 
+@ApiTags('image')
 @Controller('image')
 export class ImageController {
     constructor(private readonly imageService: ImageService) {}

@@ -25,11 +25,14 @@ const Header = ({ isLogoActive }: headerType) => {
     const [gitHubLoginModalActive, setGitHubLoginModalActive] = useState(false);
     const [userSettingModalActive, setuserSettingModalActive] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
+    const [userId, setUserId] = useState<number>(0);
 
     const checkLogin = async () => {
         const res = await getUserInfo();
-        if (res.nickname) setIsLogin(true);
-        else setIsLogin(false);
+        if (res.nickname) {
+            setIsLogin(true);
+            setUserId(res.id);
+        } else setIsLogin(false);
     };
 
     useEffect(() => {
@@ -51,11 +54,18 @@ const Header = ({ isLogoActive }: headerType) => {
 
     return (
         <HeaderWrapper>
-            <Link to="/">
+            {isLogoActive ? (
+                <Link to="/">
+                    <LogoArea isLogoActive={isLogoActive}>
+                        <LogoTitle>BOOSTPRESS</LogoTitle>
+                    </LogoArea>
+                </Link>
+            ) : (
                 <LogoArea isLogoActive={isLogoActive}>
                     <LogoTitle>BOOSTPRESS</LogoTitle>
                 </LogoArea>
-            </Link>
+            )}
+
             <HeaderRightArea>
                 <SearchArea placeholder="검색어 입력 " />
                 <SearchIconSVG css={SearchIcon} />
@@ -82,7 +92,9 @@ const Header = ({ isLogoActive }: headerType) => {
                 </GitHubLoginArea>
 
                 <UserSettingModalArea active={userSettingModalActive}>
-                    <UserSettingModalItem>
+                    <UserSettingModalItem
+                        onClick={() => navigate(`/blog/${String(userId)}`)}
+                    >
                         <HomeSVG /> <p>내 블로그 페이지</p>
                     </UserSettingModalItem>
                     <UserSettingModalItem>

@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { DetailedResponseDTO, PatchDTO } from './dto';
 
 @Injectable()
 export class BlogService {
@@ -16,38 +18,45 @@ export class BlogService {
         });
     }
 
-    private articleCountPerTag(id: number) {
+    private articlePerTag(authorId: number) {
         return this.prisma.tag.findMany({
+            // 사용자가 게시글을 작성하지 않은 태그를 필터링
             where: {
                 articles: {
-                    every: {
-                        authorId: id,
-                    },
+                    some: { authorId },
                 },
             },
-            select: {
-                name: true,
-                _count: {
-                    select: {
-                        articles: true,
-                    },
+            // 사용자가 게시글을 작성한 적 있는 태그와 그 태그를 가진 게시글의 집합
+            include: {
+                articles: {
+                    where: { authorId },
                 },
             },
         });
     }
 
-    async read(id: number) {
-        const [basicInfo, counts] = await Promise.all([
+    async read(id: number): Promise<DetailedResponseDTO> {
+        const [basicInfo, articles] = await Promise.all([
             this.getBasicInfo(id),
-            this.articleCountPerTag(id),
+            this.articlePerTag(id),
         ]);
 
         return {
             ...basicInfo,
-            tag: counts.map((item) => ({
+            tag: articles.map((item) => ({
+                id: item.id,
                 name: item.name,
-                articleCount: item._count.articles,
+                articleCount: item.articles.length,
             })),
         };
+    }
+
+    async patch(user: User, dto: PatchDTO) {
+        const { id } = user;
+        const { bio, blogName, imageURL } = dto;
+        return this.prisma.user.update({
+            where: { id },
+            data: { bio, blogName, imageURL },
+        });
     }
 }

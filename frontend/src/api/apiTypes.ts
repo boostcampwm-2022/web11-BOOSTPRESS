@@ -49,7 +49,7 @@ export interface MultipleArticleAPIType {
 
 export interface MultipleArticleUserType {
     articles: postType[];
-    totalPages: Number;
+    totalPages: number;
 }
 
 export interface createArticleType {

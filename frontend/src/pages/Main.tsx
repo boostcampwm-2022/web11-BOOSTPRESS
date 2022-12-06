@@ -23,6 +23,8 @@ const Main = () => {
         checkLogin();
     }, []);
 
+    console.log(data?.articles);
+
     return (
         <>
             <Header isLogoActive={true} />

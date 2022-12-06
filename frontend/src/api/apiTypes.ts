@@ -44,7 +44,12 @@ export interface noneType {
 }
 
 export interface MultipleArticleAPIType {
-    articles: postCardInfoType[];
+    articles: postType[];
+}
+
+export interface MultipleArticleUserType {
+    articles: postType[];
+    totalPages: Number;
 }
 
 export interface createArticleType {

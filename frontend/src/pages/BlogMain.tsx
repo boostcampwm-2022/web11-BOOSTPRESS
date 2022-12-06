@@ -19,6 +19,7 @@ const BlogMain = () => {
         queryKey: ['articles', userId, pageIdx],
         queryFn: () => getArticlesWithUserId(userId),
     });
+
     return (
         <Wrapper>
             <Header isLogoActive={false} />

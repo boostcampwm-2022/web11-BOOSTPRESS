@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { DetailedResponseDTO, PatchDTO } from './dto';
+import { BlogDetailedResponseDTO, PatchDTO } from './dto';
 
 @Injectable()
 export class BlogService {
@@ -35,7 +35,7 @@ export class BlogService {
         });
     }
 
-    async read(id: number): Promise<DetailedResponseDTO> {
+    async read(id: number): Promise<BlogDetailedResponseDTO> {
         const [basicInfo, articles] = await Promise.all([
             this.getBasicInfo(id),
             this.articlePerTag(id),

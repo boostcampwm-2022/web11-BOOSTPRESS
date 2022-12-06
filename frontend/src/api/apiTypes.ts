@@ -7,10 +7,10 @@ export interface blogSideBarInfoType {
 }
 
 export interface categoryType {
-    id: number;
     name: string;
-    depth: number;
-    child: categoryType[];
+    id: number;
+    parentId: number;
+    children: categoryType[];
 }
 
 export interface postType {

@@ -1,4 +1,3 @@
-/*  */
 import styled from '@emotion/styled/macro';
 import React, { useState } from 'react';
 import colors from 'styles/color';
@@ -9,25 +8,16 @@ import guideLine from 'editor/guideLine';
 import { createArticle, updateArticle } from 'api/api';
 import { useNavigate } from 'react-router-dom';
 import TagSelector from './TagSelector';
-import { postType, tagType } from 'api/apiTypes';
+import { tagType, categoryType, postType } from 'api/apiTypes';
 import CategorySelector from './CategorySelector';
 
 interface NewPostBodyPropsType {
     postInfo?: postType;
 }
 
-interface categoryType {
-    name: string;
-    id: number;
-    children: categoryType[];
-}
-
 const NewPostBody = ({ postInfo }: NewPostBodyPropsType) => {
     const navigate = useNavigate();
     const [title, setTitle] = useState(postInfo ? postInfo.title : '');
-    const [content, setContent] = useState(postInfo ? postInfo.content : '');
-
-    //태그,카테고리는 후에 선택
     const [selectedTags, setSelectedTags] = useState<tagType[]>(
         postInfo ? postInfo.tags : [],
     );
@@ -123,14 +113,26 @@ const NewPostBody = ({ postInfo }: NewPostBodyPropsType) => {
                             categories={[
                                 {
                                     name: '상위',
+                                    parentId: 0,
                                     id: 1,
                                     children: [
-                                        { name: '하위1', id: 2, children: [] },
-                                        { name: '하위2', id: 3, children: [] },
+                                        {
+                                            name: '하위1',
+                                            parentId: 0,
+                                            id: 2,
+                                            children: [],
+                                        },
+                                        {
+                                            name: '하위2',
+                                            parentId: 0,
+                                            id: 3,
+                                            children: [],
+                                        },
                                     ],
                                 },
                                 {
                                     name: '하위없음',
+                                    parentId: 0,
                                     id: 4,
                                     children: [],
                                 },

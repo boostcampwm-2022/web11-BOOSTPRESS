@@ -8,6 +8,7 @@ import {
     updateArticleType,
     noneType,
     updateArticleResType,
+    MultipleArticleUserType,
 } from './apiTypes';
 
 const url = process.env.REACT_APP_API_URL;
@@ -18,27 +19,27 @@ export async function getBlogSideBarInfo(userId: string) {
     return (await res.json()) as blogSideBarInfoType;
 }
 
-//추천게시물 받아오는 가상 api (나중에 조회수,추천수 등등 만들어야함)
 export async function getFeaturePostInfo() {
-    const res = await fetch(mockURL + '/articles');
+    const res = await fetch(url + '/article');
     return (await res.json()) as MultipleArticleAPIType;
 }
 
 export async function getArticlesWithUserId(
-    userId: string,
+    authorId: string,
     page: number = 1,
     category?: string,
 ) {
     const res = await fetch(
-        mockURL +
-            '/articles?' +
+        url +
+            '/article?' +
             new URLSearchParams({
-                userId,
+                authorId,
                 page: page.toString(),
                 ...(category ? { category } : {}),
             }),
     );
-    return (await res.json()) as MultipleArticleAPIType;
+
+    return (await res.json()) as MultipleArticleUserType;
 }
 
 export async function getAllTags() {

@@ -17,8 +17,11 @@ const BlogMain = () => {
     });
     const articlesQuery = useQuery({
         queryKey: ['articles', userId, pageIdx],
-        queryFn: () => getArticlesWithUserId(userId),
+        queryFn: () => getArticlesWithUserId(userId, pageIdx),
     });
+
+    console.log(articlesQuery.data);
+
     return (
         <Wrapper>
             <Header isLogoActive={false} />
@@ -35,13 +38,15 @@ const BlogMain = () => {
                 ) : articlesQuery.isError ? (
                     <span>Error</span>
                 ) : (
-                    <PostGrid postInfo={articlesQuery.data.articles} />
+                    <>
+                        <PostGrid postInfo={articlesQuery.data.articles} />
+                        <Pagination
+                            curPage={pageIdx}
+                            maxPage={articlesQuery.data.totalPages}
+                            setCurPage={setPageIdx}
+                        />
+                    </>
                 )}
-                <Pagination
-                    curPage={pageIdx}
-                    maxPage={5}
-                    setCurPage={setPageIdx}
-                />
             </Main>
         </Wrapper>
     );

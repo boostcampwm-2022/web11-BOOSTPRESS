@@ -18,6 +18,7 @@ interface NewPostBodyPropsType {
 const NewPostBody = ({ postInfo }: NewPostBodyPropsType) => {
     const navigate = useNavigate();
     const [title, setTitle] = useState(postInfo ? postInfo.title : '');
+    const [content, setContent] = useState(postInfo ? postInfo.content : '');
     const [selectedTags, setSelectedTags] = useState<tagType[]>(
         postInfo ? postInfo.tags : [],
     );

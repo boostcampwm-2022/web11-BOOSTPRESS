@@ -12,4 +12,16 @@ export class PatchDTO {
     @IsString()
     @IsOptional()
     imageURL: string;
+
+    @IsString()
+    @IsOptional()
+    twitterLink: string;
+
+    @IsString()
+    @IsOptional()
+    facebookLink: string;
+
+    @IsString()
+    @IsOptional()
+    linkedinLink: string;
 }

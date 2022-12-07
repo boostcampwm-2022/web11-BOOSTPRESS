@@ -34,6 +34,9 @@ class ArticleResponseDTO {
 
     @ApiProperty({ description: '게시글의 카테고리' })
     category?: CategoryDTO;
+
+    @ApiProperty({ description: '게시글의 메인 이미지 URL' })
+    mainImageURL: string;
 }
 
 export class ArticleBriefResponseDTO extends ArticleResponseDTO {
@@ -47,6 +50,7 @@ export class ArticleBriefResponseDTO extends ArticleResponseDTO {
             tags: article.tags,
             category:
                 article.category && CategoryDTO.fromCategory(article.category),
+            mainImageURL: article.mainImageURL,
         };
     }
 }

@@ -51,6 +51,7 @@ model Article {
     // 게시글 파일
     id    Int    @id @default(autoincrement())
     title String
+    mainImageURL String?
 
     // 분류 관련
     categoryId Int?

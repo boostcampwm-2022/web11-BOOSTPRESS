@@ -4,9 +4,11 @@ import { ReactComponent as TrashbinIcon } from 'assets/svg/Trashbin.svg';
 import { ReactComponent as MailIcon } from 'assets/svg/mail.svg';
 import { ReactComponent as TwitterIcon } from 'assets/svg/twitter.svg';
 import { ReactComponent as FacebookIcon } from 'assets/svg/facebook.svg';
-import { ReactComponent as HomeIcon } from 'assets/svg/home.svg';
+import { ReactComponent as LinkedInIcon } from 'assets/svg/linkedin.svg';
 
-import { PropsWithChildren, useState } from 'react';
+import { FormEventHandler, PropsWithChildren, useState } from 'react';
+import { blogType, snsType } from 'api/apiTypes';
+import { updateBlogInfo } from 'api/api';
 
 const PersonalInfoManage = () => {
     const [blogName, setBlogName] = useState('');
@@ -14,11 +16,34 @@ const PersonalInfoManage = () => {
     const [profileFile, setProfileFile] = useState<string>('');
     const [bio, setBio] = useState('');
     const [email, setEmail] = useState('');
-    const [twitter, setTwitter] = useState('');
-    const [facebook, setFacebook] = useState('');
-    const [homePageUrl, setHomePageUrl] = useState('');
+    const [twitterLink, setTwitterLink] = useState('');
+    const [facebookLink, setFacebookLink] = useState('');
+    const [linkedinLink, setLinkedinLink] = useState('');
+
+    const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+        e.preventDefault();
+
+        const snsLink: snsType[] = [];
+        if (twitterLink !== '')
+            snsLink.push({ snsName: 'twitter', link: twitterLink });
+        if (facebookLink !== '')
+            snsLink.push({ snsName: 'facebook', link: facebookLink });
+        if (linkedinLink !== '')
+            snsLink.push({ snsName: 'linkedin', link: linkedinLink });
+
+        const dto: blogType = {
+            blogName,
+            nickname,
+            imageURL: profileFile,
+            bio,
+            snsLink,
+        };
+
+        const res = await updateBlogInfo(dto);
+    };
+
     return (
-        <Form>
+        <Form onSubmit={onSubmit}>
             <InputSection
                 title="블로그 제목"
                 description="블로그 페이지 최상단에 사용될 제목입니다"
@@ -94,27 +119,27 @@ const PersonalInfoManage = () => {
                     <TwitterIcon />
                     <Input
                         type="text"
-                        placeholder="Twitter 유저네임"
-                        value={twitter}
-                        onChange={(e) => setTwitter(e.target.value)}
+                        placeholder="내 Twitter 페이지"
+                        value={twitterLink}
+                        onChange={(e) => setTwitterLink(e.target.value)}
                     />
                 </SocialInfoRow>
                 <SocialInfoRow>
                     <FacebookIcon />
                     <Input
                         type="text"
-                        placeholder="facebook 유저네임"
-                        value={facebook}
-                        onChange={(e) => setFacebook(e.target.value)}
+                        placeholder="내 Facebook 페이지"
+                        value={facebookLink}
+                        onChange={(e) => setFacebookLink(e.target.value)}
                     />
                 </SocialInfoRow>
                 <SocialInfoRow>
-                    <HomeIcon />
+                    <LinkedInIcon />
                     <Input
                         type="text"
-                        placeholder="홈페이지 URL"
-                        value={homePageUrl}
-                        onChange={(e) => setHomePageUrl(e.target.value)}
+                        placeholder="내 LinkedIn 페이지"
+                        value={linkedinLink}
+                        onChange={(e) => setLinkedinLink(e.target.value)}
                     />
                 </SocialInfoRow>
             </InputSection>

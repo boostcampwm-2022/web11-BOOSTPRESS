@@ -58,3 +58,16 @@ export interface tagType {
     name: string;
     id: string;
 }
+
+export interface snsType {
+    snsName: string;
+    link: string;
+}
+
+export interface blogType {
+    blogName: string;
+    nickname: string;
+    imageURL: string;
+    bio: string;
+    snsLink: snsType[];
+}

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
+import { SNSDTO } from './SNS.dto';
 
 export class PatchDTO {
     @IsString()
@@ -24,16 +25,6 @@ export class PatchDTO {
 
     @IsString()
     @IsOptional()
-    @ApiProperty({ description: '사용자의 트위터 페이지 URL' })
-    twitterLink: string;
-
-    @IsString()
-    @IsOptional()
-    @ApiProperty({ description: '사용자의 페이스북 페이지 URLL' })
-    facebookLink: string;
-
-    @IsString()
-    @IsOptional()
-    @ApiProperty({ description: '사용자의 링크드인 사진 URL' })
-    linkedinLink: string;
+    @ApiProperty({ description: '사용자의 SNS 링크', type: [SNSDTO] })
+    snsLink: SNSDTO[];
 }

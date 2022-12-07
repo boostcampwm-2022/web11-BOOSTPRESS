@@ -5,6 +5,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
+import { parsingMainImageURL } from 'src/utils';
 import { PrismaService } from '../prisma/prisma.service';
 import { FilterDTO, UpsertDTO } from './dto';
 
@@ -14,7 +15,8 @@ export class DatabaseService {
 
     constructor(private readonly prisma: PrismaService) {}
 
-    async create(user: User, dto: UpsertDTO, mainImageURL: string) {
+    async create(user: User, dto: UpsertDTO) {
+        const mainImageURL = parsingMainImageURL(dto.content);
         const connect = dto.tagId.map((value) => ({ id: value }));
         const article = await this.prisma.article.create({
             data: {
@@ -76,7 +78,8 @@ export class DatabaseService {
         };
     }
 
-    async update(user: User, dto: UpsertDTO, id: number, mainImageURL: string) {
+    async update(user: User, dto: UpsertDTO, id: number) {
+        const mainImageURL = parsingMainImageURL(dto.content);
         await this.validateDbArticle(id, user.id);
 
         const article = await this.prisma.article.update({

@@ -34,11 +34,4 @@ export class FileService {
             throw new BadRequestException(message);
         }
     }
-
-    async parsingMainImageURL(content: string) {
-        const imageRegex = /\!\[\]\([^\)]*\)/;
-        const imageText = imageRegex.exec(content);
-        const mainImageURL = imageText ? imageText[0].slice(4, -1) : '';
-        return mainImageURL;
-    }
 }

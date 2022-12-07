@@ -14,8 +14,6 @@ export const generate = (body: string) => {
         rehypePlugins: [rehypeHighlight],
     }).default;
 
-    console.log(renderToStaticMarkup(createElement(mdx)));
-
     return renderToStaticMarkup(createElement(mdx));
 };
 

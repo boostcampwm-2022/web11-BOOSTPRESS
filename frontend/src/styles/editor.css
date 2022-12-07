@@ -689,6 +689,20 @@
     background-color: #1d1e22;
 }
 
+.markdown-body-content pre {
+    background-color: #1d1e22 !important;
+}
+
+.markdown-body .code-accordion pre {
+    margin: 0;
+}
+
+.markdown-body .code-accordion p {
+    margin: 0;
+}
+
+/* 커스텀 끝*/
+
 .markdown-body code,
 .markdown-body tt {
     padding: 0.2em 0.4em;

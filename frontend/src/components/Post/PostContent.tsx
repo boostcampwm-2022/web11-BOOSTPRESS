@@ -2,13 +2,15 @@
 import styled from '@emotion/styled';
 import { evaluateSync } from '@mdx-js/mdx';
 import mdxComponents from 'editor/mdxComponent';
-import React, { createElement } from 'react';
+import React, { createElement, useState } from 'react';
 import * as runtime from 'react/jsx-runtime';
 import colors from 'styles/color';
+import rehypeHighlight from 'rehype-highlight';
 
 const generate = (body: string) => {
     const mdx = evaluateSync(body, {
         ...(runtime as any),
+        rehypePlugins: [rehypeHighlight],
     }).default;
 
     return createElement(mdx);
@@ -19,8 +21,10 @@ interface PostContentPropsType {
 }
 
 const PostContent = ({ content }: PostContentPropsType) => {
+    const [render, setRender] = useState(true);
+
     return (
-        <ContentArea className="markdown-body">
+        <ContentArea className="markdown-body markdown-body-content">
             {generate(mdxComponents + content)}
         </ContentArea>
     );

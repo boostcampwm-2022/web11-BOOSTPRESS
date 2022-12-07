@@ -45,7 +45,8 @@ export class ArticleController {
         @CurrentUser() user: User,
         @Body() dto: UpsertDTO,
     ): Promise<ArticleBriefResponseDTO> {
-        const article = await this.db.create(user, dto);
+        const mainImageURL = await this.file.parsingMainImageURL(dto.content);
+        const article = await this.db.create(user, dto, mainImageURL);
 
         await Promise.all([
             this.file.write(article, dto.content),
@@ -105,7 +106,8 @@ export class ArticleController {
         @Param('id', ParseIntPipe) id: number,
         @Body() dto: UpsertDTO,
     ): Promise<ArticleBriefResponseDTO> {
-        const article = await this.db.update(user, dto, id);
+        const mainImageURL = await this.file.parsingMainImageURL(dto.content);
+        const article = await this.db.update(user, dto, id, mainImageURL);
 
         await Promise.all([
             this.file.write(article, dto.content),

@@ -14,7 +14,7 @@ export class DatabaseService {
 
     constructor(private readonly prisma: PrismaService) {}
 
-    async create(user: User, dto: UpsertDTO) {
+    async create(user: User, dto: UpsertDTO, mainImageURL: string) {
         const connect = dto.tagId.map((value) => ({ id: value }));
         const article = await this.prisma.article.create({
             data: {
@@ -22,6 +22,7 @@ export class DatabaseService {
                 title: dto.title,
                 tags: { connect },
                 categoryId: dto.categoryId,
+                mainImageURL: mainImageURL,
             },
             include: this.includeOption(),
         });
@@ -75,7 +76,7 @@ export class DatabaseService {
         };
     }
 
-    async update(user: User, dto: UpsertDTO, id: number) {
+    async update(user: User, dto: UpsertDTO, id: number, mainImageURL: string) {
         await this.validateDbArticle(id, user.id);
 
         const article = await this.prisma.article.update({
@@ -86,6 +87,7 @@ export class DatabaseService {
                 tags: {
                     connect: dto.tagId.map((value) => ({ id: value })),
                 },
+                mainImageURL: mainImageURL,
             },
             include: this.includeOption(),
         });

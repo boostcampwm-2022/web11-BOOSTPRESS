@@ -25,9 +25,34 @@ export class BlogBriefResponseDTO {
     @ApiProperty({ description: '사용자의 프로필 사진 URL' })
     imageURL: string;
 
+    @ApiProperty({ description: '사용자의 트위터 페이지 URL' })
+    twitterLink: string;
+
+    @ApiProperty({ description: '사용자의 페이스북 페이지 URLL' })
+    facebookLink: string;
+
+    @ApiProperty({ description: '사용자의 링크드인 사진 URL' })
+    linkedinLink: string;
+
     static toBrief(user: User) {
-        const { nickname, bio, blogName, imageURL } = user;
-        return { nickname, bio, blogName, imageURL };
+        const {
+            nickname,
+            bio,
+            blogName,
+            imageURL,
+            twitterLink,
+            facebookLink,
+            linkedinLink,
+        } = user;
+        return {
+            nickname,
+            bio,
+            blogName,
+            imageURL,
+            twitterLink,
+            facebookLink,
+            linkedinLink,
+        };
     }
 }
 

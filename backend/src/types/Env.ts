@@ -23,4 +23,12 @@ export interface Env {
     TWITTER_CLIENT_ID: string;
     TWITTER_CLIENT_SECRET: string;
     TWITTER_REDIRECT_URL: string;
+
+    LINKEDIN_CLIENT_ID: string;
+    LINKEDIN_CLIENT_SECRET: string;
+    LINKEDIN_REDIRECT_URL: string;
+
+    FACEBOOK_CLIENT_ID: string;
+    FACEBOOK_CLIENT_SECRET: string;
+    FACEBOOK_REDIRECT_URL: string;
 }

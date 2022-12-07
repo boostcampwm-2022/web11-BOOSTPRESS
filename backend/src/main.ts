@@ -2,7 +2,6 @@ import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as session from 'express-session';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from './modules/app.module';
 import { Env } from './types';
@@ -22,13 +21,6 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const config = app.get(ConfigService<Env>);
     app.use(cookieParser());
-    app.use(
-        session({
-            secret: config.get('JWT_SECRET'),
-            resave: false,
-            saveUninitialized: false,
-        }),
-    );
     app.enableCors({
         origin: config.get('REDIRECT_URL'),
         credentials: true,

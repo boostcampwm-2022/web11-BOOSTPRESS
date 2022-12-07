@@ -4,6 +4,11 @@ import { IsOptional, IsString } from 'class-validator';
 export class PatchDTO {
     @IsString()
     @IsOptional()
+    @ApiProperty({ description: '사용자의 닉네임' })
+    nickname: string;
+
+    @IsString()
+    @IsOptional()
     @ApiProperty({ description: '사용자의 bio' })
     bio: string;
 

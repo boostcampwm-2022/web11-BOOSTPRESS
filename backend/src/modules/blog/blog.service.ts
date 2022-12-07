@@ -11,6 +11,7 @@ export class BlogService {
         return this.prisma.user.findUnique({
             where: { id },
             select: {
+                nickname: true,
                 bio: true,
                 imageURL: true,
                 blogName: true,
@@ -53,10 +54,10 @@ export class BlogService {
 
     async patch(user: User, dto: PatchDTO) {
         const { id } = user;
-        const { bio, blogName, imageURL } = dto;
+        const { nickname, bio, blogName, imageURL } = dto;
         return this.prisma.user.update({
             where: { id },
-            data: { bio, blogName, imageURL },
+            data: { nickname, bio, blogName, imageURL },
         });
     }
 }

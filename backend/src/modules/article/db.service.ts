@@ -5,7 +5,7 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { parsingMainImageURL } from 'src/utils';
+import { parseMainImageURL } from 'src/utils';
 import { PrismaService } from '../prisma/prisma.service';
 import { FilterDTO, UpsertDTO } from './dto';
 
@@ -16,15 +16,10 @@ export class DatabaseService {
     constructor(private readonly prisma: PrismaService) {}
 
     async create(user: User, dto: UpsertDTO) {
-        const mainImageURL = parsingMainImageURL(dto.content);
-        const connect = dto.tagId.map((value) => ({ id: value }));
         const article = await this.prisma.article.create({
             data: {
                 authorId: user.id,
-                title: dto.title,
-                tags: { connect },
-                categoryId: dto.categoryId,
-                mainImageURL: mainImageURL,
+                ...this.dtoToData(dto),
             },
             include: this.includeOption(),
         });
@@ -79,19 +74,11 @@ export class DatabaseService {
     }
 
     async update(user: User, dto: UpsertDTO, id: number) {
-        const mainImageURL = parsingMainImageURL(dto.content);
         await this.validateDbArticle(id, user.id);
 
         const article = await this.prisma.article.update({
             where: { id },
-            data: {
-                title: dto.title,
-                categoryId: dto.categoryId,
-                tags: {
-                    connect: dto.tagId.map((value) => ({ id: value })),
-                },
-                mainImageURL: mainImageURL,
-            },
+            data: this.dtoToData(dto),
             include: this.includeOption(),
         });
 
@@ -115,6 +102,16 @@ export class DatabaseService {
             author: true,
             tags: true,
             category: true,
+        };
+    }
+
+    private dtoToData(dto: UpsertDTO) {
+        const connectTag = dto.tagId.map((value) => ({ id: value }));
+        return {
+            title: dto.title,
+            categoryId: dto.categoryId,
+            tags: { connect: connectTag },
+            mainImageURL: parseMainImageURL(dto.content),
         };
     }
 

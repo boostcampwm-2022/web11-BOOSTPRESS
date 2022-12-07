@@ -10,6 +10,9 @@ export class BlogService {
     private getBasicInfo(id: number) {
         return this.prisma.user.findUnique({
             where: { id },
+            include: {
+                snsLink: true,
+            },
         });
     }
 
@@ -48,15 +51,28 @@ export class BlogService {
 
     async patch(user: User, dto: PatchDTO) {
         const { id } = user;
-        const {
-            nickname,
-            bio,
-            blogName,
-            imageURL,
-            twitterLink,
-            facebookLink,
-            linkedinLink,
-        } = dto;
+        const { nickname, bio, blogName, imageURL, snsLink } = dto;
+
+        console.log(snsLink);
+
+        // TODO: 트랜잭션?
+        await Promise.all(
+            snsLink.map(
+                async (item) =>
+                    await this.prisma.userSNS.upsert({
+                        where: {
+                            userId_name: { userId: id, name: item.snsName },
+                        },
+                        create: {
+                            user: { connect: { id } },
+                            name: item.snsName,
+                            link: item.link,
+                        },
+                        update: { link: item.link },
+                    }),
+            ),
+        );
+
         return this.prisma.user.update({
             where: { id },
             data: {
@@ -64,10 +80,8 @@ export class BlogService {
                 bio,
                 blogName,
                 imageURL,
-                twitterLink,
-                facebookLink,
-                linkedinLink,
             },
+            include: { snsLink: true },
         });
     }
 }

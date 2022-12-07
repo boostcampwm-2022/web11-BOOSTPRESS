@@ -23,15 +23,21 @@ model User {
     bio      String
     imageURL String
 
-    // SNS 관련
-    twitterLink  String?
-    facebookLink String?
-    linkedinLink String?
-
     // join 관련
     session    Session?
     categories Category[]
     articles   Article[]
+    snsLink    UserSNS[]
+}
+
+model UserSNS {
+    id     Int    @id @default(autoincrement())
+    userId Int
+    user   User   @relation(fields: [userId], references: [id])
+    name   String
+    link   String
+
+    @@unique([userId, name])
 }
 
 model Session {

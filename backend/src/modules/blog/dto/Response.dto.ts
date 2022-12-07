@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { User, UserSNS } from '@prisma/client';
+import { SNSDTO } from './SNS.dto';
 
 class TagInfoDTO {
     @ApiProperty({ description: '태그의 ID' })
@@ -10,6 +11,10 @@ class TagInfoDTO {
 
     @ApiProperty({ description: '해당 태그를 가진 게시글의 개수' })
     articleCount: number;
+}
+
+export class JoinDTO {
+    snsLink: UserSNS[];
 }
 
 export class BlogBriefResponseDTO {
@@ -25,33 +30,18 @@ export class BlogBriefResponseDTO {
     @ApiProperty({ description: '사용자의 프로필 사진 URL' })
     imageURL: string;
 
-    @ApiProperty({ description: '사용자의 트위터 페이지 URL' })
-    twitterLink: string;
+    @ApiProperty({ description: '사용자의 SNS 페이지 URL' })
+    snsLink: SNSDTO[];
 
-    @ApiProperty({ description: '사용자의 페이스북 페이지 URLL' })
-    facebookLink: string;
+    static toBrief(user: User & JoinDTO) {
+        const { nickname, bio, blogName, imageURL, snsLink } = user;
 
-    @ApiProperty({ description: '사용자의 링크드인 사진 URL' })
-    linkedinLink: string;
-
-    static toBrief(user: User) {
-        const {
-            nickname,
-            bio,
-            blogName,
-            imageURL,
-            twitterLink,
-            facebookLink,
-            linkedinLink,
-        } = user;
         return {
             nickname,
             bio,
             blogName,
             imageURL,
-            twitterLink,
-            facebookLink,
-            linkedinLink,
+            snsLink: snsLink.map(SNSDTO.toExport),
         };
     }
 }

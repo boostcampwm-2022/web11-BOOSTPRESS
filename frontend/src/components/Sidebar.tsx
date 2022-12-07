@@ -18,15 +18,15 @@ const SidebarComponent = ({ blogSideBarInfo }: SidebarComponentProps) => {
     const categories = [
         {
             id: 1,
+            parentId: 0,
             name: '확장가능',
-            depth: 1,
-            child: [{ id: 1, name: '하위1', depth: 2, child: [] }],
+            children: [{ id: 1, parentId: 0, name: '하위1', children: [] }],
         },
         {
             id: 1,
+            parentId: 0,
             name: '확장불가',
-            depth: 1,
-            child: [],
+            children: [],
         },
     ];
     const tags = [
@@ -64,7 +64,7 @@ const SidebarComponent = ({ blogSideBarInfo }: SidebarComponentProps) => {
                 <SideBarPlainButton>전체 글 보기</SideBarPlainButton>
                 <Collapsible title="카테고리">
                     {categories.map((category) => (
-                        <CategoryButton categoryObj={category} />
+                        <CategoryButton categoryObj={category} depth={1} />
                     ))}
                 </Collapsible>
                 <Collapsible title="태그">

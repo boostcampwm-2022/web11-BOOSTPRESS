@@ -1,7 +1,6 @@
 import {
     Controller,
     Post,
-    Res,
     UploadedFile,
     UseGuards,
     UseInterceptors,
@@ -9,9 +8,15 @@ import {
 import { ImageService } from './image.service';
 import { JwtGuard } from '../../guard/jwt.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+    ApiConsumes,
+    ApiOperation,
+    ApiResponse,
+    ApiTags,
+} from '@nestjs/swagger';
 import { UploadImage } from './swagger';
 
+@ApiTags('image')
 @Controller('image')
 export class ImageController {
     constructor(private readonly imageService: ImageService) {}
@@ -22,8 +27,8 @@ export class ImageController {
     @UseGuards(JwtGuard)
     @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
-    async uploadImage(@UploadedFile() file, @Res() res) {
+    async uploadImage(@UploadedFile() file) {
         const imageURL = await this.imageService.create(file);
-        return res.send({ imageURL });
+        return { imageURL };
     }
 }

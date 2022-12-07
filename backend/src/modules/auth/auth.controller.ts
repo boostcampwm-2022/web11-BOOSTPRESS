@@ -1,6 +1,6 @@
 import { Controller, Delete, Get, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { Response } from 'express';
 import { CurrentUser } from 'src/decorator';
@@ -11,6 +11,7 @@ import { UserDTO } from './dto';
 import { Login, Logout, Me } from './swagger';
 import { TokenService } from './token.service';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
     private readonly REDIRECT_URL: string;

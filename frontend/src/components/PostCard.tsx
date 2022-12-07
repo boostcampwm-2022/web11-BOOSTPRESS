@@ -5,10 +5,10 @@ import React from 'react';
 import colors from 'styles/color';
 import { dateToStr } from 'utils/utils';
 import { Link } from 'react-router-dom';
-import { postCardInfoType } from 'api/apiTypes';
+import { postType } from 'api/apiTypes';
 
 interface postCardType {
-    postInfo: postCardInfoType;
+    postInfo: postType;
     width: string;
     height: string;
 }
@@ -16,18 +16,18 @@ interface postCardType {
 const PostCard = ({ postInfo, width, height }: postCardType) => {
     return (
         <PostCardWrapper width={width} height={height}>
-            <Link to={postInfo.postURL}>
+            <Link to={`/post/${String(postInfo.id)}`}>
                 {/* 추후에 이미지로 변경 */}
-                <img src={postInfo.imgURL} alt="게시글이미지" />
+                <img src={'https://picsum.photos/230/144'} alt="게시글이미지" />
                 <DescriptionArea>
-                    <p>{`[ ${postInfo.category} ]`}</p>
+                    <p>{postInfo.category ? `[ ${postInfo.category} ]` : ''}</p>
                     <Title>{postInfo.title}</Title>
                     <BottomInfo
-                        date={new Date(postInfo.date)}
-                        writer={postInfo.authorId}
+                        date={new Date(postInfo.updatedAt)}
+                        writer={postInfo.author.nickname}
                     >
-                        {dateToStr(new Date(postInfo.date), 'MMDD')} ·{' '}
-                        {postInfo.authorId}
+                        {dateToStr(new Date(postInfo.updatedAt), 'MMDD')} ·{' '}
+                        {postInfo.author.nickname}
                     </BottomInfo>
                 </DescriptionArea>
             </Link>

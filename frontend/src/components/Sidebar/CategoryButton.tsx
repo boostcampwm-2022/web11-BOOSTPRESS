@@ -7,6 +7,7 @@ import { categoryType } from 'api/apiTypes';
 
 interface CategoryButtonProps {
     categoryObj: categoryType;
+    depth: number;
 }
 interface collapseButtonProps {
     isExpandable: boolean;
@@ -15,12 +16,12 @@ interface ButtonProps {
     depth: number;
 }
 
-const CategoryButton = ({ categoryObj }: CategoryButtonProps) => {
+const CategoryButton = ({ categoryObj, depth }: CategoryButtonProps) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const toggleExpanded = () => {
         setIsExpanded((prev) => !prev);
     };
-    const { name: categoryName, child, depth } = categoryObj;
+    const { name: categoryName, children: child } = categoryObj;
     return (
         <Button depth={depth}>
             <Wrapper>
@@ -29,7 +30,7 @@ const CategoryButton = ({ categoryObj }: CategoryButtonProps) => {
                     <CategoryName>{categoryName}</CategoryName>
                 </TitleArea>
                 <CollapseButtonArea
-                    isExpandable={categoryObj.child.length !== 0}
+                    isExpandable={categoryObj.children.length !== 0}
                 >
                     <CollapseButton onClick={toggleExpanded}>
                         {isExpanded ? <MinusIconSVG /> : <PlusIconSVG />}
@@ -38,7 +39,7 @@ const CategoryButton = ({ categoryObj }: CategoryButtonProps) => {
             </Wrapper>
             {isExpanded &&
                 child.map((category) => (
-                    <CategoryButton categoryObj={category} />
+                    <CategoryButton categoryObj={category} depth={depth + 1} />
                 ))}
         </Button>
     );

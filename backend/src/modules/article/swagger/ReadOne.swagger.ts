@@ -1,5 +1,5 @@
 import { ApiOperationOptions, ApiResponseOptions } from '@nestjs/swagger';
-import { DetailedResponseDTO } from '../dto';
+import { ArticleDetailedResponseDTO } from '../dto';
 
 export const Operation: ApiOperationOptions = {
     summary: '단일 게시글 조회 API',
@@ -9,5 +9,5 @@ export const Operation: ApiOperationOptions = {
 export const _200: ApiResponseOptions = {
     status: 200,
     description: '게시글 정보',
-    type: DetailedResponseDTO,
+    type: ArticleDetailedResponseDTO,
 };

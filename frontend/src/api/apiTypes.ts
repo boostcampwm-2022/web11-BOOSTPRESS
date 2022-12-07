@@ -7,10 +7,10 @@ export interface blogSideBarInfoType {
 }
 
 export interface categoryType {
-    id: number;
     name: string;
-    depth: number;
-    child: categoryType[];
+    id: number;
+    parentId: number;
+    children: categoryType[];
 }
 
 export interface postType {
@@ -44,7 +44,12 @@ export interface noneType {
 }
 
 export interface MultipleArticleAPIType {
-    articles: postCardInfoType[];
+    articles: postType[];
+}
+
+export interface MultipleArticleUserType {
+    articles: postType[];
+    totalPages: number;
 }
 
 export interface createArticleType {

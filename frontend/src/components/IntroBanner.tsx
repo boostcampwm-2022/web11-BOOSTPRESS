@@ -23,7 +23,7 @@ const IntroBanner = ({ isLogin }: IntroBannerType) => {
                     <span>The Ultimate</span> Platform <span>For Dev</span>
                 </Title>
                 <Description>
-                    블라블라 어쩌구저쩌구 설명블라블라 어쩌구저쩌구
+                    기록을 좋아하는 개발자들을 위한 블로그 플랫폼 BOOSTPRESS
                 </Description>
             </BannerTextArea>
             <LoadingSVG />

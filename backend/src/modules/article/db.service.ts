@@ -61,6 +61,9 @@ export class DatabaseService {
                 where,
                 include: this.includeOption(),
                 skip: (page - 1) * this.take,
+                orderBy: {
+                    id: 'desc',
+                },
                 take: this.take,
             }),
             this.prisma.article.count({ where }),

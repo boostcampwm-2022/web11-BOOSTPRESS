@@ -9,13 +9,15 @@ import {
     Post,
     UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { User } from '@prisma/client';
 import { CurrentUser } from 'src/decorator';
 import { JwtGuard } from 'src/guard';
 import { CategoryService } from './category.service';
 import { CategoryDTO } from './dto';
 import { Create, ReadAll, Remove, Update } from './swagger';
 
+@ApiTags('category')
 @Controller('category')
 export class CategoryController {
     constructor(private readonly categoryService: CategoryService) {}
@@ -28,10 +30,10 @@ export class CategoryController {
     }
 
     @ApiOperation(Create.Operation)
-    @ApiResponse(Create._200)
+    @ApiResponse(Create._201)
     @UseGuards(JwtGuard)
     @Post()
-    async create(@CurrentUser() user, @Body() dto: CategoryDTO) {
+    async create(@CurrentUser() user: User, @Body() dto: CategoryDTO) {
         return await this.categoryService.create(user, dto);
     }
 
@@ -40,7 +42,7 @@ export class CategoryController {
     @UseGuards(JwtGuard)
     @Patch(':id')
     async update(
-        @CurrentUser() user,
+        @CurrentUser() user: User,
         @Param('id', ParseIntPipe) id: number,
         @Body() dto: CategoryDTO,
     ) {

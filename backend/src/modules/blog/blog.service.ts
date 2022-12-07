@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { PatchDTO } from './dto';
+import { BlogDetailedResponseDTO, PatchDTO } from './dto';
 
 @Injectable()
 export class BlogService {
@@ -11,6 +11,7 @@ export class BlogService {
         return this.prisma.user.findUnique({
             where: { id },
             select: {
+                nickname: true,
                 bio: true,
                 imageURL: true,
                 blogName: true,
@@ -35,7 +36,7 @@ export class BlogService {
         });
     }
 
-    async read(id: number) {
+    async read(id: number): Promise<BlogDetailedResponseDTO> {
         const [basicInfo, articles] = await Promise.all([
             this.getBasicInfo(id),
             this.articlePerTag(id),
@@ -44,6 +45,7 @@ export class BlogService {
         return {
             ...basicInfo,
             tag: articles.map((item) => ({
+                id: item.id,
                 name: item.name,
                 articleCount: item.articles.length,
             })),
@@ -53,6 +55,7 @@ export class BlogService {
     async patch(user: User, dto: PatchDTO) {
         const { id } = user;
         const {
+            nickname,
             bio,
             blogName,
             imageURL,
@@ -63,6 +66,7 @@ export class BlogService {
         return this.prisma.user.update({
             where: { id },
             data: {
+                nickname,
                 bio,
                 blogName,
                 imageURL,

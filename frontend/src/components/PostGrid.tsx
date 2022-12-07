@@ -1,11 +1,11 @@
 /* 추천(인기순,조회순 등)에 따른 게시글 출력 */
 import styled from '@emotion/styled';
-import { postCardInfoType } from 'api/apiTypes';
+import { postType } from 'api/apiTypes';
 import React from 'react';
 import PostCard from './PostCard';
 
 interface PostGridType {
-    postInfo: postCardInfoType[];
+    postInfo: postType[];
     title?: string;
 }
 

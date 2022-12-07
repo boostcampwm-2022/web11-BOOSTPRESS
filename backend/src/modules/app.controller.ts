@@ -1,6 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 
+@ApiTags('main')
 @Controller()
 export class AppController {
     constructor(private readonly appService: AppService) {}
@@ -8,10 +10,5 @@ export class AppController {
     @Get()
     getHello(): string {
         return this.appService.getHello();
-    }
-
-    @Get('/healthCheck')
-    healthCheck(): string {
-        return 'Server is now available.';
     }
 }

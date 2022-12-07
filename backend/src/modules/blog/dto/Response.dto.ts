@@ -13,6 +13,9 @@ class TagInfoDTO {
 }
 
 export class BlogBriefResponseDTO {
+    @ApiProperty({ description: '사용자의 닉네임' })
+    nickname: string;
+
     @ApiProperty({ description: '사용자의 bio' })
     bio: string;
 
@@ -23,8 +26,8 @@ export class BlogBriefResponseDTO {
     imageURL: string;
 
     static toBrief(user: User) {
-        const { bio, blogName, imageURL } = user;
-        return { bio, blogName, imageURL };
+        const { nickname, bio, blogName, imageURL } = user;
+        return { nickname, bio, blogName, imageURL };
     }
 }
 

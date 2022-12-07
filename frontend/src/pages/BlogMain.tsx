@@ -38,14 +38,14 @@ const BlogMain = () => {
                 ) : articlesQuery.isError ? (
                     <span>Error</span>
                 ) : (
-                    <>
+                    <BlogMainBody>
                         <PostGrid postInfo={articlesQuery.data.articles} />
                         <Pagination
                             curPage={pageIdx}
                             maxPage={articlesQuery.data.totalPages}
                             setCurPage={setPageIdx}
                         />
-                    </>
+                    </BlogMainBody>
                 )}
             </Main>
         </Wrapper>
@@ -71,6 +71,13 @@ const Main = styled.main`
         align-self: center;
         bottom: 80px;
     }
+`;
+
+const BlogMainBody = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 5rem;
+    width: 80vw;
 `;
 
 export default BlogMain;

@@ -21,4 +21,16 @@ export class PatchDTO {
     @IsOptional()
     @ApiProperty({ description: '사용자의 프로필 사진 URL' })
     imageURL: string;
+
+    @IsString()
+    @IsOptional()
+    twitterLink: string;
+
+    @IsString()
+    @IsOptional()
+    facebookLink: string;
+
+    @IsString()
+    @IsOptional()
+    linkedinLink: string;
 }

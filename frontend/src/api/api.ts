@@ -9,6 +9,7 @@ import {
     noneType,
     updateArticleResType,
     MultipleArticleUserType,
+    blogType,
 } from './apiTypes';
 
 const url = process.env.REACT_APP_API_URL;
@@ -93,4 +94,20 @@ export async function getArticleInfo(postId: string) {
         credentials: 'include',
     });
     return (await res.json()) as postType & noneType;
+}
+
+export async function getBlogInfo(id: number) {
+    const res = await fetch(url + `/blog/${id}`, {
+        method: 'GET',
+        credentials: 'include',
+    });
+    return (await res.json()) as blogType;
+}
+
+export async function updateBlogInfo(dto: blogType) {
+    const res = await fetch(url + `/blog`, {
+        method: 'PATCH',
+        credentials: 'include',
+    });
+    return (await res.json()) as blogType;
 }

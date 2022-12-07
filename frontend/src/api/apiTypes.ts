@@ -94,3 +94,16 @@ export interface tagType {
     name: string;
     id: number;
 }
+
+export interface snsType {
+    snsName: string;
+    link: string;
+}
+
+export interface blogType {
+    blogName: string;
+    nickname: string;
+    imageURL: string;
+    bio: string;
+    snsLink: snsType[];
+}

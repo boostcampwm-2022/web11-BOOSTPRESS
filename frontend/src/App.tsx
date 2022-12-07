@@ -4,6 +4,9 @@ import BlogMain from 'pages/BlogMain';
 import NewPost from 'pages/NewPost';
 import Post from 'pages/Post';
 import UpdatePost from 'pages/UpdatePost';
+import Admin from 'pages/Admin';
+import PersonalInfoManage from 'pages/Admin/PersonalInfoManage';
+import ContentsManage from 'pages/Admin/Contents';
 
 const App = () => {
     return (
@@ -14,6 +17,10 @@ const App = () => {
             <Route path="/blog/:userId" element={<BlogMain />} />
             <Route path="/post/:postId" element={<Post />} />
             <Route path="/newpost/:postId" element={<UpdatePost />} />
+            <Route path="/admin" element={<Admin />}>
+                <Route path="personalInfo" element={<PersonalInfoManage />} />
+                <Route path="contents" element={<ContentsManage />} />
+            </Route>
         </Routes>
     );
 };

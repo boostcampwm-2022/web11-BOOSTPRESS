@@ -21,8 +21,6 @@ interface PostContentPropsType {
 }
 
 const PostContent = ({ content }: PostContentPropsType) => {
-    const [render, setRender] = useState(true);
-
     return (
         <ContentArea className="markdown-body markdown-body-content">
             {generate(mdxComponents + content)}

@@ -43,6 +43,22 @@ export async function getArticlesWithUserId(
     return (await res.json()) as MultipleArticleUserType;
 }
 
+export async function getArticlesWithSearchWord(
+    searchWord: string,
+    page: number = 1,
+) {
+    const res = await fetch(
+        url +
+            '/article?' +
+            new URLSearchParams({
+                searchWord,
+                page: page.toString(),
+            }),
+    );
+
+    return (await res.json()) as MultipleArticleUserType;
+}
+
 export async function getAllTags() {
     const res = await fetch(url + '/tag', {
         method: 'GET',

@@ -16,10 +16,11 @@ import { getUserInfo } from 'api/api';
 
 interface headerType {
     isLogoActive: boolean;
+    isSearchActive?: boolean;
 }
 
 // 로고는 안보일때도 있을 수 있음
-const Header = ({ isLogoActive }: headerType) => {
+const Header = ({ isLogoActive, isSearchActive = true }: headerType) => {
     const navigate = useNavigate();
 
     const [gitHubLoginModalActive, setGitHubLoginModalActive] = useState(false);
@@ -67,8 +68,13 @@ const Header = ({ isLogoActive }: headerType) => {
             )}
 
             <HeaderRightArea>
-                <SearchArea placeholder="검색어 입력 " />
-                <SearchIconSVG css={SearchIcon} />
+                {isSearchActive ? (
+                    <>
+                        <SearchArea placeholder="검색어 입력 " />
+                        <SearchIconSVG css={SearchIcon} />
+                    </>
+                ) : null}
+
                 {isLogin ? (
                     // 유저이미지 부분으로 교체해야함 (현재 임시)
                     <UserImg

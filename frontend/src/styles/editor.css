@@ -689,6 +689,10 @@
     background-color: #1d1e22;
 }
 
+.markdown-body .editor-preview-side .accordion-btn {
+    top: 0 !important;
+}
+
 .markdown-body-content pre {
     background-color: #1d1e22 !important;
 }
@@ -697,8 +701,8 @@
     margin: 0;
 }
 
-.markdown-body .code-accordion p {
-    margin: 0;
+.markdown-body .editor-preview-side .code-accordion .accordion_btn {
+    top: -3.7rem !important;
 }
 
 /* 커스텀 끝*/

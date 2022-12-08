@@ -10,13 +10,14 @@ import {
     updateArticleResType,
     MultipleArticleUserType,
     blogType,
+    categoryType,
 } from './apiTypes';
 
 const url = process.env.REACT_APP_API_URL;
 const mockURL = 'http://localhost:3000';
 
 export async function getBlogSideBarInfo(userId: string) {
-    const res = await fetch(mockURL + `/blog/${userId}`);
+    const res = await fetch(url + `/blog/${userId}`);
     return (await res.json()) as blogSideBarInfoType;
 }
 

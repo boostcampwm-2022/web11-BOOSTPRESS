@@ -108,7 +108,11 @@ export async function getBlogInfo(id: number) {
 export async function updateBlogInfo(dto: blogType) {
     const res = await fetch(url + `/blog`, {
         method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         credentials: 'include',
+        body: JSON.stringify(dto),
     });
     return (await res.json()) as blogType;
 }
@@ -119,4 +123,15 @@ export async function getCategoryByUserId(userId: string) {
         credentials: 'include',
     });
     return (await res.json()) as categoryType[];
+}
+
+export async function uploadImage(image: File) {
+    const formData = new FormData();
+    formData.append('file', image);
+    const res = await fetch(url + '/image/upload', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+    });
+    return (await res.json()) as { imageURL: string };
 }

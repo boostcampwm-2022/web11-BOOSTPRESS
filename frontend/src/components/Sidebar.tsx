@@ -4,47 +4,48 @@ import { ReactComponent as SettingIconSVG } from 'assets/svg/setting.svg';
 import { ReactComponent as GithubIconSVG } from 'assets/svg/github.svg';
 import { ReactComponent as MailIconSVG } from 'assets/svg/mail.svg';
 import { ReactComponent as TwitterIconSVG } from 'assets/svg/twitter.svg';
+import { ReactComponent as FacebookIconSVG } from 'assets/svg/facebook.svg';
 import { ReactComponent as LinkedinIconSVG } from 'assets/svg/linkedin.svg';
 import Collapsible from './Sidebar/Collapsible';
 import CategoryButton from './Sidebar/CategoryButton';
 import { PlainBtn } from 'styles/common';
 import { blogSideBarInfoType } from 'api/apiTypes';
+import { useQuery } from '@tanstack/react-query';
+import { getCategoryByUserId } from 'api/api';
 
 interface SidebarComponentProps {
+    userId: string;
     blogSideBarInfo: blogSideBarInfoType;
 }
 
-const SidebarComponent = ({ blogSideBarInfo }: SidebarComponentProps) => {
-    const categories = [
-        {
-            id: 1,
-            parentId: 0,
-            name: '확장가능',
-            children: [{ id: 1, parentId: 0, name: '하위1', children: [] }],
-        },
-        {
-            id: 1,
-            parentId: 0,
-            name: '확장불가',
-            children: [],
-        },
-    ];
-    const tags = [
-        { name: '태그1호', article_count: 1 },
-        { name: '태그2호', article_count: 2 },
-    ];
+const SidebarComponent = ({
+    userId,
+    blogSideBarInfo,
+}: SidebarComponentProps) => {
+    const { bio, blogName, nickname, tag, imageURL, snsLink } = blogSideBarInfo;
+
+    const mappedSNSLink = snsLink.reduce(
+        (acc, { snsName, link }) => ({ ...acc, [snsName]: link }),
+        {} as { [name: string]: string },
+    );
+
+    const categoryQuery = useQuery({
+        queryKey: ['category', userId],
+        queryFn: () => getCategoryByUserId(userId),
+    });
+
     return (
         <Sidebar>
             <TitleArea>
-                <BlogName>홍길동의 블로그</BlogName>
+                <BlogName>{blogName}</BlogName>
                 <CreditSection>with boostpress</CreditSection>
             </TitleArea>
             <NameCard>
-                <Name>John doe</Name>
+                <Name>{nickname}</Name>
                 <Bio>
-                    <p>{blogSideBarInfo.bio}</p>
+                    <p>{bio}</p>
                 </Bio>
-                <ProfileImage src="https://picsum.photos/75" />
+                <ProfileImage src={imageURL} />
                 <SocialInfos>
                     <Link to="#">
                         <GithubIconSVG />
@@ -52,25 +53,38 @@ const SidebarComponent = ({ blogSideBarInfo }: SidebarComponentProps) => {
                     <Link to="#">
                         <MailIconSVG />
                     </Link>
-                    <Link to="#">
-                        <TwitterIconSVG />
-                    </Link>
-                    <Link to="#">
-                        <LinkedinIconSVG />
-                    </Link>
+                    {mappedSNSLink['twitter'] && (
+                        <Link to={mappedSNSLink['twitter']}>
+                            <TwitterIconSVG />
+                        </Link>
+                    )}
+                    {mappedSNSLink['facebook'] && (
+                        <Link to={mappedSNSLink['facebook']}>
+                            <TwitterIconSVG />
+                        </Link>
+                    )}
+                    {mappedSNSLink['linkedin'] && (
+                        <Link to={mappedSNSLink['linkedin']}>
+                            <LinkedinIconSVG />
+                        </Link>
+                    )}
                 </SocialInfos>
             </NameCard>
             <Menu>
                 <SideBarPlainButton>전체 글 보기</SideBarPlainButton>
-                <Collapsible title="카테고리">
-                    {categories.map((category) => (
-                        <CategoryButton categoryObj={category} depth={1} />
-                    ))}
-                </Collapsible>
+                {categoryQuery.isLoading ? (
+                    <span>Loading...</span>
+                ) : (
+                    <Collapsible title="카테고리">
+                        {categoryQuery.data?.map((category) => (
+                            <CategoryButton categoryObj={category} depth={1} />
+                        ))}
+                    </Collapsible>
+                )}
                 <Collapsible title="태그">
                     <Tags>
-                        {tags.map((tag) => (
-                            <Tag>{`${tag.name}(${tag.article_count})`}</Tag>
+                        {tag.map((tagInfo) => (
+                            <Tag>{`${tagInfo.name}(${tagInfo.articleCount})`}</Tag>
                         ))}
                     </Tags>
                 </Collapsible>

@@ -16,7 +16,11 @@ const Post = () => {
 
     const postQuery = useQuery({
         queryKey: ['postInfo', postId],
-        queryFn: () => getArticleInfo(postId),
+        queryFn: async () => {
+            const data = await getArticleInfo(postId);
+            if (data !== null) setUserId(`${data.author.id}`);
+            return data;
+        },
     });
 
     const sideBarQuery = useQuery({
@@ -35,13 +39,16 @@ const Post = () => {
     return (
         <Wrapper>
             <Header isLogoActive={false} />
-            {sideBarQuery.isLoading ? (
+            {sideBarQuery.isLoading || userId === '' ? (
                 <span>Loading</span>
             ) : sideBarQuery.isError ? (
                 <span>Error</span>
             ) : (
                 <SideBarWrapper>
-                    <SidebarComponent blogSideBarInfo={sideBarQuery.data} />
+                    <SidebarComponent
+                        userId={userId}
+                        blogSideBarInfo={sideBarQuery.data}
+                    />
                 </SideBarWrapper>
             )}
             <PostBody>

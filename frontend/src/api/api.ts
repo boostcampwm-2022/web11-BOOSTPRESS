@@ -107,7 +107,11 @@ export async function getBlogInfo(id: number) {
 export async function updateBlogInfo(dto: blogType) {
     const res = await fetch(url + `/blog`, {
         method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         credentials: 'include',
+        body: JSON.stringify(dto),
     });
     return (await res.json()) as blogType;
 }

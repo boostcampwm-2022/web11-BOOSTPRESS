@@ -6,11 +6,18 @@ import { ReactComponent as TwitterIcon } from 'assets/svg/twitter.svg';
 import { ReactComponent as FacebookIcon } from 'assets/svg/facebook.svg';
 import { ReactComponent as LinkedInIcon } from 'assets/svg/linkedin.svg';
 
-import { FormEventHandler, PropsWithChildren, useState } from 'react';
+import {
+    FormEventHandler,
+    PropsWithChildren,
+    useCallback,
+    useEffect,
+    useState,
+} from 'react';
 import { blogType, snsType } from 'api/apiTypes';
-import { updateBlogInfo } from 'api/api';
+import { getBlogInfo, getUserInfo, updateBlogInfo } from 'api/api';
 
 const PersonalInfoManage = () => {
+    const [userId, setUserId] = useState<number | undefined>(undefined);
     const [blogName, setBlogName] = useState('');
     const [nickname, setNickname] = useState('');
     const [profileFile, setProfileFile] = useState<string>('');
@@ -19,6 +26,34 @@ const PersonalInfoManage = () => {
     const [twitterLink, setTwitterLink] = useState('');
     const [facebookLink, setFacebookLink] = useState('');
     const [linkedinLink, setLinkedinLink] = useState('');
+
+    const setInitData = useCallback(async () => {
+        if (userId === undefined) return;
+        const blogInfo = await getBlogInfo(userId);
+
+        const snsLink =
+            blogInfo.snsLink?.reduce(
+                (acc, curr) => ({ ...acc, [curr.snsName]: curr.link }),
+                {} as { [name: string]: string },
+            ) ?? {};
+
+        setNickname(blogInfo.nickname);
+        setBlogName(blogInfo.blogName);
+        setBio(blogInfo.bio);
+        setProfileFile(blogInfo.imageURL);
+
+        setTwitterLink(snsLink.twitter ?? '');
+        setFacebookLink(snsLink.facebook ?? '');
+        setLinkedinLink(snsLink.linkedin ?? '');
+    }, [userId]);
+
+    useEffect(() => {
+        getUserInfo().then((data) => setUserId(data.id));
+    }, []);
+
+    useEffect(() => {
+        setInitData();
+    }, [userId]);
 
     const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
@@ -40,6 +75,9 @@ const PersonalInfoManage = () => {
         };
 
         const res = await updateBlogInfo(dto);
+        alert('성공적으로 데이터를 전송하였습니다!');
+
+        // TODO: 여기서 새로고침을 고려해 볼 수 있을 듯
     };
 
     return (
@@ -143,6 +181,8 @@ const PersonalInfoManage = () => {
                     />
                 </SocialInfoRow>
             </InputSection>
+
+            <SubmitButton type="submit">제출</SubmitButton>
         </Form>
     );
 };
@@ -196,6 +236,10 @@ const Button = styled.button`
     span {
         width: max-content;
     }
+`;
+
+const SubmitButton = styled(Button)`
+    background-color: #4945ff;
 `;
 
 const ImageUploadButton = styled(Button)`

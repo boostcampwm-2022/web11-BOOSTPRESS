@@ -16,14 +16,16 @@ import { getUserInfo } from 'api/api';
 
 interface headerType {
     isLogoActive: boolean;
+    isSearchActive?: boolean;
 }
 
 // 로고는 안보일때도 있을 수 있음
-const Header = ({ isLogoActive }: headerType) => {
+const Header = ({ isLogoActive, isSearchActive = true }: headerType) => {
     const navigate = useNavigate();
 
     const [gitHubLoginModalActive, setGitHubLoginModalActive] = useState(false);
     const [userSettingModalActive, setuserSettingModalActive] = useState(false);
+    const [searchWord, setSearchWord] = useState('');
     const [isLogin, setIsLogin] = useState(false);
     const [userId, setUserId] = useState<number>(0);
 
@@ -47,9 +49,17 @@ const Header = ({ isLogoActive }: headerType) => {
         setuserSettingModalActive(!userSettingModalActive);
     };
 
+    const handleSearchWord = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchWord(e.target.value);
+    };
+
     const moveGitHubAuth = () => {
         const url = process.env.REACT_APP_API_URL;
         window.location.href = `${url}/auth/github`;
+    };
+
+    const moveSearch = () => {
+        navigate(`/search/${searchWord}`);
     };
 
     return (
@@ -67,8 +77,17 @@ const Header = ({ isLogoActive }: headerType) => {
             )}
 
             <HeaderRightArea>
-                <SearchArea placeholder="검색어 입력 " />
-                <SearchIconSVG css={SearchIcon} />
+                {isSearchActive ? (
+                    <>
+                        <SearchArea
+                            placeholder="검색어 입력 "
+                            value={searchWord}
+                            onChange={handleSearchWord}
+                        />
+                        <SearchIconSVG css={SearchIcon} onClick={moveSearch} />
+                    </>
+                ) : null}
+
                 {isLogin ? (
                     // 유저이미지 부분으로 교체해야함 (현재 임시)
                     <UserImg
@@ -95,7 +114,7 @@ const Header = ({ isLogoActive }: headerType) => {
                     <UserSettingModalItem to={`/blog/${String(userId)}`}>
                         <HomeSVG /> <p>내 블로그 페이지</p>
                     </UserSettingModalItem>
-                    <UserSettingModalItem to="/">
+                    <UserSettingModalItem to="/admin/personalInfo">
                         <SettingSVG /> <p>내 블로그 설정</p>
                     </UserSettingModalItem>
                     <UserSettingModalItem to={`/newpost`}>

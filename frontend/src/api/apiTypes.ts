@@ -44,6 +44,7 @@ export interface postType {
         name: string;
         articles: { name: string; id: number }[];
     };
+    mainImageURL: string | null;
 }
 
 export interface noneType {

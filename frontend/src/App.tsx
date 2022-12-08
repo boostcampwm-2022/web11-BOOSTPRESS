@@ -7,6 +7,7 @@ import UpdatePost from 'pages/UpdatePost';
 import Admin from 'pages/Admin';
 import PersonalInfoManage from 'pages/Admin/PersonalInfoManage';
 import ContentsManage from 'pages/Admin/Contents';
+import Search from 'pages/Search';
 
 const App = () => {
     return (
@@ -20,6 +21,9 @@ const App = () => {
             <Route path="/admin" element={<Admin />}>
                 <Route path="personalInfo" element={<PersonalInfoManage />} />
                 <Route path="contents" element={<ContentsManage />} />
+            </Route>
+            <Route path="/search" element={<Search />}>
+                <Route path=":query" element={<Search />} />
             </Route>
         </Routes>
     );

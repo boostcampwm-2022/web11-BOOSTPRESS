@@ -6,6 +6,7 @@ import colors from 'styles/color';
 import { dateToStr } from 'utils/utils';
 import { Link } from 'react-router-dom';
 import { postType } from 'api/apiTypes';
+import boostpressLogo from 'assets/png/boostpress.png';
 
 interface postCardType {
     postInfo: postType;
@@ -18,7 +19,16 @@ const PostCard = ({ postInfo, width, height }: postCardType) => {
         <PostCardWrapper width={width} height={height}>
             <Link to={`/post/${String(postInfo.id)}`}>
                 {/* 추후에 이미지로 변경 */}
-                <img src={'https://picsum.photos/230/144'} alt="게시글이미지" />
+                <img
+                    src={
+                        postInfo.mainImageURL
+                            ? postInfo.mainImageURL
+                            : boostpressLogo
+                    }
+                    alt="게시글이미지"
+                    width={'230px'}
+                    height={'150px'}
+                />
                 <DescriptionArea>
                     <p>{postInfo.category ? `[ ${postInfo.category} ]` : ''}</p>
                     <Title>{postInfo.title}</Title>

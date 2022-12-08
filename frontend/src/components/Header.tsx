@@ -114,7 +114,7 @@ const Header = ({ isLogoActive, isSearchActive = true }: headerType) => {
                     <UserSettingModalItem to={`/blog/${String(userId)}`}>
                         <HomeSVG /> <p>내 블로그 페이지</p>
                     </UserSettingModalItem>
-                    <UserSettingModalItem to="/">
+                    <UserSettingModalItem to="/admin/personalInfo">
                         <SettingSVG /> <p>내 블로그 설정</p>
                     </UserSettingModalItem>
                     <UserSettingModalItem to={`/newpost`}>

@@ -28,20 +28,11 @@ const SidebarComponent = ({
         (acc, { snsName, link }) => ({ ...acc, [snsName]: link }),
         {} as { [name: string]: string },
     );
-    const categories = [
-        {
-            id: 1,
-            parentId: 0,
-            name: '확장가능',
-            children: [{ id: 1, parentId: 0, name: '하위1', children: [] }],
-        },
-        {
-            id: 1,
-            parentId: 0,
-            name: '확장불가',
-            children: [],
-        },
-    ];
+
+    const categoryQuery = useQuery({
+        queryKey: ['category', userId],
+        queryFn: () => getCategoryByUserId(userId),
+    });
 
     return (
         <Sidebar>
@@ -81,11 +72,15 @@ const SidebarComponent = ({
             </NameCard>
             <Menu>
                 <SideBarPlainButton>전체 글 보기</SideBarPlainButton>
-                <Collapsible title="카테고리">
-                    {categories.map((category) => (
-                        <CategoryButton categoryObj={category} depth={1} />
-                    ))}
-                </Collapsible>
+                {categoryQuery.isLoading ? (
+                    <span>Loading...</span>
+                ) : (
+                    <Collapsible title="카테고리">
+                        {categoryQuery.data?.map((category) => (
+                            <CategoryButton categoryObj={category} depth={1} />
+                        ))}
+                    </Collapsible>
+                )}
                 <Collapsible title="태그">
                     <Tags>
                         {tag.map((tagInfo) => (

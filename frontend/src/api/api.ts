@@ -112,3 +112,11 @@ export async function updateBlogInfo(dto: blogType) {
     });
     return (await res.json()) as blogType;
 }
+
+export async function getCategoryByUserId(userId: string) {
+    const res = await fetch(url + `/category/${userId}`, {
+        method: 'GET',
+        credentials: 'include',
+    });
+    return (await res.json()) as categoryType[];
+}

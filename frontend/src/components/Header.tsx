@@ -25,6 +25,7 @@ const Header = ({ isLogoActive, isSearchActive = true }: headerType) => {
 
     const [gitHubLoginModalActive, setGitHubLoginModalActive] = useState(false);
     const [userSettingModalActive, setuserSettingModalActive] = useState(false);
+    const [searchWord, setSearchWord] = useState('');
     const [isLogin, setIsLogin] = useState(false);
     const [userId, setUserId] = useState<number>(0);
 
@@ -48,9 +49,17 @@ const Header = ({ isLogoActive, isSearchActive = true }: headerType) => {
         setuserSettingModalActive(!userSettingModalActive);
     };
 
+    const handleSearchWord = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchWord(e.target.value);
+    };
+
     const moveGitHubAuth = () => {
         const url = process.env.REACT_APP_API_URL;
         window.location.href = `${url}/auth/github`;
+    };
+
+    const moveSearch = () => {
+        navigate(`/search/${searchWord}`);
     };
 
     return (
@@ -70,8 +79,12 @@ const Header = ({ isLogoActive, isSearchActive = true }: headerType) => {
             <HeaderRightArea>
                 {isSearchActive ? (
                     <>
-                        <SearchArea placeholder="검색어 입력 " />
-                        <SearchIconSVG css={SearchIcon} />
+                        <SearchArea
+                            placeholder="검색어 입력 "
+                            value={searchWord}
+                            onChange={handleSearchWord}
+                        />
+                        <SearchIconSVG css={SearchIcon} onClick={moveSearch} />
                     </>
                 ) : null}
 

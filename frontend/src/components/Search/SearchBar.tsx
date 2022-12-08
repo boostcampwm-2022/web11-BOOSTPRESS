@@ -13,7 +13,7 @@ interface SearchBarProps {
 const SearchBar = ({ searchWord, setSearchWord }: SearchBarProps) => {
     const navigate = useNavigate();
 
-    const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearchWord = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchWord(e.target.value);
     };
 
@@ -23,7 +23,7 @@ const SearchBar = ({ searchWord, setSearchWord }: SearchBarProps) => {
 
     return (
         <Wrapper>
-            <SearchArea value={searchWord} onChange={handleTitle} />
+            <SearchArea value={searchWord} onChange={handleSearchWord} />
             <SearchIcon onClick={search} />
         </Wrapper>
     );

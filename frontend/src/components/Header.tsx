@@ -98,7 +98,7 @@ const Header = ({ isLogoActive }: headerType) => {
                     <UserSettingModalItem to="/">
                         <SettingSVG /> <p>내 블로그 설정</p>
                     </UserSettingModalItem>
-                    <UserSettingModalItem to={`/`}>
+                    <UserSettingModalItem to={`/newpost`}>
                         <PencilSVG /> <p>글 쓰기</p>
                     </UserSettingModalItem>
                 </UserSettingModalArea>

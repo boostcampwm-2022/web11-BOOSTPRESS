@@ -49,6 +49,7 @@ const Pagination = ({ curPage, maxPage, setCurPage }: PaginationProps) => {
 const Wrapper = styled.div`
     display: flex;
     gap: 2px;
+    margin: 3rem 0;
 `;
 const NavigationButton = styled.button`
     width: 32px;

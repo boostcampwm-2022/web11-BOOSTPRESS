@@ -5,11 +5,13 @@ import EasyMDE from 'easymde';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { evaluateSync } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
+import rehypeHighlight from 'rehype-highlight';
 
 //string으로 된 mdx => 컴포넌트로 변환
 export const generate = (body: string) => {
     const mdx = evaluateSync(body, {
         ...(runtime as any),
+        rehypePlugins: [rehypeHighlight],
     }).default;
 
     return renderToStaticMarkup(createElement(mdx));

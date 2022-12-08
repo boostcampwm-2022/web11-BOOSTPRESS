@@ -19,6 +19,8 @@ const Search = () => {
         queryFn: () => getArticlesWithSearchWord(initialSearchWord, pageIdx),
     });
 
+    console.log(articlesQuery.data?.articles);
+
     return (
         <>
             <Header isLogoActive={true} isSearchActive={false} />

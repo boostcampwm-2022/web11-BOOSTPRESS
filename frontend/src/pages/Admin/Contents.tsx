@@ -1,22 +1,38 @@
 import styled from '@emotion/styled';
 import { ReactComponent as MenuIconSVG } from 'assets/svg/menu.svg';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { PropsWithChildren, useState } from 'react';
-
-const Data = [
-    { name: '일번', parentId: 0, id: 1, children: [] },
-    { name: '이번', parentId: 0, id: 2, children: [] },
-];
+import { useNavigate } from 'react-router-dom';
+import { PropsWithChildren, useState, useEffect } from 'react';
+import { getCategoryByUserId, getUserInfo } from 'api/api';
+import { categoryType } from 'api/apiTypes';
 
 const ContentsManage = () => {
+    const navigate = useNavigate();
+    const [categories, setCategories] = useState<categoryType[]>([]);
+
+    const getCategories = async () => {
+        const me = await getUserInfo();
+        if (!me) {
+            alert('로그인이 필요합니다!');
+            navigate('/');
+        }
+
+        const data = await getCategoryByUserId(`${me.id}`);
+        setCategories(data);
+    };
+
+    useEffect(() => {
+        getCategories();
+    }, []);
+
     return (
         <Wrapper>
             <DragDropContext onDragEnd={() => {}}>
                 <CategoryRows>
-                    {Data.map((data) => (
+                    {categories.map((category) => (
                         <CategoryManageRow
-                            title={data.name}
-                            key={data.id}
+                            title={category.name}
+                            key={category.id}
                         ></CategoryManageRow>
                     ))}
                 </CategoryRows>

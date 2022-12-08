@@ -10,6 +10,7 @@ import {
     updateArticleResType,
     MultipleArticleUserType,
     blogType,
+    categoryType,
 } from './apiTypes';
 
 const url = process.env.REACT_APP_API_URL;
@@ -110,4 +111,12 @@ export async function updateBlogInfo(dto: blogType) {
         credentials: 'include',
     });
     return (await res.json()) as blogType;
+}
+
+export async function getCategoryByUserId(userId: string) {
+    const res = await fetch(url + `/category/${userId}`, {
+        method: 'GET',
+        credentials: 'include',
+    });
+    return (await res.json()) as categoryType[];
 }

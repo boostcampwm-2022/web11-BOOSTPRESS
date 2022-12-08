@@ -23,7 +23,8 @@ export const Description = ({children}) => {
   
   return (
   <div style ={{position : 'relative'}}>
-    <div 
+    <div
+      className='accordion_btn'
       onClick={(e)=>{
         e.target.innerText = e.target.innerText ==='+'?'‒':'+';
         e.target.nextSibling.style.display = e.target.nextSibling.style.display=== 'none' ? 'block': 'none'
@@ -31,12 +32,16 @@ export const Description = ({children}) => {
       style={{
         position : 'absolute', 
         color : '#fff',
-        top : '-3rem',
+        top : '-2.4rem',
         right : '0.7rem',
         fontSize : '1.5rem',
         cursor : 'pointer',
+        margin : '0',
       }}>+</div>
-    <div>{children}</div>
+    <p>
+      <p>&nbsp;</p>
+      <div>{children}</div>
+    </p>
   </div>
 )}
 

@@ -111,3 +111,14 @@ export async function updateBlogInfo(dto: blogType) {
     });
     return (await res.json()) as blogType;
 }
+
+export async function uploadImage(image: File) {
+    const formData = new FormData();
+    formData.append('file', image);
+    const res = await fetch(url + '/image/upload', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+    });
+    return (await res.json()) as { imageURL: string };
+}

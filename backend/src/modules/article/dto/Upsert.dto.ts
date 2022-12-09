@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, MinLength } from 'class-validator';
 
 export class UpsertDTO {
     @ApiProperty({ description: '게시글의 제목' })
     @IsString()
     @IsNotEmpty()
+    @MinLength(1)
     title: string;
 
     @ApiProperty({ description: '게시글의 내용' })

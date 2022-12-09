@@ -74,6 +74,7 @@ const PersonalInfoManage = () => {
         }
 
         const dto: blogType = {
+            login: '',
             blogName,
             nickname,
             imageURL,

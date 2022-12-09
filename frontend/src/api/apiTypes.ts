@@ -1,4 +1,5 @@
 export interface blogType {
+    login: string;
     blogName: string;
     nickname: string;
     imageURL: string;

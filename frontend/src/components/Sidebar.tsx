@@ -22,7 +22,8 @@ const SidebarComponent = ({
     userId,
     blogSideBarInfo,
 }: SidebarComponentProps) => {
-    const { bio, blogName, nickname, tag, imageURL, snsLink } = blogSideBarInfo;
+    const { bio, login, blogName, nickname, tag, imageURL, snsLink } =
+        blogSideBarInfo;
 
     const mappedSNSLink = snsLink.reduce(
         (acc, { snsName, link }) => ({ ...acc, [snsName]: link }),
@@ -47,26 +48,26 @@ const SidebarComponent = ({
                 </Bio>
                 <ProfileImage src={imageURL} />
                 <SocialInfos>
-                    <Link to="#">
+                    <a href={`https://github.com/${login}`}>
                         <GithubIconSVG />
-                    </Link>
+                    </a>
                     <Link to="#">
                         <MailIconSVG />
                     </Link>
                     {mappedSNSLink['twitter'] && (
-                        <Link to={mappedSNSLink['twitter']}>
+                        <a href={mappedSNSLink['twitter']}>
                             <TwitterIconSVG />
-                        </Link>
+                        </a>
                     )}
                     {mappedSNSLink['facebook'] && (
-                        <Link to={mappedSNSLink['facebook']}>
+                        <a href={mappedSNSLink['facebook']}>
                             <TwitterIconSVG />
-                        </Link>
+                        </a>
                     )}
                     {mappedSNSLink['linkedin'] && (
-                        <Link to={mappedSNSLink['linkedin']}>
+                        <a href={mappedSNSLink['linkedin']}>
                             <LinkedinIconSVG />
-                        </Link>
+                        </a>
                     )}
                 </SocialInfos>
             </NameCard>

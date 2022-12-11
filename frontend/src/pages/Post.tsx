@@ -8,6 +8,7 @@ import PostHead from 'components/Post/PostHead';
 import SidebarComponent from 'components/Sidebar';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Utterances } from 'utterances-react-component';
 
 const Post = () => {
     const navigate = useNavigate();
@@ -16,7 +17,11 @@ const Post = () => {
 
     const postQuery = useQuery({
         queryKey: ['postInfo', postId],
-        queryFn: () => getArticleInfo(postId),
+        queryFn: async () => {
+            const data = await getArticleInfo(postId);
+            if (data !== null) setUserId(`${data.author.id}`);
+            return data;
+        },
     });
 
     const sideBarQuery = useQuery({
@@ -35,13 +40,16 @@ const Post = () => {
     return (
         <Wrapper>
             <Header isLogoActive={false} />
-            {sideBarQuery.isLoading ? (
+            {sideBarQuery.isLoading || userId === '' ? (
                 <span>Loading</span>
             ) : sideBarQuery.isError ? (
                 <span>Error</span>
             ) : (
                 <SideBarWrapper>
-                    <SidebarComponent blogSideBarInfo={sideBarQuery.data} />
+                    <SidebarComponent
+                        userId={userId}
+                        blogSideBarInfo={sideBarQuery.data}
+                    />
                 </SideBarWrapper>
             )}
             <PostBody>
@@ -54,12 +62,18 @@ const Post = () => {
                 )}
                 <PostContent content={postQuery.data?.content} />
             </PostBody>
+            <Utterances
+                repo="BoostPress/comments"
+                issueTerm="pathname"
+                theme="github-light"
+            />
         </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
     display: flex;
+    flex-direction: column;
     width: 100%;
 `;
 

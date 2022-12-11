@@ -1,9 +1,19 @@
-export interface blogSideBarInfoType {
-    bio: string;
+export interface blogType {
+    login: string;
+    blogName: string;
+    nickname: string;
     imageURL: string;
-    sns_link: snsLinkType[];
-    category: categoryType[];
-    tag: tagType & { article_count: number }[];
+    bio: string;
+    snsLink: snsType[];
+}
+
+interface tagSideBarInfoType extends tagType {
+    articleCount: number;
+}
+
+export interface blogSideBarInfoType extends blogType {
+    // category: categoryType[];
+    tag: tagSideBarInfoType[];
 }
 
 export interface categoryType {
@@ -35,6 +45,7 @@ export interface postType {
         name: string;
         articles: { name: string; id: number }[];
     };
+    mainImageURL: string | null;
 }
 
 export interface noneType {
@@ -98,12 +109,4 @@ export interface tagType {
 export interface snsType {
     snsName: string;
     link: string;
-}
-
-export interface blogType {
-    blogName: string;
-    nickname: string;
-    imageURL: string;
-    bio: string;
-    snsLink: snsType[];
 }

@@ -21,6 +21,9 @@ export class BlogBriefResponseDTO {
     @ApiProperty({ description: '사용자의 닉네임' })
     nickname: string;
 
+    @ApiProperty({ description: '사용자의 GitHub 아이디' })
+    login: string;
+
     @ApiProperty({ description: '사용자의 bio' })
     bio: string;
 
@@ -34,9 +37,10 @@ export class BlogBriefResponseDTO {
     snsLink: SNSDTO[];
 
     static toBrief(user: User & JoinDTO) {
-        const { nickname, bio, blogName, imageURL, snsLink } = user;
+        const { login, nickname, bio, blogName, imageURL, snsLink } = user;
 
         return {
+            login,
             nickname,
             bio,
             blogName,

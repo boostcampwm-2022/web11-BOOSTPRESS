@@ -11,6 +11,7 @@ import PostGrid from 'components/PostGrid';
 const BlogMain = () => {
     const userId = useParams().userId as string;
     const [pageIdx, setPageIdx] = useState(1);
+
     const sideBarQuery = useQuery({
         queryKey: ['blogSideBar', userId],
         queryFn: () => getBlogSideBarInfo(userId),
@@ -20,8 +21,6 @@ const BlogMain = () => {
         queryFn: () => getArticlesWithUserId(userId, pageIdx),
     });
 
-    console.log(articlesQuery.data);
-
     return (
         <Wrapper>
             <Header isLogoActive={false} />
@@ -30,7 +29,7 @@ const BlogMain = () => {
             ) : sideBarQuery.isError ? (
                 <span>Error</span>
             ) : (
-                <Sidebar blogSideBarInfo={sideBarQuery.data} />
+                <Sidebar userId={userId} blogSideBarInfo={sideBarQuery.data} />
             )}
             <Main>
                 {articlesQuery.isLoading ? (

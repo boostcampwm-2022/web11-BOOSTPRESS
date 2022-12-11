@@ -53,25 +53,24 @@ export class BlogService {
         const { id } = user;
         const { nickname, bio, blogName, imageURL, snsLink } = dto;
 
-        console.log(snsLink);
-
-        // TODO: 트랜잭션?
-        await Promise.all(
-            snsLink.map(
-                async (item) =>
-                    await this.prisma.userSNS.upsert({
-                        where: {
-                            userId_name: { userId: id, name: item.snsName },
-                        },
-                        create: {
-                            user: { connect: { id } },
-                            name: item.snsName,
-                            link: item.link,
-                        },
-                        update: { link: item.link },
-                    }),
-            ),
-        );
+        // TODO: 트랜잭션을 이용해 사용자의 모든 SNS 링크를 수정해주어야 할까?
+        if (snsLink !== undefined)
+            await Promise.all(
+                snsLink.map(
+                    async (item) =>
+                        await this.prisma.userSNS.upsert({
+                            where: {
+                                userId_name: { userId: id, name: item.snsName },
+                            },
+                            create: {
+                                user: { connect: { id } },
+                                name: item.snsName,
+                                link: item.link,
+                            },
+                            update: { link: item.link },
+                        }),
+                ),
+            );
 
         return this.prisma.user.update({
             where: { id },

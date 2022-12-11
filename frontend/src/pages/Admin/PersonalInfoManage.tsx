@@ -14,13 +14,13 @@ import {
     useState,
 } from 'react';
 import { blogType, snsType } from 'api/apiTypes';
-import { getBlogInfo, getUserInfo, updateBlogInfo } from 'api/api';
+import { getBlogInfo, getUserInfo, updateBlogInfo, uploadImage } from 'api/api';
 
 const PersonalInfoManage = () => {
     const [userId, setUserId] = useState<number | undefined>(undefined);
     const [blogName, setBlogName] = useState('');
     const [nickname, setNickname] = useState('');
-    const [profileFile, setProfileFile] = useState<string>('');
+    const [profileFile, setProfileFile] = useState<string | File>('');
     const [bio, setBio] = useState('');
     const [email, setEmail] = useState('');
     const [twitterLink, setTwitterLink] = useState('');
@@ -53,7 +53,7 @@ const PersonalInfoManage = () => {
 
     useEffect(() => {
         setInitData();
-    }, [userId]);
+    }, [setInitData, userId]);
 
     const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
@@ -66,15 +66,23 @@ const PersonalInfoManage = () => {
         if (linkedinLink !== '')
             snsLink.push({ snsName: 'linkedin', link: linkedinLink });
 
+        let imageURL;
+        if (typeof profileFile === 'string') imageURL = profileFile;
+        else {
+            imageURL = (await uploadImage(profileFile)).imageURL;
+            console.log(imageURL);
+        }
+
         const dto: blogType = {
+            login: '',
             blogName,
             nickname,
-            imageURL: profileFile,
+            imageURL,
             bio,
             snsLink,
         };
 
-        const res = await updateBlogInfo(dto);
+        await updateBlogInfo(dto);
         alert('성공적으로 데이터를 전송하였습니다!');
 
         // TODO: 여기서 새로고침을 고려해 볼 수 있을 듯
@@ -107,7 +115,14 @@ const PersonalInfoManage = () => {
             <ProfileInput>
                 <h2>프로필 사진</h2>
                 <ImageArea>
-                    <img src={profileFile} alt="profile" />
+                    <img
+                        src={
+                            profileFile instanceof File
+                                ? URL.createObjectURL(profileFile)
+                                : profileFile
+                        }
+                        alt="profile"
+                    />
                     <ImageUploadButton htmlFor="profile-input">
                         <UploadIcon />
                         <span>이미지 업로드</span>
@@ -122,9 +137,7 @@ const PersonalInfoManage = () => {
                         accept="image/png, image/jpeg"
                         onChange={(e) => {
                             if (!e.target.files) return;
-                            setProfileFile(
-                                URL.createObjectURL(e.target.files[0]),
-                            );
+                            setProfileFile(e.target.files[0]);
                         }}
                     />
                 </ImageArea>

@@ -17,7 +17,7 @@ const url = process.env.REACT_APP_API_URL;
 const mockURL = 'http://localhost:3000';
 
 export async function getBlogSideBarInfo(userId: string) {
-    const res = await fetch(mockURL + `/blog/${userId}`);
+    const res = await fetch(url + `/blog/${userId}`);
     return (await res.json()) as blogSideBarInfoType;
 }
 
@@ -38,6 +38,22 @@ export async function getArticlesWithUserId(
                 authorId,
                 page: page.toString(),
                 ...(category ? { category } : {}),
+            }),
+    );
+
+    return (await res.json()) as MultipleArticleUserType;
+}
+
+export async function getArticlesWithSearchWord(
+    searchWord: string,
+    page: number = 1,
+) {
+    const res = await fetch(
+        url +
+            '/article?' +
+            new URLSearchParams({
+                searchWord,
+                page: page.toString(),
             }),
     );
 
@@ -108,7 +124,11 @@ export async function getBlogInfo(id: number) {
 export async function updateBlogInfo(dto: blogType) {
     const res = await fetch(url + `/blog`, {
         method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         credentials: 'include',
+        body: JSON.stringify(dto),
     });
     return (await res.json()) as blogType;
 }
@@ -119,4 +139,15 @@ export async function getCategoryByUserId(userId: string) {
         credentials: 'include',
     });
     return (await res.json()) as categoryType[];
+}
+
+export async function uploadImage(image: File) {
+    const formData = new FormData();
+    formData.append('file', image);
+    const res = await fetch(url + '/image/upload', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+    });
+    return (await res.json()) as { imageURL: string };
 }

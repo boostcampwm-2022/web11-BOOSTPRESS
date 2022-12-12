@@ -10,7 +10,7 @@ import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { Auth } from 'src/types';
-import { AuthService } from '../auth.service';
+import { SessionService } from '../session.service';
 import { TokenService } from '../token.service';
 
 const bearerRegExp = /^Bearer /;
@@ -22,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     constructor(
         private readonly prisma: PrismaService,
         private readonly tokenService: TokenService,
-        private readonly authService: AuthService,
+        private readonly sessionService: SessionService,
         config: ConfigService,
     ) {
         super({
@@ -34,10 +34,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     }
 
     handleRequest(err: any, user: any, info: any, context: any, status: any) {
-        console.log('errorGuard', err);
-        if (err || !user) {
-            throw new HttpException(err.message, err.status);
-        }
+        if (err || !user) throw new HttpException(err.message, err.status);
         return user;
     }
 
@@ -58,6 +55,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         if (session.accessToken !== cookieToToken(req))
             await this.forceLogout(req, user);
 
+        // 토큰의 유효기간과 로그인의 유효기간을 비교해 로그아웃 혹은 갱신을 진행
         const isTokenValid = new Date().getTime() - payload.exp * 1000 <= 0;
         const isLoginValid =
             new Date().getTime() - session.expiresAt.getTime() <= 0;
@@ -71,13 +69,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     // 사용자를 강제로 로그아웃
     private async forceLogout(req: Request, user: User) {
-        await this.authService.logout(user, req.res);
+        await this.sessionService.logout(user, req.res);
         throw new UnauthorizedException('로그인이 만료되었습니다!');
     }
 
     // 인증에 사용되는 JWT를 갱신
     private async resetAccessToken(req: Request, user: User) {
-        const jwt = this.tokenService.create(user);
+        const jwt = this.tokenService.createToken(user);
 
         req.res.cookie(Auth, `Bearer ${jwt}`, this.tokenService.bearerOption());
 

@@ -94,6 +94,7 @@ export interface authUserInfoType {
     nickname: string;
     email: string;
     id: number;
+    imageURL: string;
 }
 
 interface snsLinkType {

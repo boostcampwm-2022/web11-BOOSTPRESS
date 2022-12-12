@@ -16,7 +16,15 @@ class AuthorDTO {
 class ArticleResponseDTO {
     @ApiProperty({ description: '게시글의 ID' })
     id: number;
+}
 
+export class ArticleCommandResponseDTO extends ArticleResponseDTO {
+    static fromArticle(article: Article): ArticleCommandResponseDTO {
+        return { id: article.id };
+    }
+}
+
+class ArticleQueryResponseDTO extends ArticleResponseDTO {
     @ApiProperty({ description: '게시글의 제목' })
     title: string;
 
@@ -39,7 +47,7 @@ class ArticleResponseDTO {
     mainImageURL: string;
 }
 
-export class ArticleBriefResponseDTO extends ArticleResponseDTO {
+class ArticleBriefResponseDTO extends ArticleQueryResponseDTO {
     static fromArticle(article: Article & JoinDTO): ArticleBriefResponseDTO {
         return {
             id: article.id,
@@ -64,9 +72,19 @@ export class ArticleListResponseDTO {
 
     @ApiProperty({ description: '특정 조건을 지닌 게시글 목록의 페이지 수' })
     totalPages: number;
+
+    static fromArticles(
+        articles: Article[],
+        totalPages: number,
+    ): ArticleListResponseDTO {
+        return {
+            articles: articles.map(ArticleBriefResponseDTO.fromArticle),
+            totalPages,
+        };
+    }
 }
 
-export class ArticleDetailedResponseDTO extends ArticleResponseDTO {
+export class ArticleDetailedResponseDTO extends ArticleQueryResponseDTO {
     @ApiProperty({ description: '게시글의 내용' })
     content: string;
 

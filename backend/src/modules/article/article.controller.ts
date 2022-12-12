@@ -12,16 +12,17 @@ import {
     ValidationPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { Article, User } from '@prisma/client';
 import { CurrentUser } from 'src/decorator';
 import { JwtGuard } from 'src/guard';
-import { DatabaseService } from './db.service';
+import { DatabaseCommandService } from './db.command.service';
+import { DatabaseQueryService } from './db.query.service';
 import {
     UpsertDTO,
     FilterDTO,
-    ArticleBriefResponseDTO,
     ArticleDetailedResponseDTO,
     ArticleListResponseDTO,
+    ArticleCommandResponseDTO,
 } from './dto';
 import { FileService } from './file.service';
 import { GithubService } from './github.service';
@@ -31,29 +32,11 @@ import { Create, ReadMany, ReadOne, Remove, Update } from './swagger';
 @Controller('article')
 export class ArticleController {
     constructor(
-        private readonly db: DatabaseService,
+        private readonly dbCommand: DatabaseCommandService,
+        private readonly dbQuery: DatabaseQueryService,
         private readonly file: FileService,
         private readonly github: GithubService,
     ) {}
-
-    @ApiOperation(Create.Operation)
-    @ApiResponse(Create._201)
-    @ApiResponse(Create._401)
-    @UseGuards(JwtGuard)
-    @Post()
-    async create(
-        @CurrentUser() user: User,
-        @Body() dto: UpsertDTO,
-    ): Promise<ArticleBriefResponseDTO> {
-        const article = await this.db.create(user, dto);
-
-        await Promise.all([
-            this.file.write(article, dto.content),
-            this.github.push(article, dto.content, user),
-        ]);
-
-        return ArticleBriefResponseDTO.fromArticle(article);
-    }
 
     @ApiOperation(ReadOne.Operation)
     @ApiResponse(ReadOne._200)
@@ -61,7 +44,7 @@ export class ArticleController {
     async readOne(
         @Param('id', ParseIntPipe) id: number,
     ): Promise<ArticleDetailedResponseDTO> {
-        const article = await this.db.readOne(id);
+        const article = await this.dbQuery.readOne(id);
 
         let content: string = '';
 
@@ -88,11 +71,29 @@ export class ArticleController {
         )
         query: FilterDTO,
     ): Promise<ArticleListResponseDTO> {
-        const { articles, totalPages } = await this.db.readMany(query);
-        return {
-            articles: articles.map(ArticleBriefResponseDTO.fromArticle),
-            totalPages,
-        };
+        const { articles, totalPages } = await this.dbQuery.readMany(query);
+        return ArticleListResponseDTO.fromArticles(articles, totalPages);
+    }
+
+    private apply(article: Article, dto: UpsertDTO, user: User) {
+        return Promise.all([
+            this.file.write(article, dto.content),
+            this.github.push(article, dto.content, user),
+        ]);
+    }
+
+    @ApiOperation(Create.Operation)
+    @ApiResponse(Create._201)
+    @ApiResponse(Create._401)
+    @UseGuards(JwtGuard)
+    @Post()
+    async create(
+        @CurrentUser() user: User,
+        @Body() dto: UpsertDTO,
+    ): Promise<ArticleCommandResponseDTO> {
+        const article = await this.dbCommand.create(user, dto);
+        await this.apply(article, dto, user);
+        return ArticleCommandResponseDTO.fromArticle(article);
     }
 
     @ApiOperation(Update.Operation)
@@ -104,15 +105,10 @@ export class ArticleController {
         @CurrentUser() user: User,
         @Param('id', ParseIntPipe) id: number,
         @Body() dto: UpsertDTO,
-    ): Promise<ArticleBriefResponseDTO> {
-        const article = await this.db.update(user, dto, id);
-
-        await Promise.all([
-            this.file.write(article, dto.content),
-            this.github.push(article, dto.content, user),
-        ]);
-
-        return ArticleBriefResponseDTO.fromArticle(article);
+    ): Promise<ArticleCommandResponseDTO> {
+        const article = await this.dbCommand.update(user, dto, id);
+        await this.apply(article, dto, user);
+        return ArticleCommandResponseDTO.fromArticle(article);
     }
 
     @ApiOperation(Remove.Operation)
@@ -123,8 +119,7 @@ export class ArticleController {
     async delete(
         @CurrentUser() user: User,
         @Param('id', ParseIntPipe) id: number,
-    ): Promise<ArticleBriefResponseDTO> {
-        const article = await this.db.delete(user, id);
-        return ArticleBriefResponseDTO.fromArticle(article);
+    ): Promise<ArticleCommandResponseDTO> {
+        return this.dbCommand.delete(user, id);
     }
 }

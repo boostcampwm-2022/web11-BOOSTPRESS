@@ -13,6 +13,7 @@ import { css } from '@emotion/react';
 import colors from 'styles/color';
 import { Link, useNavigate } from 'react-router-dom';
 import { getUserInfo } from 'api/api';
+import { useQuery } from '@tanstack/react-query';
 
 interface headerType {
     isLogoActive: boolean;
@@ -28,12 +29,14 @@ const Header = ({ isLogoActive, isSearchActive = true }: headerType) => {
     const [searchWord, setSearchWord] = useState('');
     const [isLogin, setIsLogin] = useState(false);
     const [userId, setUserId] = useState<number>(0);
+    const [imageURL, setImageURL] = useState('');
 
     const checkLogin = async () => {
         const res = await getUserInfo();
         if (res.nickname) {
             setIsLogin(true);
             setUserId(res.id);
+            setImageURL(res.imageURL);
         } else setIsLogin(false);
     };
 
@@ -91,9 +94,10 @@ const Header = ({ isLogoActive, isSearchActive = true }: headerType) => {
                 {isLogin ? (
                     // 유저이미지 부분으로 교체해야함 (현재 임시)
                     <UserImg
-                        src={'https://picsum.photos/50'}
+                        src={imageURL}
                         alt="유저이미지"
                         onClick={handleUserSettingModal}
+                        width="50px"
                     />
                 ) : (
                     <UserIconSVG

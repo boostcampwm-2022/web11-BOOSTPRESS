@@ -1,14 +1,11 @@
 name: test deploy
 on:
     push:
-        branches: [main, fix/38-github-actions를-이용한-배포-자동화2]
+        branches: [main]
     workflow_dispatch:
 jobs:
     build:
         runs-on: ubuntu-18.04
-
-        #     env:
-        #       CI: false
 
         steps:
             - name: Deploy to Server

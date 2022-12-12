@@ -6,10 +6,11 @@ import { Response } from 'express';
 import { CurrentUser } from 'src/decorator';
 import { GitHubGuard, JwtGuard } from 'src/guard';
 import { Auth, Env } from 'src/types';
-import { AuthService } from './auth.service';
-import { UserDTO } from './dto';
+import { SessionService } from './session.service';
+import { GitHubAccessTokenDTO, UserDTO } from './dto';
 import { Login, Logout, Me } from './swagger';
 import { TokenService } from './token.service';
+import { UserService } from './user.service';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -17,7 +18,8 @@ export class AuthController {
     private readonly REDIRECT_URL: string;
 
     constructor(
-        private readonly authService: AuthService,
+        private readonly userService: UserService,
+        private readonly sessionService: SessionService,
         private readonly tokenService: TokenService,
         config: ConfigService<Env>,
     ) {
@@ -30,13 +32,14 @@ export class AuthController {
     @UseGuards(GitHubGuard)
     @Get('github')
     async github(
-        @CurrentUser() user: User,
+        @CurrentUser() dto: GitHubAccessTokenDTO,
         @Res({ passthrough: true }) res: Response,
     ) {
-        const jwt = this.tokenService.create(user);
+        const user = await this.userService.getUser(dto.accessToken);
 
+        const jwt = this.tokenService.createToken(user);
         res.cookie(Auth, `Bearer ${jwt}`, this.tokenService.bearerOption());
-        await this.tokenService.setToken(user, jwt);
+        await this.sessionService.login(user, jwt);
 
         res.redirect(this.REDIRECT_URL);
     }
@@ -50,7 +53,7 @@ export class AuthController {
         @CurrentUser() user: User,
         @Res({ passthrough: true }) res: Response,
     ) {
-        await this.authService.logout(user, res);
+        await this.sessionService.logout(user, res);
         res.redirect(this.REDIRECT_URL);
     }
 

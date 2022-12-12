@@ -6,6 +6,9 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { evaluateSync } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
 import rehypeHighlight from 'rehype-highlight';
+import { uploadImage } from 'api/api';
+
+const url = process.env.REACT_APP_API_URL;
 
 //string으로 된 mdx => 컴포넌트로 변환
 export const generate = (body: string) => {
@@ -15,6 +18,19 @@ export const generate = (body: string) => {
     }).default;
 
     return renderToStaticMarkup(createElement(mdx));
+};
+
+const uploadImg = async (
+    image: File,
+    onSuccess: (url: string) => void,
+    onError: any,
+) => {
+    try {
+        const imageURL = (await uploadImage(image)).imageURL;
+        onSuccess(imageURL);
+    } catch (error) {
+        return onError(error);
+    }
 };
 
 interface EasyEditerType {
@@ -46,6 +62,8 @@ export function EasyEditer({
             autofocus: true,
             indentWithTabs: false,
             spellChecker: false,
+            uploadImage: true,
+            imageUploadFunction: uploadImg,
         },
         toolbar,
         ...easymdeConfig,

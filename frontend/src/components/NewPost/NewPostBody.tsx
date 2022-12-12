@@ -35,6 +35,8 @@ const NewPostBody = ({ postInfo }: NewPostBodyPropsType) => {
     };
 
     const submitPost = async () => {
+        if (title === '') return alert('게시글의 제목을 입력해주세요!');
+
         const postData = {
             title,
             content,

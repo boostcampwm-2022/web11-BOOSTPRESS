@@ -38,8 +38,12 @@ const SidebarComponent = ({
     return (
         <Sidebar>
             <TitleArea>
-                <BlogName>{blogName}</BlogName>
-                <CreditSection>with boostpress</CreditSection>
+                <Link to={`/blog/${userId}`}>
+                    <BlogName>{blogName}</BlogName>
+                </Link>
+                <Link to="/">
+                    <CreditSection>with boostpress</CreditSection>
+                </Link>
             </TitleArea>
             <NameCard>
                 <Name>{nickname}</Name>

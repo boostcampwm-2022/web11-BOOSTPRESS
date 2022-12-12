@@ -59,11 +59,7 @@ export class AuthController {
     @ApiResponse(Me._401)
     @UseGuards(JwtGuard)
     @Get('me')
-    async me(@CurrentUser() user: User): Promise<UserDTO> {
-        return {
-            id: user.id,
-            nickname: user.nickname,
-            email: user.email,
-        };
+    me(@CurrentUser() user: User): UserDTO {
+        return UserDTO.fromUser(user);
     }
 }

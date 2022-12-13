@@ -69,6 +69,15 @@ const TagSelector = ({ selectedTags, setSelectedTags, onSaveClick }: Props) => {
 
                         <TagsGrid>
                             {tagQuery.data
+                                .filter((tag) =>
+                                    searchBarContent
+                                        ? tag.name
+                                              .toLowerCase()
+                                              .includes(
+                                                  searchBarContent.toLowerCase(),
+                                              )
+                                        : true,
+                                )
                                 .filter((tag) => !selectedTags.includes(tag))
                                 .map((tag) => (
                                     <Tag
@@ -126,9 +135,11 @@ const SearchBar = styled.input`
 `;
 const TagsGrid = styled.div`
     display: grid;
-    width: 364px;
+    width: fit-content;
     gap: 5px 2px;
     grid-template-columns: repeat(3, 120px);
+    max-height: 200px;
+    overflow-y: scroll;
 `;
 const Tag = styled.button`
     width: 120px;

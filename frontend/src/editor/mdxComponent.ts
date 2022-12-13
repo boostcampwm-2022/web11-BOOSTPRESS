@@ -37,7 +37,7 @@ export const Description = ({children}) => {
         fontSize : '1.5rem',
         cursor : 'pointer',
         margin : '0',
-      }}>+</div>
+      }}>-</div>
     <p>
       <p>&nbsp;</p>
       <div>{children}</div>

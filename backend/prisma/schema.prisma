@@ -21,7 +21,7 @@ model User {
     repoName String
     blogName String
     bio      String
-    imageURL String
+    imageURL String @db.VarChar(1000)
 
     // join 관련
     session    Session?
@@ -49,9 +49,9 @@ model Session {
 
 model Article {
     // 게시글 파일
-    id    Int    @id @default(autoincrement())
-    title String
-    mainImageURL String?
+    id           Int     @id @default(autoincrement())
+    title        String
+    mainImageURL String? @db.VarChar(1000)
 
     // 분류 관련
     categoryId Int?

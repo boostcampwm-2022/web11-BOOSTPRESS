@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Category } from '@prisma/client';
 
 export class CategoryDTO {
-    @ApiProperty({ description: '카테고리의 id' })
+    @ApiProperty({ description: '카테고리의 ID' })
     id: number;
 
     @ApiProperty({ description: '카테고리의 이름' })

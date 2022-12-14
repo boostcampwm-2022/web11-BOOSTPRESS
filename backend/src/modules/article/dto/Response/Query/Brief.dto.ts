@@ -1,5 +1,5 @@
 import { Article } from '@prisma/client';
-import { AuthorDTO, CategoryDTO, JoinDTO } from './join';
+import { AuthorDTO, CategoryDTO, JoinDTO, TagDTO } from './join';
 import { ArticleQueryResponseDTO } from './Query.dto';
 
 export class ArticleBriefResponseDTO extends ArticleQueryResponseDTO {
@@ -10,7 +10,7 @@ export class ArticleBriefResponseDTO extends ArticleQueryResponseDTO {
             author: AuthorDTO.fromUser(article.author),
             createdAt: article.createdAt,
             updatedAt: article.updatedAt,
-            tags: article.tags,
+            tags: article.tags.map(TagDTO.fromTag),
             category:
                 article.category && CategoryDTO.fromCategory(article.category),
             mainImageURL: article.mainImageURL,

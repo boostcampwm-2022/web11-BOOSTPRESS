@@ -75,14 +75,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     // 인증에 사용되는 JWT를 갱신
     private async resetAccessToken(req: Request, user: User) {
-        const jwt = this.tokenService.createToken(user);
-
-        req.res.cookie(Auth, `Bearer ${jwt}`, this.tokenService.bearerOption());
-
-        await this.prisma.session.update({
-            where: { userId: user.id },
-            data: { accessToken: jwt },
-        });
+        await this.sessionService.login(user, req.res);
     }
 
     // 로그인 만료 기간을 갱신

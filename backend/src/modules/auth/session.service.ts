@@ -12,9 +12,16 @@ export class SessionService {
         private readonly tokenService: TokenService,
     ) {}
 
-    async login(user: User, accessToken: string) {
+    async login(user: User, res: Response) {
         const userId = user.id,
             expiresAt = this.tokenService.loginExpirationDate();
+
+        const accessToken = this.tokenService.createToken(user);
+        res.cookie(
+            Auth,
+            `Bearer ${accessToken}`,
+            this.tokenService.bearerOption(),
+        );
 
         const where = { userId },
             create = { userId, accessToken, expiresAt },

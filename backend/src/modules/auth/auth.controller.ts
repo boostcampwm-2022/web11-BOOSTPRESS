@@ -5,11 +5,10 @@ import { User } from '@prisma/client';
 import { Response } from 'express';
 import { CurrentUser } from 'src/decorator';
 import { GitHubGuard, JwtGuard } from 'src/guard';
-import { Auth, Env } from 'src/types';
+import { Env } from 'src/types';
 import { SessionService } from './session.service';
 import { GitHubAccessTokenDTO, UserDTO } from './dto';
 import { Login, Logout, Me } from './swagger';
-import { TokenService } from './token.service';
 import { UserService } from './user.service';
 
 @ApiTags('auth')
@@ -20,7 +19,6 @@ export class AuthController {
     constructor(
         private readonly userService: UserService,
         private readonly sessionService: SessionService,
-        private readonly tokenService: TokenService,
         config: ConfigService<Env>,
     ) {
         this.REDIRECT_URL = config.get('REDIRECT_URL');
@@ -37,9 +35,7 @@ export class AuthController {
     ) {
         const user = await this.userService.getUser(dto.accessToken);
 
-        const jwt = this.tokenService.createToken(user);
-        res.cookie(Auth, `Bearer ${jwt}`, this.tokenService.bearerOption());
-        await this.sessionService.login(user, jwt);
+        await this.sessionService.login(user, res);
 
         res.redirect(this.REDIRECT_URL);
     }

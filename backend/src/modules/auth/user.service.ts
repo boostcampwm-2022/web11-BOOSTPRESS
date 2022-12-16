@@ -5,7 +5,7 @@ import { AxiosInstance } from 'axios';
 import { randomUUID } from 'node:crypto';
 import { Env } from 'src/types';
 import { PrismaService } from '../prisma/prisma.service';
-import { Email, GitHubUserDTO } from './dto';
+import { GitHubEmailDTO, GitHubUserDTO } from './dto';
 
 @Injectable()
 export class UserService {
@@ -56,7 +56,7 @@ export class UserService {
 
     private async getEmail(accessToken: string) {
         const headers = { Authorization: `Bearer ${accessToken}` };
-        const { data } = await this.axios.get<Email[]>(
+        const { data } = await this.axios.get<GitHubEmailDTO[]>(
             'https://api.github.com/user/emails',
             { headers },
         );

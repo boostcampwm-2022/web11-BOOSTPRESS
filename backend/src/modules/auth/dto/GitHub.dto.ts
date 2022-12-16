@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class GitHubUserDTO {
     @IsNumber()
@@ -14,4 +14,10 @@ export class GitHubAccessTokenDTO {
     @IsString()
     @IsNotEmpty()
     accessToken: string;
+}
+
+export class GitHubEmailDTO {
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
 }
